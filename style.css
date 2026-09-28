@@ -782,11 +782,17 @@ ul.nav-links {
   transition: all 0.25s ease;
 }
 
-.nav-link:hover,
-.nav-link.active {
+.nav-link:hover{
   background: rgba(249, 115, 22, 0.8); /* Orange accent on hover */
   border-color: rgba(249, 115, 22, 1);
   box-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
+}
+
+/* Removes persistent background/outline on click focus */
+.nav-link:focus,
+.nav-link:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .nav-buttons {
@@ -3225,12 +3231,24 @@ input[type="text"], input[type="url"] {
 
 
 
+/*======= Responsive Spacing for Smaller Screens =========*/
+
+@media (max-width: 1024px) {
+  .nav-links {
+    gap: 0.6rem;
+    font-size: 0.9rem;
+  }
+  
+  .brand-text span {
+    display: none; /* Hide subtitle on mid-sized screens to save horizontal space */
+  }
+}
 
 
 
 
 
-/* FOR TITLE DIVIDERS ONLY */
+/*========== FOR TITLE DIVIDERS ONLY ==============*/
 .category-divider-title {
   font-size: 1.3rem;
   font-weight: 700;

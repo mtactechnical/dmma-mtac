@@ -58,12 +58,12 @@
     <!-- Navigation Menu (Links + Action Buttons) -->
     <nav class="nav-menu" id="nav-menu">
       <ul class="nav-links">
-        <li><a href="#" onclick="switchTab('home-tab'); return false;" class="nav-link">Home</a></li>
-        <li><a href="#" onclick="switchTab('trainings-offered-tab'); return false;" class="nav-link">Trainings</a></li>
-        <li><a href="#" onclick="switchTab('schedule-tab'); return false;" class="nav-link">Schedule</a></li>
-        <li><a href="#" onclick="switchTab('about-tab'); return false;" class="nav-link">About Us</a></li>
-        <li><a href="#" onclick="switchTab('gallery-tab'); return false;" class="nav-link">Gallery</a></li>
-      </ul>
+    <li><a href="#home-tab" onclick="event.preventDefault(); switchTab('home-tab');" class="nav-link">Home</a></li>
+    <li><a href="#trainings-offered-tab" onclick="event.preventDefault(); switchTab('trainings-offered-tab');" class="nav-link">Trainings</a></li>
+    <li><a href="#schedule-tab" onclick="event.preventDefault(); switchTab('schedule-tab');" class="nav-link">Schedule</a></li>
+    <li><a href="#about-tab" onclick="event.preventDefault(); switchTab('about-tab');" class="nav-link">About Us</a></li>
+    <li><a href="#gallery-tab" onclick="event.preventDefault(); switchTab('gallery-tab');" class="nav-link">Gallery</a></li>
+    </ul>
 
     <!-- Dynamic Auth Button -->
     <div class="nav-buttons">

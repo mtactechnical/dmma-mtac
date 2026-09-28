@@ -592,34 +592,62 @@ function toggleAdminMode(enable) {
     }
 }
 
-// 2. Tab Switcher
-function switchTab(tabId) {
-    // Hide all sub-landing pages
-    const subTabs = document.querySelectorAll('.sub-landing-tab');
-    subTabs.forEach(subTab => {
-        subTab.classList.add('hidden');
-        subTab.style.display = '';
-    });
+// TAB SWITCHER
+function switchTab(tabId, updateHistory = true) {
+  // 1. Hide all sub-landing pages
+  const subTabs = document.querySelectorAll('.sub-landing-tab');
+  subTabs.forEach(subTab => {
+    subTab.classList.add('hidden');
+    subTab.style.display = '';
+  });
 
-    // Reset and display main tabs
-    const tabs = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => {
-        tab.classList.remove('active');
-        tab.style.display = ''; // Reset inline style
-    });
+  // 2. Reset and display main tab contents
+  const tabs = document.querySelectorAll('.tab-content');
+  tabs.forEach(tab => {
+    tab.classList.remove('active');
+    tab.style.display = '';
+  });
 
-    const activeTab = document.getElementById(tabId);
-    if (activeTab) {
-        activeTab.classList.add('active');
+  // 3. Activate the selected tab section
+  const activeTab = document.getElementById(tabId);
+  if (activeTab) {
+    activeTab.classList.add('active');
+  }
+
+  // 4. Update active visual state on navbar links
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link => {
+    if (link.getAttribute('href') === `#${tabId}`) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
     }
+  });
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // 5. Push entry into browser history if requested
+  if (updateHistory && window.location.hash !== `#${tabId}`) {
+    history.pushState({ tabId: tabId }, '', `#${tabId}`);
+  }
+
+  // FIX 1: Jump directly to the top instantly (not smooth) to prevent section jumping
+  window.scrollTo(0, 0);
+
+  // FIX 2: Remove focus from clicked link so orange hover highlight disappears
+  if (document.activeElement) {
+    document.activeElement.blur();
+  }
 }
 
-// Handle Browser Back / Forward buttons
-window.addEventListener('popstate', () => {
-    const activeHash = window.location.hash.replace('#', '') || 'home-tab';
-    switchTab(activeHash, false);
+// Handle Browser Back / Forward button navigation
+window.addEventListener('popstate', (event) => {
+  const activeHash = window.location.hash.replace('#', '') || 'home-tab';
+  switchTab(activeHash, false);
+});
+
+// Load correct tab on initial page refresh or direct link opening
+window.addEventListener('DOMContentLoaded', () => {
+  const initialHash = window.location.hash.replace('#', '') || 'home-tab';
+  switchTab(initialHash, false);
 });
 
 
@@ -744,6 +772,10 @@ document.querySelectorAll('.nav-link, [data-tab]').forEach(tabBtn => {
     }
   });
 });
+
+// SYNC TAB SWITCHING WITH URL HASH FRAGMENTS
+
+
 
 
 // --- RENDER SCHEDULE TAB (STATIC CATEGORY HEADERS) ---
