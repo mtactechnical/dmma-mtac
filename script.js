@@ -260,7 +260,6 @@ function openEnrollmentLanding(courseKey) {
 
 
 // --- ADMIN & GOOGLE OAUTH CONFIGURATION ---
-// --- ADMIN & GOOGLE OAUTH CONFIGURATION ---
 const ALLOWED_ADMIN_EMAILS = [
   "mtac.it@dmmacsp.edu.ph",
   "mtac.technical-staff-ii@dmmacsp.edu.ph"
