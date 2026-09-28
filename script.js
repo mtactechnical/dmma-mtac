@@ -260,22 +260,25 @@ function openEnrollmentLanding(courseKey) {
 
 
 // --- ADMIN & GOOGLE OAUTH CONFIGURATION ---
+// --- ADMIN & GOOGLE OAUTH CONFIGURATION ---
 const ALLOWED_ADMIN_EMAILS = [
   "mtac.it@dmmacsp.edu.ph",
   "mtac.technical-staff-ii@dmmacsp.edu.ph"
 ];
 
+// --- AUTH STATE LISTENER & SESSION INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", async () => {
-  // Listen for login / logout state changes
+  // Listen for login/logout state changes across tabs or OAuth redirects
   supabaseClient.auth.onAuthStateChange((event, session) => {
     handleUserViewState(session);
   });
 
-  // Check initial session state on load
+  // Check initial session state on page load
   const { data: { session } } = await supabaseClient.auth.getSession();
   handleUserViewState(session);
 });
 
+// --- MAIN ROUTING LOGIC ---
 function handleUserViewState(session) {
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
@@ -284,71 +287,88 @@ function handleUserViewState(session) {
   if (session && session.user) {
     const userEmail = session.user.email?.toLowerCase().trim();
 
-    // 1. Force Hide Login Button
+    // 1. ALL LOGGED-IN USERS (Admin or Regular Client):
+    // Hide Google Login, show Logout button
     if (loginBtn) {
       loginBtn.style.setProperty("display", "none", "important");
       loginBtn.classList.add("is-hidden");
-      loginBtn.classList.remove("is-visible");
     }
-
-    // 2. Force Show Logout Button
     if (logoutBtn) {
       logoutBtn.style.setProperty("display", "inline-flex", "important");
-      logoutBtn.classList.add("is-visible");
       logoutBtn.classList.remove("is-hidden");
     }
 
-    // 3. Check Admin Email
+    // 2. CHECK AUTHORIZATION FOR ADMIN vs STANDARD CLIENT
     if (ALLOWED_ADMIN_EMAILS.includes(userEmail)) {
-      console.log("Admin authenticated:", userEmail);
+      console.log("Authorized Admin logged in:", userEmail);
+      
+      // Reveal Edit Mode button in navbar
       if (adminBtn) {
         adminBtn.style.setProperty("display", "inline-flex", "important");
-        adminBtn.classList.add("is-visible");
         adminBtn.classList.remove("is-hidden", "hidden");
       }
 
-      // Show Admin portal sections
+      // Reveal all admin portal elements
       const adminElements = document.querySelectorAll(".admin-only");
       adminElements.forEach(el => el.classList.remove("hidden"));
+
+      // Route admin directly to the Admin Panel tab
+      if (typeof switchTab === 'function') {
+        switchTab('admin-tab');
+      }
     } else {
-      // Regular user (not in admin list)
+      console.log("Standard client logged in (for forms/enrollment):", userEmail);
+
+      // Hide Edit Mode button and Admin sections from non-admin users
       if (adminBtn) {
         adminBtn.style.setProperty("display", "none", "important");
         adminBtn.classList.add("is-hidden");
       }
+
+      const adminElements = document.querySelectorAll(".admin-only");
+      adminElements.forEach(el => el.classList.add("hidden"));
+
+      // Stay on/redirect standard clients to standard site tabs (Home/Trainings)
+      if (typeof switchTab === 'function') {
+        // If they were on the admin tab, send them home
+        const currentTab = document.querySelector('.tab-content.active')?.id;
+        if (currentTab === 'admin-tab') {
+          switchTab('home-tab');
+        }
+      }
     }
   } else {
+    // Unauthenticated Public View
     enablePublicView();
   }
 }
 
+// --- PUBLIC VIEW RESET ---
 function enablePublicView() {
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
   const adminBtn = document.getElementById("admin-tab-btn");
 
-  // Show Login, Hide Logout & Edit Mode
+  // Show Google Login, hide Logout & Edit Mode
   if (loginBtn) {
     loginBtn.style.setProperty("display", "inline-flex", "important");
-    loginBtn.classList.add("is-visible");
     loginBtn.classList.remove("is-hidden");
   }
   if (logoutBtn) {
     logoutBtn.style.setProperty("display", "none", "important");
     logoutBtn.classList.add("is-hidden");
-    logoutBtn.classList.remove("is-visible");
   }
   if (adminBtn) {
     adminBtn.style.setProperty("display", "none", "important");
-    adminBtn.classList.add("is-hidden");
-    adminBtn.classList.remove("is-visible");
+    adminBtn.classList.add("is-hidden", "hidden");
   }
 
-  // Hide admin section elements
+  // Hide all admin controls
   const adminElements = document.querySelectorAll(".admin-only");
   adminElements.forEach(el => el.classList.add("hidden"));
 }
 
+// --- AUTHENTICATION ACTION HANDLERS ---
 async function handleGoogleLogin() {
   const { error } = await supabaseClient.auth.signInWithOAuth({
     provider: 'google',
@@ -356,7 +376,7 @@ async function handleGoogleLogin() {
       redirectTo: window.location.origin + window.location.pathname
     }
   });
-  if (error) console.error("Login error:", error.message);
+  if (error) console.error("Google Login failed:", error.message);
 }
 
 async function handleLogout() {
