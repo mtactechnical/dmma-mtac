@@ -19,7 +19,8 @@ async function loadCoursesFromDatabase() {
     try {
         const { data, error } = await db
             .from('Course')
-            .select('*');
+            .select('*')
+            .order('order_index', { ascending: true });
 
         if (error) {
             console.error('Supabase fetch error:', error);

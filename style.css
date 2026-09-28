@@ -3125,67 +3125,52 @@ input[type="text"], input[type="url"] {
 }
 
 
-/*=============================================================
-/* --- GOOGLE LOGIN, EDIT MODE & LOGOUT BUTTON STYLES --- */
+/* ==========================================================================
+   --- GOOGLE LOGIN, EDIT MODE & LOGOUT BUTTON STYLES ---
+   ========================================================================== */
 
-/* Base container rule */
-#loginBtn, #logoutBtn, #admin-tab-btn {
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background-color: #ffffff;
-  color: #2d274c;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 8px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: all 0.25s ease-in-out;
-  outline: none;
+#loginBtn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  max-width: 240px !important;
+  padding: 10px 18px !important;
+  
+  /* Dark Glassmorphism Styling */
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 30px !important;
+  
+  /* Typography */
+  color: #ffffff !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  white-space: nowrap !important;
+  
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Hover Effect */
-#loginBtn:hover, #logoutBtn:hover, #admin-tab-btn:hover {
-  background-color: #f4f2ff;
+#loginBtn:hover {
+  background: rgba(255, 255, 255, 0.16) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Click / Active Effect */
-#loginBtn:active, #logoutBtn:active, #admin-tab-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-}
-
-/* Icon Sizing */
-.google-icon {
-  flex-shrink: 0;
-  display: block;
-}
-
-/* Logout Button Styling */
-#logoutBtn {
-  background-color: #e63946;
-  color: #ffffff;
-  border: none;
-}
-
-#logoutBtn:hover {
-  background-color: #d62828;
-}
-
-/* Edit Mode Button Styling */
-#admin-tab-btn {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-#admin-tab-btn:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+/* Give the logo a subtle white circle background so it stays sharp on dark glass */
+#loginBtn svg.google-icon {
+  width: 20px !important;
+  height: 20px !important;
+  background: #ffffff;
+  border-radius: 50%;
+  padding: 2px;
+  flex-shrink: 0 !important;
 }
 
 /* STRICT OVERRIDE UTILITIES */
@@ -3212,44 +3197,6 @@ input[type="text"], input[type="url"] {
   padding: 0 !important;
   line-height: 1 !important;
   gap: 10px !important;
-}
-
-/* Refined Desktop Button Styling */
-#loginBtn {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  height: 38px !important; /* Fixed height matches typical nav buttons */
-  padding: 0 16px !important;
-  
-  background: linear-gradient(135deg, #ff5e00 0%, #ff8c00 100%) !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 20px !important;
-  
-  font-family: inherit !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  white-space: nowrap !important;
-  cursor: pointer !important;
-  box-shadow: 0 2px 8px rgba(255, 94, 0, 0.3) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-#loginBtn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 94, 0, 0.4) !important;
-}
-
-/* Logo icon styling inside button */
-#loginBtn svg.google-icon {
-  width: 18px !important;
-  height: 18px !important;
-  background: #ffffff;
-  border-radius: 50%;
-  padding: 2px;
-  flex-shrink: 0 !important;
 }
 
 /* Edit Mode gear icon text color */
