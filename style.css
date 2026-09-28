@@ -3212,7 +3212,13 @@ input[type="text"], input[type="url"] {
 
 /*=============================================
 
-
+/* Spacing fix for Mobile Screens */
+@media (max-width: 768px) {
+  /* Option A: If your navbar is position: fixed or sticky */
+  body, .main-content {
+    padding-top: 25px !important; /* Adjust if your navbar pill is taller */
+  }
+}
 
 
 
