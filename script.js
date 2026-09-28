@@ -121,7 +121,7 @@ async function handleSaveCourse(e) {
     await showAlert('Database error: ' + err.message, 'danger');
     console.error('Supabase write error:', err);
   }
-};
+}
 
 
 
@@ -256,35 +256,67 @@ function openEnrollmentLanding(courseKey) {
 
 
 
-// AUTHORIZED GOOGLE EMAILS FOR ADMINS ONLY!!!!!
-// Initialize Supabase Client
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// AUTHORIZED GOOGLE EMAILS FOR ADMINS ONLY!!!!!
+// --- ADMIN & GOOGLE OAUTH CONFIGURATION ---
 const ALLOWED_ADMIN_EMAILS = [
   "mtac.it@dmmacsp.edu.ph",
   "mtac.technical-staff-ii@dmmacsp.edu.ph"
 ];
 
-// Trigger Google OAuth via Supabase
-async function handleAdminLogin() {
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: 'https://dmma-mtac.vercel.app'
-    }
+function handleAdminLogin() {
+  if (typeof google === 'undefined' || !google.accounts) {
+    alert("Google API is loading or unavailable. Please try again in a moment.");
+    return;
+  }
+
+  google.accounts.id.initialize({
+    client_id: "479836029947-huost4f25g2bbq0m4sjgrodmffiav7fm.apps.googleusercontent.com",
+    callback: verifyAdminUser
   });
-  if (error) console.error("Error signing in:", error.message);
+
+  google.accounts.id.prompt();
 }
 
-// Verify User Role on Admin Dashboard Load
-async function verifyAdminAccess() {
-  const { data: { user } } = await supabase.auth.getUser();
+function parseJwt(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
 
-  if (!user || !ALLOWED_ADMIN_EMAILS.includes(user.email)) {
-    alert("Unauthorized access!");
-    window.location.href = "index.html";
+    return JSON.parse(jsonPayload);
+  } catch (err) {
+    console.error("Invalid Token:", err);
+    return null;
   }
 }
+
+function verifyAdminUser(response) {
+  const userProfile = parseJwt(response.credential);
+  if (!userProfile) return;
+
+  const userEmail = userProfile.email;
+
+  if (ALLOWED_ADMIN_EMAILS.includes(userEmail)) {
+    sessionStorage.setItem("adminAuthenticated", "true");
+    alert(`Welcome back, ${userProfile.name}!`);
+    window.location.href = "admin-dashboard.html";
+  } else {
+    alert(`Access Denied: ${userEmail} is not authorized to access the Admin Panel.`);
+  }
+}
+
+// --- SAFE SHORTCUT TRIGGER FOR ADMIN LOGIN ---
+// Safely adds keyboard shortcut (Ctrl + Shift + A) without interfering with navigation
+document.addEventListener('keydown', function(event) {
+  if (event.ctrlKey && event.shiftKey && (event.key === 'A' || event.key === 'a')) {
+    event.preventDefault();
+    handleAdminLogin();
+  }
+});
+
 
 
 
