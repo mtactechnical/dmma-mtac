@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Course {
+  id            Int      @id @default(autoincrement())
+  title         String
+  duration      String
+  schedules     String[]
+  googleFormUrl String?
+  gradFormUrl   String?
+  fee           String?
+  category      String?  @default("stcw")
+}
+
+model Gallery {
+  id        Int      @id @default(autoincrement())
+  url       String
+  caption   String
+  createdAt DateTime @default(now())
+}
