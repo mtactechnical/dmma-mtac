@@ -6,6 +6,8 @@ const SUPABASE_URL = 'https://xblpzpabthcpimziqjor.supabase.co';
 // Replace with your actual anon key from Supabase Dashboard -> Settings -> API
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhibHB6cGFidGhjcGltemlxam9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAwNTk5NjksImV4cCI6MjEwNTYzNTk2OX0.C2XJwS7Zk1MSS8ktbEO7d9eEr_RVAx0bo9qfzkzdlzM'; 
 
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // --- 2. GLOBAL STATE ---
@@ -257,63 +259,134 @@ function openEnrollmentLanding(courseKey) {
 
 
 
-// AUTHORIZED GOOGLE EMAILS FOR ADMINS ONLY!!!!!
 // --- ADMIN & GOOGLE OAUTH CONFIGURATION ---
 const ALLOWED_ADMIN_EMAILS = [
   "mtac.it@dmmacsp.edu.ph",
   "mtac.technical-staff-ii@dmmacsp.edu.ph"
 ];
 
-function handleAdminLogin() {
-  if (typeof google === 'undefined' || !google.accounts) {
-    alert("Google API is loading or unavailable. Please try again in a moment.");
-    return;
-  }
-
-  google.accounts.id.initialize({
-    client_id: "479836029947-huost4f25g2bbq0m4sjgrodmffiav7fm.apps.googleusercontent.com",
-    callback: verifyAdminUser
+document.addEventListener("DOMContentLoaded", async () => {
+  // Listen for login / logout state changes
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    handleUserViewState(session);
   });
 
-  google.accounts.id.prompt();
-}
+  // Check initial session state on load
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  handleUserViewState(session);
+});
 
-function parseJwt(token) {
-  try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
+function handleUserViewState(session) {
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const adminBtn = document.getElementById("admin-tab-btn");
 
-    return JSON.parse(jsonPayload);
-  } catch (err) {
-    console.error("Invalid Token:", err);
-    return null;
-  }
-}
+  if (session && session.user) {
+    const userEmail = session.user.email?.toLowerCase().trim();
 
-function verifyAdminUser(response) {
-  const userProfile = parseJwt(response.credential);
-  if (!userProfile) return;
+    // 1. Force Hide Login Button
+    if (loginBtn) {
+      loginBtn.style.setProperty("display", "none", "important");
+      loginBtn.classList.add("is-hidden");
+      loginBtn.classList.remove("is-visible");
+    }
 
-  const userEmail = userProfile.email;
+    // 2. Force Show Logout Button
+    if (logoutBtn) {
+      logoutBtn.style.setProperty("display", "inline-flex", "important");
+      logoutBtn.classList.add("is-visible");
+      logoutBtn.classList.remove("is-hidden");
+    }
 
-  if (ALLOWED_ADMIN_EMAILS.includes(userEmail)) {
-    sessionStorage.setItem("adminAuthenticated", "true");
-    alert(`Welcome back, ${userProfile.name}!`);
-    window.location.href = "admin-dashboard.html";
+    // 3. Check Admin Email
+    if (ALLOWED_ADMIN_EMAILS.includes(userEmail)) {
+      console.log("Admin authenticated:", userEmail);
+      if (adminBtn) {
+        adminBtn.style.setProperty("display", "inline-flex", "important");
+        adminBtn.classList.add("is-visible");
+        adminBtn.classList.remove("is-hidden", "hidden");
+      }
+
+      // Show Admin portal sections
+      const adminElements = document.querySelectorAll(".admin-only");
+      adminElements.forEach(el => el.classList.remove("hidden"));
+    } else {
+      // Regular user (not in admin list)
+      if (adminBtn) {
+        adminBtn.style.setProperty("display", "none", "important");
+        adminBtn.classList.add("is-hidden");
+      }
+    }
   } else {
-    alert(`Access Denied: ${userEmail} is not authorized to access the Admin Panel.`);
+    enablePublicView();
   }
 }
 
-// --- SAFE SHORTCUT TRIGGER FOR ADMIN LOGIN ---
-// Safely adds keyboard shortcut (Ctrl + Shift + A) without interfering with navigation
-document.addEventListener('keydown', function(event) {
-  if (event.ctrlKey && event.shiftKey && (event.key === 'A' || event.key === 'a')) {
-    event.preventDefault();
-    handleAdminLogin();
+function enablePublicView() {
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const adminBtn = document.getElementById("admin-tab-btn");
+
+  // Show Login, Hide Logout & Edit Mode
+  if (loginBtn) {
+    loginBtn.style.setProperty("display", "inline-flex", "important");
+    loginBtn.classList.add("is-visible");
+    loginBtn.classList.remove("is-hidden");
+  }
+  if (logoutBtn) {
+    logoutBtn.style.setProperty("display", "none", "important");
+    logoutBtn.classList.add("is-hidden");
+    logoutBtn.classList.remove("is-visible");
+  }
+  if (adminBtn) {
+    adminBtn.style.setProperty("display", "none", "important");
+    adminBtn.classList.add("is-hidden");
+    adminBtn.classList.remove("is-visible");
+  }
+
+  // Hide admin section elements
+  const adminElements = document.querySelectorAll(".admin-only");
+  adminElements.forEach(el => el.classList.add("hidden"));
+}
+
+async function handleGoogleLogin() {
+  const { error } = await supabaseClient.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: window.location.origin + window.location.pathname
+    }
+  });
+  if (error) console.error("Login error:", error.message);
+}
+
+async function handleLogout() {
+  await supabaseClient.auth.signOut();
+  enablePublicView();
+  if (typeof switchTab === 'function') {
+    switchTab('home-tab');
+  }
+  window.location.reload();
+}
+
+window.handleGoogleLogin = handleGoogleLogin;
+window.handleLogout = handleLogout;
+
+
+
+//HAMBURGER TOGGLE FIX
+document.addEventListener("DOMContentLoaded", async () => {
+  // Check auth state
+  await checkUserSession();
+
+  // --- HAMBURGER MENU TOGGLE ---
+  const hamburgerBtn = document.getElementById("hamburger-btn");
+  const navMenu = document.querySelector(".nav-links"); // Change to match your nav links wrapper class/id
+
+  if (hamburgerBtn && navMenu) {
+    hamburgerBtn.addEventListener("click", () => {
+      navMenu.classList.toggle("active");
+      hamburgerBtn.classList.toggle("open");
+    });
   }
 });
 
