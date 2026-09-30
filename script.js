@@ -1411,7 +1411,7 @@ function initFlipbook() {
       minHeight: 900,
       maxHeight: 1200,
       drawShadow: true,
-      mobileScrollSupport: falsegit a, // Enables smooth touch interaction on phones
+      mobileScrollSupport: true, // Enables smooth touch interaction on phones
       usePortrait: true
     });
 

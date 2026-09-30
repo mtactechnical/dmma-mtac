@@ -3558,7 +3558,7 @@ input[type="text"], input[type="url"] {
   z-index: 10;
   box-sizing: border-box;
   border: 1px solid #d1c7b7;
-  height: 30%;
+  height: 33%;
 }
 
 .polaroid-card:hover {
