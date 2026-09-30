@@ -1403,24 +1403,17 @@ function initFlipbook() {
 
   if (!pageFlip) {
     pageFlip = new St.PageFlip(flipContainer, {
-      width: 550,
-  height: 700,
-  size: "stretch",
-  minWidth: 320,
-  maxWidth: 650,
-  minHeight: 450,
-  maxHeight: 850,
-  
-  // PERFORMANCE TWEAKS:
-  maxShadowOpacity: 0.1, // Reduces shadow layer opacity calculation (Default: 0.15)
-  flippingTime: 600,     // Speeds up flip duration from 1000ms to 600ms for a snappier feel
-  drawShadow: false,     // Disable dynamic canvas shadow generation if lag persists (Set to false for best performance)
-  
-  showCover: true,
-  usePortrait: true,
-  autoSize: true,
-  startZIndex: 5,
-  mobileScrollSupport: false
+      width: 400,          // base page width
+      height: 600,         // base page height
+      size: "fixed",       // or "stretch"
+      minWidth: 300,
+      maxWidth: 1000,
+      minHeight: 400,
+      maxHeight: 1200,
+      drawShadow: true,
+      showCover: true,
+      mobileScrollSupport: true, // Enables smooth touch interaction on phones
+      usePortrait: true
     });
 
     pageFlip.loadFromHTML(document.querySelectorAll(".my-page"));
