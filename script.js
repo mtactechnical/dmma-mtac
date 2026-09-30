@@ -1403,16 +1403,15 @@ function initFlipbook() {
 
   if (!pageFlip) {
     pageFlip = new St.PageFlip(flipContainer, {
-      width: 400,          // base page width
-      height: 600,         // base page height
+      width: 500,          // base page width
+      height: 800,         // base page height
       size: "fixed",       // or "stretch"
-      minWidth: 300,
+      minWidth: 600,
       maxWidth: 1000,
-      minHeight: 400,
+      minHeight: 900,
       maxHeight: 1200,
       drawShadow: true,
-      showCover: true,
-      mobileScrollSupport: true, // Enables smooth touch interaction on phones
+      mobileScrollSupport: falsegit a, // Enables smooth touch interaction on phones
       usePortrait: true
     });
 
