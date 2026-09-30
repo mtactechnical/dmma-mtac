@@ -6,7 +6,6 @@ const SUPABASE_URL = 'https://xblpzpabthcpimziqjor.supabase.co';
 // Replace with your actual anon key from Supabase Dashboard -> Settings -> API
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhibHB6cGFidGhjcGltemlxam9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAwNTk5NjksImV4cCI6MjEwNTYzNTk2OX0.C2XJwS7Zk1MSS8ktbEO7d9eEr_RVAx0bo9qfzkzdlzM'; 
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -269,12 +268,12 @@ const ALLOWED_ADMIN_EMAILS = [
 // --- AUTH STATE LISTENER & SESSION INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", async () => {
   // Listen for login/logout state changes across tabs or OAuth redirects
-  supabaseClient.auth.onAuthStateChange((event, session) => {
+  db.auth.onAuthStateChange((event, session) => {
     handleUserViewState(session);
   });
 
   // Check initial session state on page load
-  const { data: { session } } = await supabaseClient.auth.getSession();
+  const { data: { session } } = await db.auth.getSession();
   handleUserViewState(session);
 });
 
@@ -370,7 +369,7 @@ function enablePublicView() {
 
 // --- AUTHENTICATION ACTION HANDLERS ---
 async function handleGoogleLogin() {
-  const { error } = await supabaseClient.auth.signInWithOAuth({
+  const { error } = await db.auth.signInWithOAuth({
     provider: 'google',
     options: {
       redirectTo: window.location.origin + window.location.pathname
@@ -380,7 +379,7 @@ async function handleGoogleLogin() {
 }
 
 async function handleLogout() {
-  await supabaseClient.auth.signOut();
+  await db.auth.signOut();
   enablePublicView();
   if (typeof switchTab === 'function') {
     switchTab('home-tab');
@@ -395,12 +394,18 @@ window.handleLogout = handleLogout;
 
 //HAMBURGER TOGGLE FIX
 document.addEventListener("DOMContentLoaded", async () => {
-  // Check auth state
-  await checkUserSession();
+  // Check auth state safely
+  try {
+    if (typeof checkUserSession === "function") {
+      await checkUserSession();
+    }
+  } catch (error) {
+    console.error("Auth session check failed:", error);
+  }
 
   // --- HAMBURGER MENU TOGGLE ---
   const hamburgerBtn = document.getElementById("hamburger-btn");
-  const navMenu = document.querySelector(".nav-links"); // Change to match your nav links wrapper class/id
+  const navMenu = document.querySelector(".nav-links");
 
   if (hamburgerBtn && navMenu) {
     hamburgerBtn.addEventListener("click", () => {
@@ -410,6 +415,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+async function checkUserSession() {
+  const { data, error } = await supabase.auth.getSession();
+  
+  if (error) {
+    console.warn("Supabase session error:", error.message);
+    return null;
+  }
+
+  if (data && data.session) {
+    // User is logged in
+    return data.session;
+  }
+
+  return null;
+}
 
 
 
@@ -592,6 +612,7 @@ function toggleAdminMode(enable) {
     }
 }
 
+
 // TAB SWITCHER
 function switchTab(tabId, updateHistory = true) {
   // 1. Hide all sub-landing pages
@@ -605,12 +626,14 @@ function switchTab(tabId, updateHistory = true) {
   const tabs = document.querySelectorAll('.tab-content');
   tabs.forEach(tab => {
     tab.classList.remove('active');
+    tab.classList.add('hidden'); // Ensure hidden state is explicitly assigned
     tab.style.display = '';
   });
 
   // 3. Activate the selected tab section
   const activeTab = document.getElementById(tabId);
   if (activeTab) {
+    activeTab.classList.remove('hidden');
     activeTab.classList.add('active');
   }
 
@@ -629,19 +652,26 @@ function switchTab(tabId, updateHistory = true) {
     history.pushState({ tabId: tabId }, '', `#${tabId}`);
   }
 
-  // FIX 1: Jump directly to the top instantly (not smooth) to prevent section jumping
+  // Jump to top instantly
   window.scrollTo(0, 0);
 
-  // FIX 2: Remove focus from clicked link so orange hover highlight disappears
+  // Remove focus from clicked link
   if (document.activeElement) {
     document.activeElement.blur();
+  }
+
+  // 6. FIX: Delay flipbook refresh slightly so browser finishes displaying the tab container
+  if (tabId === 'stories-tab') {
+    setTimeout(() => {
+      initFlipbook();
+    }, 150);
   }
 }
 
 // Handle Browser Back / Forward button navigation
 window.addEventListener('popstate', (event) => {
-  const activeHash = window.location.hash.replace('#', '') || 'home-tab';
-  switchTab(activeHash, false);
+  const currentHash = window.location.hash.replace('#', '') || 'home-tab';
+  switchTab(currentHash, false);
 });
 
 // Load correct tab on initial page refresh or direct link opening
@@ -649,6 +679,24 @@ window.addEventListener('DOMContentLoaded', () => {
   const initialHash = window.location.hash.replace('#', '') || 'home-tab';
   switchTab(initialHash, false);
 });
+
+
+// Attached click handlers to all navigation links
+document.querySelectorAll('.nav-link, a[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href').replace('#', '');
+
+    if (targetId) {
+      // 1. Switch the UI tab
+      switchTab(targetId, true);
+
+      // 2. Push hash into browser history so Back/Forward buttons activate
+      history.pushState({ tabId: targetId }, '', `#${targetId}`);
+    }
+  });
+});
+
 
 
 // Passenger Training Course Sub-Landing
@@ -773,7 +821,7 @@ document.querySelectorAll('.nav-link, [data-tab]').forEach(tabBtn => {
   });
 });
 
-// SYNC TAB SWITCHING WITH URL HASH FRAGMENTS
+// SYNC TAB SWITCHING WITH URL HASH FRAGMENTS ---
 
 
 
@@ -909,10 +957,10 @@ function renderCourses() {
       </div>
       <div class="admin-actions">
         <button class="btn btn-secondary btn-sm" onclick="editCourse(${c.id})">
-          <i class="fa-solid fa-pen"></i> Update Course
+          <i class="fa-solid fa-pen"></i> Edit
         </button>
         <button class="btn btn-danger btn-sm" onclick="deleteCourse(${c.id})">
-          <i class="fa-solid fa-trash"></i> Delete Course
+          <i class="fa-solid fa-trash"></i> Delete
         </button>
       </div>
     </div>
@@ -1279,10 +1327,48 @@ function editCourse(id) {
   const submitBtn = document.getElementById('course-submit-btn');
   if (submitBtn) submitBtn.textContent = 'Update Course';
 
+  const cancelBtn = document.getElementById('course-cancel-btn');
+  if (cancelBtn) cancelBtn.style.display = 'block';
+
   // 5. Scroll smoothly up to the Admin form
   const formElement = document.getElementById('course-form');
   if (formElement) formElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
+
+
+// Function to clear textboxes and reset form state
+function resetCourseForm() {
+  const formElement = document.getElementById('course-form');
+  if (formElement) formElement.reset();
+
+  // Clear hidden editing ID
+  const editingIdInput = document.getElementById('editing-course-id');
+  if (editingIdInput) editingIdInput.value = '';
+
+  // Reset schedules to 1 empty input row
+  if (typeof initScheduleInputs === 'function') {
+    initScheduleInputs(['']);
+  }
+
+  // Restore Submit Button text
+  const submitBtn = document.getElementById('course-submit-btn');
+  if (submitBtn) submitBtn.textContent = 'Publish Course';
+
+  // Hide Cancel Button
+  const cancelBtn = document.getElementById('course-cancel-btn');
+  if (cancelBtn) cancelBtn.style.display = 'none';
+}
+
+// Event listener for Cancel Edit button
+document.addEventListener('DOMContentLoaded', () => {
+  const cancelBtn = document.getElementById('course-cancel-btn');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', resetCourseForm);
+  }
+});
+
+
+
 
 // MESSENGER CTA BUBBLE
 document.addEventListener('DOMContentLoaded', () => {
@@ -1302,4 +1388,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
         observer.observe(footer);
     }
+});
+
+
+// PAGE FLIP BOOK FUNCTIONS
+let pageFlip = null;
+
+function initFlipbook() {
+  const flipContainer = document.getElementById("my-flipbook");
+  const storiesTab = document.getElementById("stories-tab");
+
+  // Safety check: Don't run if tab is missing or hidden
+  if (!flipContainer || !storiesTab || storiesTab.classList.contains("hidden")) return;
+
+  if (!pageFlip) {
+    pageFlip = new St.PageFlip(flipContainer, {
+      width: 550,
+  height: 700,
+  size: "stretch",
+  minWidth: 320,
+  maxWidth: 650,
+  minHeight: 450,
+  maxHeight: 850,
+  
+  // PERFORMANCE TWEAKS:
+  maxShadowOpacity: 0.1, // Reduces shadow layer opacity calculation (Default: 0.15)
+  flippingTime: 600,     // Speeds up flip duration from 1000ms to 600ms for a snappier feel
+  drawShadow: false,     // Disable dynamic canvas shadow generation if lag persists (Set to false for best performance)
+  
+  showCover: true,
+  usePortrait: true,
+  autoSize: true,
+  startZIndex: 5,
+  mobileScrollSupport: false
+    });
+
+    pageFlip.loadFromHTML(document.querySelectorAll(".my-page"));
+    window.pageFlip = pageFlip;
+  } else {
+    // FIX: Wait for DOM layout to paint before updating size
+    setTimeout(() => {
+      if (flipContainer.clientWidth > 0 && window.pageFlip) {
+        window.pageFlip.update();
+      }
+    }, 150);
+  }
+}
+
+// Handle Resize for active flipbook
+window.addEventListener("resize", () => {
+  const storiesTab = document.getElementById("stories-tab");
+  if (window.pageFlip && storiesTab && !storiesTab.classList.contains("hidden")) {
+    window.pageFlip.update();
+  }
 });

@@ -27,12 +27,13 @@ main,
     padding-bottom: 3rem !important;
 }
 
+
 body { 
   background-color: var(--bg-light); 
   color: var(--text-dark); 
   margin:0 !important; 
   padding:0 !important; 
-  overflow-x: hidden; 
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -62,7 +63,7 @@ body {
 
 /* Layout & Containers */
 .main-container { 
-    width: 92%;               /* Dynamically scales across screens */
+    width: 95%;               /* Dynamically scales across screens */
     max-width: 1400px;        /* Widens desktop view significantly */
     margin: 0 auto; 
     padding: 2.5rem 1.5rem; 
@@ -77,7 +78,26 @@ body {
 }
 
 .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
-.tab-content.active { display: block; }
+.tab-content.active { position: relative !important;
+  top: 0 !important;
+  left: 0 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  height: auto !important;
+  display: block; }
+
+.tab-content:not(.active) {
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
@@ -711,7 +731,7 @@ img, video {
    ========================================== */
 .navbar {
   position: sticky;
-  top: 1.25rem;
+  top: 1.0rem;
   z-index: 99999;
   width: 100%;
   max-width: 1380px;
@@ -1712,7 +1732,16 @@ ul.nav-links {
 .schedule-card-content {
   display: flex;
   flex-direction: column;
+  align-items: flex-start; /* Keeps price badge, titles, and dates anchored to the left */
+  text-align: left;        /* Stops text centering on window resize */
+  width: 100%;             /* Spans full width so align-items works properly */
   gap: 0.35rem;
+}
+
+/* Force child elements inside content block to align left */
+.schedule-card-content > * {
+  text-align: left;
+  margin-left: 0;
 }
 
 /* STCW MANDATORY BADGE */
@@ -2315,6 +2344,22 @@ ul.nav-links {
   font-weight: 500; 
 }
 
+/* ==========================================================
+   CAPTURED MOMENTS GALLERY IMAGE FIX
+   ========================================================== */
+
+/* Target gallery grid images (adjust selector if your class differs) */
+.gallery-card img,
+.gallery-item img,
+.captured-moments img {
+  width: 100% !important;
+  height: 250px !important;       /* Set your desired uniform card image height */
+  object-fit: cover !important;   /* Prevents stretching by auto-cropping to fit */
+  object-position: center !important; /* Centers the image inside the frame */
+  border-radius: 8px;             /* Optional: maintains inner card corner radius */
+}
+
+
 /* LIGHTBOX MODAL CONTAINER FOR GALLERY */
 .lightbox {
   display: none;
@@ -2544,8 +2589,27 @@ input[type="text"], input[type="url"] {
     inset 0 1px 0 0 rgba(255, 255, 255, 0.6); 
 }
 
+#cancel-edit-btn {
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: #e2e8f0;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#cancel-edit-btn:hover {
+  background: #cbd5e1;
+  color: #0f172a;
+}
+
 .btn-secondary { 
-  background: #e2e8f0; 
+  background: #c6c8ca; 
   color: var(--text-dark); 
 }
 .btn-secondary-solid { 
@@ -2641,7 +2705,7 @@ input[type="text"], input[type="url"] {
 /*Delete Course Button */
 .btn-delete,
 .btn-danger {
-    background-color: #dc3545 !important;
+    background-color: #b50a0a !important;
     color: #ffffff !important;
     border: none;
     transition: background-color 0.2s ease;
@@ -3106,29 +3170,6 @@ input[type="text"], input[type="url"] {
     width: 100%;
 }
 
-/* FOR RESPONSIVE DIFFERENT SCREEN TYPES */
-/* Ultra-Wide Monitors (1600px and up) */
-@media (min-width: 1600px) {
-    .main-container {
-        max-width: 1520px;
-    }
-}
-
-/* Tablets & Laptops (1024px and below) */
-@media (max-width: 1024px) {
-    .main-container {
-        width: 95%;
-        padding: 1.5rem 1rem;
-    }
-}
-
-/* Mobile Devices (768px and below) */
-@media (max-width: 768px) {
-    .main-container {
-        width: 100%;
-        padding: 1rem;
-    }
-}
 
 
 /* ==========================================================================
@@ -3179,6 +3220,10 @@ input[type="text"], input[type="url"] {
   flex-shrink: 0 !important;
 }
 
+#logoutBtn {
+  border-radius: 50px;
+}
+
 /* STRICT OVERRIDE UTILITIES */
 #loginBtn.is-hidden,
 #logoutBtn.is-hidden,
@@ -3205,44 +3250,674 @@ input[type="text"], input[type="url"] {
   gap: 10px !important;
 }
 
-/* Edit Mode gear icon text color */
+/* Edit Mode gear icon text color & layout */
 #admin-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;               /* Space between gear icon and text */
+  padding: 0.45rem 0.45rem;    /* Breathing room around text */
+  border-radius: 20px;
   background: transparent;
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  white-space: nowrap;       /* Keeps text on a single line */
+  cursor: pointer;
 }
 
 #admin-tab-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(211, 117, 54, 0.528);
+}
+
+#admin-tab-btn i {
+  font-size: 1.0rem;
+  margin: 0;
 }
 
 /*=============================================
 
-/* Spacing fix for Mobile Screens */
-@media (max-width: 768px) {
-  /* Option A: If your navbar is position: fixed or sticky */
-  body, .main-content {
-    padding-top: 25px !important; /* Adjust if your navbar pill is taller */
-  }
+
+
+
+
+
+
+/* FLIP BOOK PAGE EFFECT */
+#my-flipbook,
+.stpageflip-container,
+.stpageflip-page,
+.my-page {
+  will-change: transform;
+  transform: translateZ(0); /* Triggers hardware acceleration layer */
+  backface-visibility: hidden; /* Stops rendering hidden page backs */
+  -webkit-backface-visibility: hidden;
+}
+
+.stpageflip-page.--flipping {
+  /* Disables live recalculation of complex box-shadows while animating */
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+.flipbook-wrapper,
+.stpageflip-container {
+  perspective: 2000px !important;
+  /* Multi-layered shadow giving true elevation above background */
+  filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.45)) 
+          drop-shadow(0 10px 12px rgba(25, 15, 5, 0.3)) !important;
+}
+
+#stories-tab.active {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100%;
+  min-height: calc(100vh - 120px);
+  overflow: visible !important;
+}
+
+#stories-tab {
+  position: relative;
+  width: 100%;
+  min-height: 750px;
+  max-height: 850px; /* Constrains vertical maximum */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px; /* Clean gap above footer */
 }
 
 
+/* Scene Container */
+.flipbook-scene {
+  width: 100%;
+  height: 100%;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: relative;
+  overflow: visible !important;
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+/* Wrapper Expanded for Large Book Display */
+.flipbook-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 95vw;
+  height: 85vh; /* Expanded height to fit large book */
+  margin: 0 auto !important;
+  perspective: 2000px;
+  overflow: visible !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Force Canvas Centering & Allow 3D Overflow */
+.stpageflip-container,
+.stpageflip-canvas 
+.stpageflip .--shadow {
+  filter: blur(4px) opacity(0.85) !important;
+  margin: 0 auto !important;
+  display: block !important;
+  overflow: visible !important;
+}
+
+.stpageflip {
+  margin: 0 auto !important;
+}
 
 
+/* Page Base Styling */
+.my-page {
+  background-color: #f4ecd8 !important; /* Parchment base */
+  background-image: 
+    /* Aged stains & foxing */
+    radial-gradient(circle at 15% 15%, rgba(120, 70, 20, 0.05) 0%, transparent 25%),
+    radial-gradient(circle at 85% 75%, rgba(100, 50, 10, 0.06) 0%, transparent 30%),
+    /* Paper edge wear vignette */
+    radial-gradient(ellipse at center, transparent 60%, rgba(101, 67, 33, 0.18) 100%) !important;
+
+  box-shadow: 
+    inset 0 0 20px rgba(80, 50, 20, 0.22),
+    inset -4px 0 8px rgba(0, 0, 0, 0.12) !important;
+
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden !important;
+  border: 1px solid rgba(115, 80, 45, 0.3) !important;
+  padding: 25px 25px 40px 25px !important;
+  display: flex;
+  flex-direction: column;
+  color: #2b2219 !important;
+}
+
+/* Spine Shadow */
+.my-page::before {
+ content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 22px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(45, 25, 10, 0.28) 0%, rgba(45, 25, 10, 0) 100%) !important;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.my-page img {
+  transform: translateZ(0);
+  pointer-events: none; /* Prevents browser drag checks */
+}
+
+.page-footer {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 0.8rem;
+  font-family: "Georgia", serif;
+  color: #6b5847 !important;
+  letter-spacing: 1px;
+  z-index: 10;
+}
 
 
-/*======= Responsive Spacing for Smaller Screens =========*/
-
-@media (max-width: 1024px) {
-  .nav-links {
-    gap: 0.6rem;
-    font-size: 0.9rem;
-  }
+/* COVER STYLE STORIES BOOK */
+.page-cover {
+  background-color: #2b1d14 !important; /* Dark distressed leather */
+  background-image: 
+    /* Leather grain texture highlights */
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.7) 100%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, rgba(255, 255, 255, 0.05) 3%, transparent 10%) !important;
+  color: #d4af37 !important;
+  padding: 18px !important;
+  box-sizing: border-box;
   
-  .brand-text span {
-    display: none; /* Hide subtitle on mid-sized screens to save horizontal space */
+  /* Thick leather cover edges with inner beveling */
+  border-left: 8px solid #1a100b !important;  /* Spine side thickness */
+  border-top: 3px solid #3d2b1f !important;   /* Top light bevel */
+  border-right: 5px solid #170d08 !important; /* Outer cover edge depth */
+  border-bottom: 5px solid #100804 !important;/* Bottom shadow edge */
+  border-radius: 4px 10px 10px 4px !important;
+  
+  /* Inner leather inset shadow */
+  box-shadow: 
+    inset 0 0 15px rgba(0, 0, 0, 0.8),
+    inset 2px 0 5px rgba(255, 255, 255, 0.1) !important;
+}
+
+.page-cover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12px; /* Indented cover crease line */
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(255, 255, 255, 0.1) 50%, rgba(0, 0, 0, 0.4));
+  box-shadow: 1px 0 2px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  z-index: 20;
+}
+
+.page-cover::before {
+  display: none;
+}
+
+.page-cover.stpageflip-page-front::before {
+  content: "";
+  position: absolute;
+  right: -8px;
+  top: 4px;
+  bottom: 4px;
+  width: 8px;
+  /* Simulates hundreds of golden-aged stacked paper pages */
+  background: repeating-linear-gradient(
+    to bottom,
+    #e8d8b8 0px,
+    #c4b290 1px,
+    #d1c09d 2px,
+    #b3a07d 3px
+  ) !important;
+  border-left: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: inset 2px 0 3px rgba(0, 0, 0, 0.3);
+  border-radius: 0 2px 2px 0;
+  pointer-events: none;
+}
+
+.page-cover .cover-inner{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 2px solid #8c6d3b !important; /* Gold foil border */
+  outline: 1px dashed rgba(212, 175, 55, 0.35);
+  outline-offset: -8px;
+  padding: 30px;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+  background: rgba(20, 12, 7, 0.2); /* Slight contrast lift for text */
+}
+
+.cover-inner p {
+  font-size: small;
+}
+
+.cover-subtitle {
+  font-size: 0.95rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #c4a468 !important;
+  margin-bottom: 14px;
+  font-family: "Georgia", serif;
+}
+
+.cover-title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin: 0;
+  color: #e5c158 !important; /* Weathered gold header */
+  text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.7);
+  font-family: "Georgia", serif;
+}
+
+.cover-line {
+  width: 110px;
+  height: 2px;
+  background-color: #8c6d3b !important;
+  margin: 20px 0;
+}
+
+.cover-caption {
+  font-size: 0.85rem;
+  color: #b59862 !important;
+  margin: 0;
+  font-family: "Georgia", serif;
+}
+
+/* POLAROID CARD CONTAINER */
+.polaroid-card {
+  float: right;
+  position: relative;
+  width: 190px !important;
+  margin: 0 0 10px 12px !important;
+  background: #f0eae1 !important; /* Aged photo paper */
+  padding: 10px 10px 15px 10px !important;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25) !important;
+  transform: rotate(3deg);
+  z-index: 10;
+  box-sizing: border-box;
+  border: 1px solid #d1c7b7;
+  height: 30%;
+}
+
+.polaroid-card:hover {
+  transform: rotate(1deg) scale(1.02);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
+
+.polaroid-img-wrapper {
+  width: 100%;
+  height: 180px !important;           /* Scaled image wrapper */
+  overflow: hidden;
+  background: #111111;
+}
+
+.polaroid-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: sepia(0.35) contrast(1.05) !important; /* Warm vintage photo filter */
+}
+
+.polaroid-caption {
+  font-size: 0.75rem !important;
+  color: #222222;
+  text-align: center;
+  margin: 6px 0 0 0 !important;
+  font-weight: 600;
+}
+
+.thumb-pin {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle at 35% 35%, #ff6b6b, #cc0000 60%, #800000 100%);
+  border-radius: 50%;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset -1px -1px 3px rgba(0, 0, 0, 0.5);
+  z-index: 25;
+}
+
+/* Metallic pin center dot */
+.thumb-pin::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 5px;
+  height: 5px;
+  background: radial-gradient(circle at 30% 30%, #ffffff, #dcdcdc 50%, #888888 100%);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Pin drop shadow on page */
+.thumb-pin::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 2px;
+  width: 14px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  filter: blur(1px);
+  z-index: -1;
+}
+
+.compass-watermark {
+  position: absolute;
+  right: 15px;
+  bottom: 25px;
+  width: 220px;
+  height: 220px;
+  opacity: 0.12; /* Adjust opacity for desired subtle look */
+  pointer-events: none;
+  z-index: 1; /* Keeps it behind text content */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23521812"><path d="M50 0 L55 45 L100 50 L55 55 L50 100 L45 55 L0 50 L45 45 Z"/><circle cx="50" cy="50" r="40" fill="none" stroke="%23521812" stroke-width="2"/><circle cx="50" cy="50" r="45" fill="none" stroke="%23521812" stroke-width="1" stroke-dasharray="2,2"/><path d="M50 10 L52 48 L90 50 L52 52 L50 90 L48 52 L10 50 L48 48 Z" opacity="0.5"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+
+
+
+/* Text Layouts */
+.text-container {
+  height: 100%;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.text-container h1, 
+.text-container h2 {
+  font-family: "Georgia", serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0 0 10px 0 !important;
+  color: #241b12 !important;
+}
+
+.text-container h2 {
+  padding-bottom: 2%;
+}
+
+.text-container p {
+  font-family: "Georgia", serif;
+  font-size: 0.85rem;
+  line-height: 1.25;
+  color: #382c21 !important; /* Aged dark brown ink */
+  margin: 0 0 10px 0 !important;
+  padding: 0 !important;
+  text-align: justify;
+}
+
+/* ==========================================================
+   FAIRYTALE "THE END" PAGE STYLING
+   ========================================================== */
+
+.text-container.the-end-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.the-end-title {
+  font-family: "Georgia", "Times New Roman", serif !important;
+  font-size: 2.8rem !important; /* Scaled up for better storybook proportion */
+  font-style: italic;
+  font-weight: 700;
+  color: #3b2314 !important;
+  letter-spacing: 3px;
+  margin: 12px 0 !important;
+  text-shadow: 1px 1px 2px rgba(180, 130, 80, 0.2);
+}
+
+
+.drop-cap::first-letter {
+  font-size: 2.2rem;
+  font-family: "Georgia", serif;
+  font-weight: bold;
+  color: #521812 !important; /* Vintage nautical red accent */
+  float: left;
+  line-height: 0.8;
+  padding-right: 6px;
+  padding-top: 2px;
+}
+
+.photo-container img,
+.combined-container img {
+  filter: sepia(0.3) contrast(1.1) !important; /* Apply subtle seafarer photo tone */
+  border: 1px solid rgba(80, 50, 20, 0.2);
+}
+
+/* Photo Layouts */
+.photo-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-container img {
+  width: 100%;
+  height: 85%;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.photo-caption {
+  font-size: 0.9rem;
+  color: #777;
+  font-style: italic;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.combined-container img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 2px;
+  margin-bottom: 15px;
+}
+
+.combined-container h3 {
+  font-size: 1.1rem;
+  margin: 0 0 8px 0;
+}
+
+.combined-container p {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+/* Full Bleed Image */
+.full-bleed {
+  padding: 0 !important;
+}
+
+.bleed-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+/* ==========================================
+   RESPONSIVE MEDIA QUERY FOR SMALLER SCREENS
+   ========================================== */
+@media screen and (max-width: 768px) {
+  .text-container {
+    padding: 5px 8px;
+  }
+
+  .text-container h1, 
+  .text-container h2 {
+    font-size: 1.3rem;
+    margin-bottom: 10px !important;
+  }
+
+  /* Make text smaller on mobile screens */
+  .text-container p {
+    font-size: 0.65rem !important;
+    line-height: 1.35 !important;
+    margin-bottom: 6px !important;
+  }
+
+  /* Scale polaroid smaller so more text wraps beside it */
+  .polaroid-card {
+    width: 150px !important;
+    margin: 0 0 8px 8px !important;
+    padding: 5px 5px 10px 5px !important;
+  }
+
+  .polaroid-img-wrapper {
+    height: 130px !important;
+  }
+
+  .polaroid-caption {
+    font-size: 0.65rem !important;
+  }
+
+  .drop-cap::first-letter {
+    font-size: 1.8rem;
   }
 }
+
+
+/* FOR RESPONSIVE DIFFERENT SCREEN TYPES */
+/* Ultra-Wide Monitors (1600px and up) */
+@media (min-width: 1600px) {
+    .main-container {
+        max-width: 1520px;
+    }
+}
+
+/* Tablets & Laptops (1024px and below) */
+@media (max-width: 1024px) {
+    .main-container {
+        width: 95%;
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* Mobile Devices (768px and below) */
+@media (max-width: 768px) {
+    .main-container {
+        width: 100%;
+        padding: 1rem;
+    }
+}
+
+
+/* ==========================================================
+   NAVBAR LINKS RESPONSIVENESS & TEXT WRAP FIX
+   ========================================================== */
+
+/* Prevent nav links from wrapping into 2 lines */
+.navbar nav,
+.navbar ul,
+.navbar-links {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1.25rem !important;        /* Flexible spacing between items */
+  flex-wrap: nowrap !important;   /* Forces items to stay on a single line */
+}
+
+/* Force links to stay on one line and adjust font sizing */
+.navbar nav a,
+.navbar ul li a,
+.navbar-links a {
+  white-space: nowrap !important; /* Stops "About Us" from breaking onto two lines */
+  font-size: 0.9rem !important;   /* Slightly reduce font so all items fit */
+}
+
+/* Tablet & Smaller Screens Adjustment */
+@media (max-width: 1100px) {
+  .navbar nav,
+  .navbar ul,
+  .navbar-links {
+    gap: 0.75rem !important;       /* Tighten gap when viewport shrinks */
+  }
+
+  .navbar nav a,
+  .navbar ul li a,
+  .navbar-links a {
+    font-size: 0.8rem !important;  /* Scale down font size */
+  }
+
+  /* Optional: hide subtitle to save navbar space on smaller displays */
+  .navbar .brand-subtitle,
+  .navbar .logo-text span {
+    display: none !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3385,3 +4060,6 @@ select:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
+
+
+
