@@ -1391,46 +1391,156 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// PAGE FLIP BOOK FUNCTIONS
-let pageFlip = null;
+// TICKET STACK FUNCTION ARRAY
+// Dataset with full multi-paragraph seaman stories
+const seamanStories = [
+  {
+    id: "#20030220",
+    name: "Brian C. Estologa",
+    rank: "Deck Cadet",
+    vessel: "MV Pacific Star",
+    date: "MAR 2026",
+    vesselType: "Bulk Carrier",
+    quote: "Every expert was once a beginner. Do not fear mistakes; fear the absence of trying.",
+    image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=700&q=80",
+    paragraphs: [
+      "My journey in the maritime industry is a story of gratitude, hard work, and unwavering determination. Life was not always easy, and there was a time when I struggled to find my true path. I once dreamed of becoming a Law Officer, but fate had different plans for me.",
+      "Facing that reality felt like a failure at first, but it turned out to be a blessing in disguise. I decided to embrace the maritime world, and that decision changed my life forever. As a proud Company Scholar, I was blessed with invaluable support that covered my education needs.",
+      "I also owe my competence and confidence to DMMA Maritime Training Center, where I acquired the technical knowledge and practical skills that made me future-ready and capable of handling the challenges of the sea."
+    ]
+  },
+  {
+    id: "#20030221",
+    name: "Capt. Juan Dela Cruz",
+    rank: "Master Mariner",
+    vessel: "MV Ocean Guardian",
+    date: "OCT 2024",
+    vesselType: "Container Ship",
+    quote: "The sea rewards those who respect its power and master their craft.",
+    image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=700&q=80",
+    paragraphs: [
+      "Navigating through the North Atlantic during peak winter taught me true resilience. The seas were rough, with swelling waves hitting our bow continuously for three days.",
+      "Maintaining morale on deck during severe weather is just as vital as managing navigation instruments. Seeing the sun break through the clouds after days of storm reminded everyone onboard why we chose this noble profession."
+    ]
+  },
+  {
+    id: "#20030222",
+    name: "Engr. Mark Santos",
+    rank: "Chief Engineer",
+    vessel: "MT Blue Horizon",
+    date: "JAN 2025",
+    vesselType: "Oil Tanker",
+    quote: "Precision and teamwork in the engine room keep the heart of the ship beating.",
+    image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=700&q=80",
+    paragraphs: [
+      "Working inside an engine room operating under high ambient temperatures requires extreme discipline and constant vigil. Mid-voyage, our team encountered an issue with an auxiliary generator.",
+      "By relying on the rigorous training we underwent at DMMA MTAC, we systematically diagnosed and repaired the unit without losing critical power. The accomplishment reinforced the value of practical simulation training."
+    ]
+  }
+];
 
-function initFlipbook() {
-  const flipContainer = document.getElementById("my-flipbook");
-  const storiesTab = document.getElementById("stories-tab");
+let currentTicketIndex = 0;
 
-  // Safety check: Don't run if tab is missing or hidden
-  if (!flipContainer || !storiesTab || storiesTab.classList.contains("hidden")) return;
+function renderTicketStack() {
+  const container = document.getElementById("ticket-stack-container");
+  if (!container) return;
+  
+  container.innerHTML = "";
 
-  if (!pageFlip) {
-    pageFlip = new St.PageFlip(flipContainer, {
-      width: 500,          // base page width
-      height: 800,         // base page height
-      size: "fixed",       // or "stretch"
-      minWidth: 600,
-      maxWidth: 1000,
-      minHeight: 900,
-      maxHeight: 1200,
-      drawShadow: true,
-      mobileScrollSupport: true, // Enables smooth touch interaction on phones
-      usePortrait: true
+  seamanStories.forEach((item, index) => {
+    const ticketElement = document.createElement("div");
+    ticketElement.className = "ticket";
+    ticketElement.setAttribute("data-index", index);
+
+    // Build story paragraphs HTML dynamically
+    const paragraphsHtml = item.paragraphs.map(p => `<p>${p}</p>`).join("");
+
+    ticketElement.innerHTML = `
+      <div class="left">
+        <div class="image" style="background-image: url('${item.image}');"></div>
+        <div class="admit-one">
+          <span>ADMIT ONE</span>
+          <span>STORY TICKET</span>
+        </div>
+        <div class="ticket-number">${item.id}</div>
+      </div>
+
+      <div class="ticket-info">
+        <div class="date">
+          <span>${item.vesselType}</span>
+          <span style="color:#0284c7;">${item.date}</span>
+          <span>VOYAGE</span>
+        </div>
+
+        <div class="show-name">
+          <h1>${item.name}</h1>
+          <span>${item.rank} • ${item.vessel}</span>
+        </div>
+
+        <div class="story-body">
+          <blockquote>"${item.quote}"</blockquote>
+          ${paragraphsHtml}
+        </div>
+
+        <div class="location">
+          <span>DMMA MTAC</span>
+          <span>&#9875;</span>
+          <span>Maritime Stories</span>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="right-info-container">
+          <span style="font-size: 0.9rem; font-weight:700; color:#1e293b;">${item.rank}</span>
+          <span style="font-size: 0.8rem; color:#64748b;">${item.vessel}</span>
+        </div>
+        <div class="barcode">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(item.name + '-' + item.id)}" alt="QR Code" />
+        </div>
+        <span class="ticket-number" style="font-size:0.8rem; color:#94a3b8;">${item.id}</span>
+      </div>
+    `;
+
+    // Click active card to cycle to the next story
+    ticketElement.addEventListener("click", () => {
+      nextTicket();
     });
 
-    pageFlip.loadFromHTML(document.querySelectorAll(".my-page"));
-    window.pageFlip = pageFlip;
-  } else {
-    // FIX: Wait for DOM layout to paint before updating size
-    setTimeout(() => {
-      if (flipContainer.clientWidth > 0 && window.pageFlip) {
-        window.pageFlip.update();
-      }
-    }, 150);
+    container.appendChild(ticketElement);
+  });
+
+  updateStackClasses();
+}
+
+function updateStackClasses() {
+  const tickets = document.querySelectorAll("#ticket-stack-container .ticket");
+  const total = tickets.length;
+
+  tickets.forEach((ticket, idx) => {
+    ticket.classList.remove("active", "next-1", "next-2", "hidden-stack");
+
+    const offset = (idx - currentTicketIndex + total) % total;
+
+    if (offset === 0) {
+      ticket.classList.add("active");
+    } else if (offset === 1) {
+      ticket.classList.add("next-1");
+    } else if (offset === 2) {
+      ticket.classList.add("next-2");
+    } else {
+      ticket.classList.add("hidden-stack");
+    }
+  });
+
+  const badge = document.getElementById("ticket-counter-badge");
+  if (badge) {
+    badge.textContent = `Story ${currentTicketIndex + 1} of ${total}`;
   }
 }
 
-// Handle Resize for active flipbook
-window.addEventListener("resize", () => {
-  const storiesTab = document.getElementById("stories-tab");
-  if (window.pageFlip && storiesTab && !storiesTab.classList.contains("hidden")) {
-    window.pageFlip.update();
-  }
-});
+function nextTicket() {
+  currentTicketIndex = (currentTicketIndex + 1) % seamanStories.length;
+  updateStackClasses();
+}
+
+document.addEventListener("DOMContentLoaded", renderTicketStack);
