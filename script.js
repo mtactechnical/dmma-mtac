@@ -1395,48 +1395,75 @@ document.addEventListener('DOMContentLoaded', () => {
 // Dataset with full multi-paragraph seaman stories
 const seamanStories = [
   {
-    id: "#20030220",
+    id: "#00001",
     name: "Brian C. Estologa",
     rank: "Deck Cadet",
     vessel: "MV Pacific Star",
     date: "MAR 2026",
     vesselType: "Bulk Carrier",
-    quote: "Every expert was once a beginner. Do not fear mistakes; fear the absence of trying.",
-    image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=700&q=80",
+    quote: "Every expert was once a beginner. Do not fear mistakes; fear the absence of trying. The harder you fall, the higher you rise.",
+    qrMessage: "MTAC ENGINE ROOM SENSOR:\nAmbient Temp: 48°C\nSweat Produced: 3 Liters\nNoise Level: WHAT? I CAN'T HEAR YOU!\nCurrent Mood: Sauna session complete! 🔧🔥",
+    image: "img/stories/brian.png",
     paragraphs: [
-      "My journey in the maritime industry is a story of gratitude, hard work, and unwavering determination. Life was not always easy, and there was a time when I struggled to find my true path. I once dreamed of becoming a Law Officer, but fate had different plans for me.",
-      "Facing that reality felt like a failure at first, but it turned out to be a blessing in disguise. I decided to embrace the maritime world, and that decision changed my life forever. As a proud Company Scholar, I was blessed with invaluable support that covered my education needs.",
-      "I also owe my competence and confidence to DMMA Maritime Training Center, where I acquired the technical knowledge and practical skills that made me future-ready and capable of handling the challenges of the sea."
+      "My journey in the maritime industry is a story of gratitude, hard work, and unwavering determination. Life was not always easy, and there was a time when I struggled to find my true path. I once dreamed of becoming a Law Officer, but fate had different plans for me. Facing that reality felt like a failure at first, but it turned out to be a blessing in disguise. I decided to embrace the maritime world, and that decision changed my life forever. As a proud Company Scholar of Bouvet Shipping Management Corporation, I was blessed with invaluable support that covered my education needs and guided me every step of the way. From my cadetship and training days to my actual deployment, their guidance helped me transition smoothly into becoming a professional seafarer. ",
+      "I also owe my competence and confidence to DMMA Maritime Training Center, where I acquired the technical knowledge and practical skills that made me future-ready and capable of handling the challenges of the sea. Behind every achievement stands the unwavering love and encouragement of my family, who are my greatest inspiration and strength. Today, as I sail the oceans and fulfill my duties onboard, I carry with me the discipline, excellence, and values instilled in me. I may have taken a different road than I first planned, but I know now that the sea is truly where I belong. I am committed to growing further in my career and becoming a top-tier officer in the years to come. "
     ]
   },
   {
-    id: "#20030221",
-    name: "Capt. Juan Dela Cruz",
+    id: "#00002",
+    name: "D/C Renz Quion Puzon",
     rank: "Master Mariner",
     vessel: "MV Ocean Guardian",
     date: "OCT 2024",
     vesselType: "Container Ship",
     quote: "The sea rewards those who respect its power and master their craft.",
-    image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=700&q=80",
+    image: "img/stories/renz.png",
     paragraphs: [
       "Navigating through the North Atlantic during peak winter taught me true resilience. The seas were rough, with swelling waves hitting our bow continuously for three days.",
       "Maintaining morale on deck during severe weather is just as vital as managing navigation instruments. Seeing the sun break through the clouds after days of storm reminded everyone onboard why we chose this noble profession."
     ]
   },
   {
-    id: "#20030222",
-    name: "Engr. Mark Santos",
+    id: "#00003",
+    name: "Leigh Mar Melvin Angelo F. Maza",
     rank: "Chief Engineer",
     vessel: "MT Blue Horizon",
     date: "JAN 2025",
     vesselType: "Oil Tanker",
     quote: "Precision and teamwork in the engine room keep the heart of the ship beating.",
-    image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=700&q=80",
+    image: "img/stories/leighmar.png",
     paragraphs: [
       "Working inside an engine room operating under high ambient temperatures requires extreme discipline and constant vigil. Mid-voyage, our team encountered an issue with an auxiliary generator.",
       "By relying on the rigorous training we underwent at DMMA MTAC, we systematically diagnosed and repaired the unit without losing critical power. The accomplishment reinforced the value of practical simulation training."
     ]
-  }
+  },
+  {
+    id: "#00004",
+    name: "Jason R. Estremos",
+    rank: "Master Mariner",
+    vessel: "MV Ocean Guardian",
+    date: "OCT 2024",
+    vesselType: "Container Ship",
+    quote: "The sea rewards those who respect its power and master their craft.",
+    image: "img/stories/jason.png",
+    paragraphs: [
+      "Navigating through the North Atlantic during peak winter taught me true resilience. The seas were rough, with swelling waves hitting our bow continuously for three days.",
+      "Maintaining morale on deck during severe weather is just as vital as managing navigation instruments. Seeing the sun break through the clouds after days of storm reminded everyone onboard why we chose this noble profession."
+    ]
+  },{
+    id: "#00005",
+    name: "D/C Renz Quion Puzon",
+    rank: "Master Mariner",
+    vessel: "MV Ocean Guardian",
+    date: "OCT 2024",
+    vesselType: "Container Ship",
+    quote: "The sea rewards those who respect its power and master their craft.",
+    image: "img/stories/renz.png",
+    paragraphs: [
+      "Navigating through the North Atlantic during peak winter taught me true resilience. The seas were rough, with swelling waves hitting our bow continuously for three days.",
+      "Maintaining morale on deck during severe weather is just as vital as managing navigation instruments. Seeing the sun break through the clouds after days of storm reminded everyone onboard why we chose this noble profession."
+    ]
+  },
 ];
 
 let currentTicketIndex = 0;
@@ -1446,6 +1473,7 @@ function renderTicketStack() {
   if (!container) return;
   
   container.innerHTML = "";
+  
 
   seamanStories.forEach((item, index) => {
     const ticketElement = document.createElement("div");
@@ -1459,8 +1487,8 @@ function renderTicketStack() {
       <div class="left">
         <div class="image" style="background-image: url('${item.image}');"></div>
         <div class="admit-one">
-          <span>ADMIT ONE</span>
-          <span>STORY TICKET</span>
+          <span>MTAC</span>
+          <span>STORIES</span>
         </div>
         <div class="ticket-number">${item.id}</div>
       </div>
@@ -1495,7 +1523,7 @@ function renderTicketStack() {
           <span style="font-size: 0.8rem; color:#64748b;">${item.vessel}</span>
         </div>
         <div class="barcode">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(item.name + '-' + item.id)}" alt="QR Code" />
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(item.qrMessage)}" alt="Maritime Easter Egg QR Code" />
         </div>
         <span class="ticket-number" style="font-size:0.8rem; color:#94a3b8;">${item.id}</span>
       </div>
@@ -1544,3 +1572,6 @@ function nextTicket() {
 }
 
 document.addEventListener("DOMContentLoaded", renderTicketStack);
+
+
+
