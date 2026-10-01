@@ -3430,7 +3430,7 @@ input[type="text"], input[type="url"] {
 .ticket-info .show-name h1 {
   font-size: 2rem;
   font-weight: 800;
-  color: #0284c7;
+  color: var(--text-dark);
   margin: 0 0 2px 0;
 }
 
@@ -3469,8 +3469,8 @@ input[type="text"], input[type="url"] {
 
 .ticket-info .story-body blockquote {
   font-style: italic;
-  color: #0284c7;
-  border-left: 3px solid #0284c7;
+  color: #fb590e;
+  border-left: 3px solid #fb590e;
   padding-left: 0.75rem;
   margin: 0.5rem 0 0.85rem 0;
   font-weight: 600;

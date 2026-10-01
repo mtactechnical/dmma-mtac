@@ -1416,11 +1416,12 @@ const seamanStories = [
     vessel: "MV Ocean Guardian",
     date: "OCT 2024",
     vesselType: "Container Ship",
-    quote: "The sea rewards those who respect its power and master their craft.",
+    quote: "...and taught me that a ship does not sail with one anchor—teamwork is the real engine of success; the greatest rewards are found beyond the biggest waves.",
     image: "img/stories/renz.png",
     paragraphs: [
-      "Navigating through the North Atlantic during peak winter taught me true resilience. The seas were rough, with swelling waves hitting our bow continuously for three days.",
-      "Maintaining morale on deck during severe weather is just as vital as managing navigation instruments. Seeing the sun break through the clouds after days of storm reminded everyone onboard why we chose this noble profession."
+      "I started my journey by losing sight of the shore, knowing that the greatest rewards are found beyond the biggest waves. A young boy looking at the horizon, dreaming of distant lands, large ships, and a better life for his family. Despite coming from a humble background with no maritime experience, determined me to become a ship's officer. All of this it started in the classroom at DMMA COLLEGE and DMMA MARITIME TRAINING AND ASSESSMENT CENTER I was driven by a dream of exploring the world and a desire for a challenging, noble profession. The dedication of the instructors and the hands-on practical, simulators helped me turn theoretical knowledge into confidence. ",
+      "Life at sea isn’t always calm waters. I faced long periods away from family, demanding workloads, and the need to quickly adapt to a multicultural environment. But these challenges were my greatest teachers. They built my resilience and taught me that a 'ship does not sail with one anchor'—teamwork is the real engine of success. Today, as a Deck Cadet on Panamax Bulk Carrier, I am proud to apply the lessons in safety, leadership, and technical skill I learned early in my training. I am grateful for the solid foundation provided by DMMA MARITIME TRAINING AND ASSESSMENT CENTER. My goal is to continue progressing toward becoming a Officer. ",
+      "ABANTE LANG TA BAI, KAY GUBA ATONG ATRAS" 
     ]
   },
   {
@@ -1430,11 +1431,12 @@ const seamanStories = [
     vessel: "MT Blue Horizon",
     date: "JAN 2025",
     vesselType: "Oil Tanker",
-    quote: "Precision and teamwork in the engine room keep the heart of the ship beating.",
+    quote: "What is our biggest room? Room for Improvement",
     image: "img/stories/leighmar.png",
     paragraphs: [
-      "Working inside an engine room operating under high ambient temperatures requires extreme discipline and constant vigil. Mid-voyage, our team encountered an issue with an auxiliary generator.",
-      "By relying on the rigorous training we underwent at DMMA MTAC, we systematically diagnosed and repaired the unit without losing critical power. The accomplishment reinforced the value of practical simulation training."
+      "The room for improvement is where success is quietly built. This is my seafaring story. As a student way back 2019, everything became a flash right before my eyes. New environment, new people to encounter. Always had a doubt if I “makahalutay bako ani na kursoha kay perti naman ka challenging” I never knew that this uniform holds too much pressure for myself. Fast forward and the time comes as I stepped on to the ship’s gangway for the first time. All I am thinking that time is “mao najud ni, makaya lage salig lang” ",
+      "During my days at sea, as a cadet “di jud malikayan na permi ko makasab an, masungugan ug matripan, permi mapressure everytime pangutan on sa opisyal” this is one of my biggest challenges na ma face nako everyday na permi nako huna hunaon “How can I become better tomorrow by learning from the lessons of yesterday? Kay permi lage ta makapiso sa kauban. As I sailed for more than a year, “dako kaayu kog pasalamat and daghan kog natun an” regarding self improvement.",
+      "There are days na palpak jud but it doesn’t define of who we are. Tao lang ta, dili ta perfect kaya naa tay gina ingon na “what is our biggest room? Room for improvement” My journey in seafaring is not perfect, but a roller coaster which we can go with the flow. No matter hadlok siya na dalan, basta naa kay kakayahan na mupadayun, maabot rajud na. Enjoy and trust the process because it molds and boost our better selves."
     ]
   },
   {
@@ -1444,24 +1446,27 @@ const seamanStories = [
     vessel: "MV Ocean Guardian",
     date: "OCT 2024",
     vesselType: "Container Ship",
-    quote: "The sea rewards those who respect its power and master their craft.",
+    quote: "I understand that success is not about how quickly you achieve your goals, but how you endure the journey",
     image: "img/stories/jason.png",
     paragraphs: [
-      "Navigating through the North Atlantic during peak winter taught me true resilience. The seas were rough, with swelling waves hitting our bow continuously for three days.",
-      "Maintaining morale on deck during severe weather is just as vital as managing navigation instruments. Seeing the sun break through the clouds after days of storm reminded everyone onboard why we chose this noble profession."
+      "My journey in the maritime field was not easy. Like many aspiring seafarers, I had big dreams, but the path toward them tested my patience and strength. I remember applying to many companies, hoping that one of them would give me the opportunity I had been working so hard for. Unfortunately, rejection became something I faced again and again. It reached a point where I felt so down, questioning myself because I was always the one not chosen. ",
+      "Despite the disappointment, I held on to my goal. I continued improving myself, learning, and staying focused on why I started this journey in the first place. Then, during my very last year at DMMA, as a 3rd-year student, something finally changed. When I least expected it, TORM Shipping gave me a chance to be part of their team. That moment reminded me that all the rejections were not the end of my story—they were simply preparing me for the right opportunity. Going onboard a ship was another chapter of growth. Life at sea was challenging—long hours, demanding tasks, and being away from family—but it was also where I truly discovered my strength and discipline. Every day onboard taught me responsibility, teamwork, and resilience. I learned how important it is to stay focused, to trust your training, and to support your fellow crew members. There were moments of exhaustion, but also moments of pride—especially when I realized I was living the dream I once thought was out of reach. Looking back, I understand that success is not about how quickly you achieve your goals, but how you endure the journey. Rejections may slow you down, but they do not define your future. What matters is your perseverance, your willingness to keep going even when things feel uncertain. To anyone who is still waiting for their chance: don’t give up. Your time will come, just like mine did. Keep pushing forward, believe in yourself, and trust that every setback is leading you to something better. "
     ]
   },{
     id: "#00005",
-    name: "D/C Renz Quion Puzon",
+    name: "Peter John Magsayo",
     rank: "Master Mariner",
     vessel: "MV Ocean Guardian",
     date: "OCT 2024",
     vesselType: "Container Ship",
-    quote: "The sea rewards those who respect its power and master their craft.",
-    image: "img/stories/renz.png",
+    quote: "The training center taught me the importance of teamwork, discipline, communication and quick  decision making , which are all essential qualities of a competent seafarer",
+    image: "img/stories/peter.png",
     paragraphs: [
-      "Navigating through the North Atlantic during peak winter taught me true resilience. The seas were rough, with swelling waves hitting our bow continuously for three days.",
-      "Maintaining morale on deck during severe weather is just as vital as managing navigation instruments. Seeing the sun break through the clouds after days of storm reminded everyone onboard why we chose this noble profession."
+      "My journey as a seafarer began when I entered school as a regular student during the pandemic school year. During that time, internet connection became one of my biggest challenges because I lived in an uphill area where the signal was very unstable.However,this difficulty did not become a hindrance for me to quit my maritime journey.When face to face classes resumed, I became active in different school organizations. I also became an ROTC officer and served as the Deputy Commander, which helped me develop leadership, discipline, and responsibility. Despite financial difficulties, I continued my studies while working in order to support my needs and education.Those experiences taught me the value of hard work, perseverance, and dedication.",
+      "Eventually, I became part of the V.Ships company, which gave me the opportunity to work onboard their vessels as an aspiring Engine Cadet.At first, I felt nervous and uncertain because everything was new to me the environment, the people, and the technical responsibilities involved in working onboard a ship. However, the training center became the foundation of my growth and helped me build confidence in myself.",
+      "During my training, I gained valuable knowledge and practical skills that prepared me for real life situations at sea. The instructors provided quality education and hands on training in engine operations, firefighting, survival techniques, pollution prevention, and emergency response. The training also emphasized the importance of following international maritime regulations, especially safety procedures and protocols onboard. The training center taught me the importance of teamwork, discipline, communication, and quick decision making, which are all essential qualities of a competent seafarer.",
+      "There were times when challenges tested my abilities, especially during emergency drills and demanding work schedules. However, the training center had already prepared me mentally and physically to handle pressure and adapt to life at sea. Because of the lessons and experiences I gained, I became more confident and prepared to perform my duties onboard and got very good recommendations from my senior engineers.",
+      "Looking back on my journey, I can proudly say that the training center played a very important role in shaping me into a qualified and confident seafarer.As an Engine Cadet, I may still be at the beginning of my journey, but I am motivated to continue learning, improving myself, and becoming a successful marine engineer in the future. It was also a good experience to fulfill my childhood dream to visit America and different country in Asia. "
     ]
   },
 ];
