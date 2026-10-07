@@ -7,7 +7,7 @@
   --text-dark: #1b1c1d;
   --text-muted: #22252a;
   --border-color: #e2e8f0;
-  --owwa-blue: #000080;
+  --owwa-blue: #080824;
   --schedule-orange: #fbbd75;
 }
 
@@ -115,7 +115,7 @@ body {
 
 .section-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1.25rem; margin-bottom: 2rem; }
 .section-header.flex-between { display: flex; justify-content: space-between; align-items: flex-end; }
-.section-header h2 { color: var(--secondary); font-size: 1.5rem; }
+.section-header h2 { color: var(--text-muted); font-size: 1.75rem; padding-top: 10px;}
 .section-header p { color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem; }
 
 /* Hero Section */
@@ -258,6 +258,89 @@ body {
     100% {
         box-shadow: 0 0 0 0 rgba(0, 132, 255, 0);
     }
+}
+
+
+
+
+/* ==========================================================
+   COVERFLOW CAROUSEL LIGHTBOX MODAL
+   ========================================================== */
+.course-modal {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: rgba(15, 23, 42, 0);
+  backdrop-filter: blur(0px);
+  align-items: center;
+  justify-content: center;
+  padding: 80px 1.5rem 1.5rem 1.5rem;
+  opacity: 0;
+  pointer-events: none; /* Prevents clicks when hidden */
+  transition: opacity 0.3s ease, background-color 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+/* Active State - Smooth Overlay Fade */
+.course-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+  background-color: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+}
+
+/* Modal Content Card */
+.course-modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.7); /* Starting unpop state */
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+
+/* Active Pop State */
+.course-modal.active .course-modal-content {
+  transform: scale(1); /* Pop in effect */
+  opacity: 1;
+}
+
+/* Image Styling */
+.course-modal-content img {
+  max-width: 100%;
+  max-height: calc(100vh - 140px);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  object-fit: contain;
+}
+
+/* Close Button */
+.course-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(15, 23, 42, 0.75);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 1.5rem;
+  font-weight: 700;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.course-modal-close:hover {
+  background: #0284c7;
+  transform: scale(1.1);
 }
 
 
@@ -479,6 +562,15 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   width: 100%;
+}
+
+.catalog-hero h2 {
+ padding-top: 10px;
+ font-size: 2.0rem;
+}
+
+.catalog-hero p {
+ font-size: 1.0rem;
 }
 
 /* 3. Tablets & Small Laptops (1024px and below) */
@@ -1873,6 +1965,7 @@ ul.nav-links {
 .hero-card {
   border-radius: 16px;
   padding: 3rem 2.5rem;
+  margin-top: 15px;
   
   /* 1. Dark violet gradient overlay (adjust 0.85 opacity if you want the image brighter or darker) */
   /* 2. Replace 'your-image-path.jpg' with the actual path to your photo */
@@ -3295,16 +3388,16 @@ input[type="text"], input[type="url"] {
   padding: 1rem 0 3rem 0;
 }
 
-/* Expanded Outer Container Dimensions */
+/* Outer Stack Container */
 #ticket-stack-container {
   position: relative;
   width: 100%;
-  max-width: 1150px; /* Expands across screen width */
-  height: 520px;     /* Increased height to accommodate multiple long paragraphs */
+  max-width: 950px;
+  height: 480px;
   margin: 0 auto;
 }
 
-/* Main Ticket Box */
+/* Main Ticket Card */
 .ticket {
   position: absolute;
   top: 0;
@@ -3313,52 +3406,80 @@ input[type="text"], input[type="url"] {
   height: 100%;
   background: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
   display: flex;
   overflow: hidden;
   cursor: pointer;
   user-select: none;
-  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
-              opacity 0.4s ease, 
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+              opacity 0.4s ease,
               box-shadow 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+/* Decorative Ticket Notches (Top & Bottom) */
+.ticket::before,
+.ticket::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background-color: #f8fafc; /* Matches your background section color */
+  border-radius: 50%;
+  z-index: 20;
+}
+
+/* Top Notch along the dashed barcode line */
+.ticket::before {
+  top: -11px;
+  right: 99px;
+  box-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Bottom Notch along the dashed barcode line */
+.ticket::after {
+  bottom: -11px;
+  right: 99px;
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 
 .ticket:hover {
-  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.18);
 }
 
-/* Layering Effect */
+/* Stack Layering Animation */
 .ticket.active {
   z-index: 10;
-  transform: translateY(0) scale(1);
+  transform: rotate(0deg) translateY(0) scale(1);
   opacity: 1;
 }
 
 .ticket.next-1 {
   z-index: 9;
-  transform: translateY(20px) scale(0.96);
-  opacity: 0.85;
+  transform: rotate(3.5deg) translate(10px, 8px) scale(0.98);
+  opacity: 0.9;
 }
 
 .ticket.next-2 {
   z-index: 8;
-  transform: translateY(40px) scale(0.92);
-  opacity: 0.65;
+  transform: rotate(-3deg) translate(-8px, 14px) scale(0.96);
+  opacity: 0.75;
 }
 
 .ticket.hidden-stack {
   z-index: 1;
-  transform: translateY(60px) scale(0.88);
+  transform: rotate(5deg) translate(18px, 22px) scale(0.92);
   opacity: 0;
   pointer-events: none;
 }
 
-/* Left Image Column */
+/* Left Column - Trainee Photo */
 .left {
   position: relative;
-  width: 340px;
+  width: 320px;
   height: 100%;
   flex-shrink: 0;
+  background: #0f172a;
 }
 
 .left .image {
@@ -3368,84 +3489,42 @@ input[type="text"], input[type="url"] {
   background-position: center;
 }
 
-.left .admit-one {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  padding: 0 14px;
-  letter-spacing: 0.2em;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  writing-mode: vertical-rl;
-  transform: rotate(-180deg);
-  color: #ffffff;
-  font-size: 0.95rem;
-  font-weight: 800;
-  background: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(3px);
-}
-
-.left .ticket-number {
-  position: absolute;
-  bottom: 14px;
-  right: 16px;
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: bold;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-}
-
-/* Center Content Area - Expanded for Reading */
+/* Center Column - Text Content */
 .ticket-info {
   flex: 1;
-  padding: 2rem 2.5rem;
+  padding: 2.25rem 2.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden; /* Contains interior scrolling elements */
+  justify-content: flex-start;
+  overflow: hidden;
 }
 
-.ticket-info .date {
-  border-top: 2px solid #e2e8f0;
-  border-bottom: 2px solid #e2e8f0;
-  padding: 8px 0;
+.ticket-header {
+  font-size: 0.85rem;
   font-weight: 800;
-  font-size: 0.95rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: #475569;
+  letter-spacing: 0.15em;
+  color: #0284c7;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  flex-shrink: 0;
+  margin-bottom: 0.35rem;
 }
 
 .ticket-info .show-name {
-  margin: 0.75rem 0 0.5rem 0;
-  flex-shrink: 0;
+  margin-bottom: 1rem;
 }
 
 .ticket-info .show-name h1 {
-  font-size: 2rem;
+  font-size: 2.1rem;
   font-weight: 800;
-  color: var(--text-dark);
-  margin: 0 0 2px 0;
+  color: #080824;
+  line-height: 1.15;
+  margin: 0;
 }
 
-.ticket-info .show-name span {
-  font-size: 1.05rem;
-  color: #64748b;
-  font-weight: 600;
-}
-
-/* Narrative Body Section with Clean Scrollbar for Long Text */
+/* Story Text & Quote Scroll Area */
 .ticket-info .story-body {
   flex: 1;
-  margin: 0.5rem 0;
-  padding-right: 0.5rem;
   overflow-y: auto;
+  padding-right: 0.75rem;
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;
 }
@@ -3459,96 +3538,68 @@ input[type="text"], input[type="url"] {
   border-radius: 10px;
 }
 
+.ticket-info .story-body blockquote {
+  font-style: italic;
+  color: #fa4c13;
+  border-left: 3.5px solid #fa4c13;
+  padding-left: 0.85rem;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+
 .ticket-info .story-body p {
-  font-size: 1.02rem;
-  color: #334155;
+  font-size: 1rem;
+  color: #000000;
   line-height: 1.6;
-  text-align: justify;
   margin-bottom: 0.85rem;
 }
 
-.ticket-info .story-body blockquote {
-  font-style: italic;
-  color: #fb590e;
-  border-left: 3px solid #fb590e;
-  padding-left: 0.75rem;
-  margin: 0.5rem 0 0.85rem 0;
-  font-weight: 600;
-}
-
-.ticket-info .location {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding-top: 10px;
-  border-top: 2px solid #e2e8f0;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #64748b;
-  flex-shrink: 0;
-}
-
-/* Right Stub */
+/* Right Column - Decorative Fake Barcode Stub */
 .right {
-  width: 220px;
+  width: 110px;
   height: 100%;
   border-left: 2px dashed #cbd5e1;
-  padding: 2rem 1.25rem;
+  padding: 1.5rem 0;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
   background: #f8fafc;
   flex-shrink: 0;
 }
 
-.right .right-info-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0.3rem;
-}
-
-.right .barcode {
-  height: 110px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.right .barcode img {
-  height: 100%;
-  object-fit: contain;
-}
-
-/* Counter Badge */
-#ticket-counter-badge {
-  background: #e2e8f0;
-  color: #334155;
-  padding: 0.5rem 1.25rem;
-  border-radius: 20px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin-top: 0.5rem;
+/* Fake Barcode CSS Pattern */
+.fake-barcode {
+  width: 50px;
+  height: 80%;
+  background: repeating-linear-gradient(
+    0deg,
+    #0f172a,
+    #0f172a 2px,
+    transparent 2px,
+    transparent 5px,
+    #0f172a 5px,
+    #0f172a 9px,
+    transparent 9px,
+    transparent 11px
+  );
+  opacity: 0.8;
+  border-radius: 2px;
 }
 
 /* ==========================================================
-   MOBILE VIEW FIX FOR TICKET DECK (PREVENTS GLITCHING/DISAPPEARING)
+   MOBILE RESPONSIVE FIX (PREVENTS OVERLAP & GLITCHES)
    ========================================================== */
 
 @media (max-width: 768px) {
-  /* Allow container to expand naturally based on ticket content */
   #ticket-stack-container {
     width: 100%;
-    max-width: 100%;
     height: auto !important;
     min-height: unset !important;
     position: relative;
   }
 
-  /* Reset absolute positioning for active & stacked cards on mobile */
   .ticket {
     position: relative !important;
     top: auto !important;
@@ -3556,73 +3607,104 @@ input[type="text"], input[type="url"] {
     width: 100%;
     height: auto !important;
     flex-direction: column;
-    margin-bottom: 0;
   }
 
-  /* Hide background stacked cards in mobile view so they don't overlap or glitch */
   .ticket.next-1,
   .ticket.next-2,
   .ticket.hidden-stack {
     display: none !important;
   }
 
-  /* Display only the active card smoothly */
   .ticket.active {
     display: flex !important;
     transform: none !important;
     opacity: 1 !important;
   }
 
-  /* Adjust image header height */
   .left {
     width: 100% !important;
-    height: 180px !important;
+    height: 240px !important;
   }
 
-  .left .admit-one {
-    writing-mode: horizontal-tb;
-    transform: none;
-    height: auto;
-    width: 100%;
-    top: 0;
-    left: 0;
-    padding: 6px 12px;
-    justify-content: space-between;
-    font-size: 0.75rem;
-  }
-
-  /* Ensure text area wraps properly and doesn't push elements off-screen */
   .ticket-info {
-    padding: 1.25rem 1rem !important;
-    overflow: visible !important;
+    padding: 1.5rem 1.25rem !important;
   }
 
   .ticket-info .show-name h1 {
-    font-size: 1.4rem !important;
+    font-size: 1.6rem !important;
   }
 
   .ticket-info .story-body {
-    max-height: 260px !important;
-    overflow-y: auto !important;
+    max-height: 280px !important;
   }
 
-  /* Bottom stub adjustment */
   .right {
     width: 100% !important;
-    height: auto !important;
+    height: 70px !important;
     border-left: none !important;
     border-top: 2px dashed #cbd5e1 !important;
-    padding: 1rem !important;
-    flex-direction: row !important;
-    justify-content: space-between !important;
-    align-items: center !important;
+    padding: 0.75rem !important;
   }
 
-  .right .barcode {
-    height: 70px !important;
-    width: 70px !important;
+  .fake-barcode {
+    width: 75%;
+    height: 35px;
+    background: repeating-linear-gradient(
+      90deg,
+      #0f172a,
+      #0f172a 2px,
+      transparent 2px,
+      transparent 5px,
+      #0f172a 5px,
+      #0f172a 9px,
+      transparent 9px,
+      transparent 11px
+    );
+  }
+
+  .ticket::before,
+  .ticket::after {
+    display: none !important;
   }
 }
+
+
+/* Container to hold badges horizontally for prices walk-in and fresh grad */
+.price-badges-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+/* Base Badge Style */
+.price-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Orange Walk-in Badge */
+.price-badge.price-walkin {
+  background-color: #fff3eb;
+  color: #ff5500;
+  border: 1px solid #ffd8c2;
+}
+
+/* Light Navy Alumni Badge (Matches Orange Layout) */
+.price-badge.price-alumni {
+  background-color: #f0f2f9;
+  color: #21215a;
+  border: 1px solid #c8d0e7;
+}
+
+
 
 
 
@@ -3695,7 +3777,56 @@ input[type="text"], input[type="url"] {
   }
 }
 
+@media (max-width: 768px) {
+  /* Fix header section stacking */
+  .admin-header,
+  .section-header,
+  .flex-between {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
+  }
 
+  /* Make editing status badge align cleanly */
+  .admin-header .editing-status,
+  .section-header > div:last-child {
+    align-self: flex-start;
+  }
+
+  /* Form container responsiveness */
+  #course-form,
+  .admin-card,
+  .card {
+    padding: 1rem !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Ensure all inputs and selects take full width */
+  #course-form input[type="text"],
+  #course-form input[type="url"],
+  #course-form select,
+  #course-form button {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Input rows stacking */
+  .form-row,
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+
+  /* Add bottom padding to form so the floating Chat button doesn't block inputs */
+  #course-form {
+    padding-bottom: 5rem !important;
+  }
+}
 
 
 

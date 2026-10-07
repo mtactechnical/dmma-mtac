@@ -344,6 +344,13 @@
   </div>
 </section>
 
+<!-- CAROUSEL CARD IMAGE MODAL LIGHTBOX -->
+<div id="course-modal" class="course-modal">
+  <div class="course-modal-content">
+    <button id="close-course-modal" class="course-modal-close" aria-label="Close image">&times;</button>
+    <img id="course-modal-img" src="" alt="Course Poster Full View" />
+  </div>
+</div>
 
 <!--FEATURED TRAININGS-->
       <div class="landing-section">
@@ -1497,8 +1504,8 @@
 <section id="stories-tab" class="tab-content">
   <div class="stories-container">
     <div class="stories-header" style="text-align: center; margin-bottom: 2rem;">
-      <h2 style="font-size: 2.5rem; color: #1e293b; font-weight: 800;">MTAC Stories</h2>
-      <p style="color: #64748b; font-size: 1.1rem;"><strong>From Trainings to Triumph:</strong>
+      <h2 style="font-size: 2.5rem; color: #080824; font-weight: 800; padding-top: 10px;">MTAC Stories</h2>
+      <p style="color: #010101; font-size: 1.1rem;"><strong>From Trainings to Triumph:</strong>
 A collection of inspiring journeys from our trainees—showcasing their growth, achievements, and success beyond training.</p>
     </div>
 
@@ -1524,7 +1531,7 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
     <section id="admin-tab" class="section tab-content admin-only" style="display: none;">
       <div class="section-header flex-between">
         <div>
-          <h2>Admin Management Portal</h2>
+          <h2>Management Dashboard</h2>
           <p>Add new courses, manage multiple dates/schedules, assign registration links, and update gallery photos.</p>
         </div>
         <span class="badge-admin"><i class="fa-solid fa-pen-to-square"></i> Editing Enabled</span>
@@ -1551,9 +1558,13 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
             </select>
 
             <div class="currency-input-wrapper">
-               <span class="currency-symbol">₱</span>
-              <input type="text" id="course-fee" placeholder="Fee (e.g., 2,500.00)" required />
-              </div>
+            <span class="currency-symbol">₱</span>
+            <input type="text" id="course-fee" placeholder="Walk-in Fee (e.g., 2,500.00)" required />
+            </div>
+            <div class="currency-input-wrapper">
+            <span class="currency-symbol">₱</span>
+            <input type="text" id="course-grad-fee" placeholder="Alumni / Fresh Grad Fee (Optional)" />
+          </div>
           </div>
 
         <!-- Multiple Schedule Inputs Section -->

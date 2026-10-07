@@ -48,78 +48,96 @@ window.onload = async function () {
 async function handleSaveCourse(e) {
   e.preventDefault();
 
-  // 1. Extract values from DOM
+  // Extract Form Values
   const id = document.getElementById('editing-course-id').value;
   const title = document.getElementById('course-title').value.trim();
   const duration = document.getElementById('course-duration').value.trim();
-  let rawFee = document.getElementById('course-fee').value.trim();
+  const rawFee = document.getElementById('course-fee') ? document.getElementById('course-fee').value.trim() : '';
+  const gradFeeInput = document.getElementById('course-grad-fee');
+  const rawGradFee = gradFeeInput ? gradFeeInput.value.trim() : '';
   const googleFormUrl = document.getElementById('course-form-url').value;
-  const gradFormUrl = document.getElementById('course-grad-url').value;
-  
-  // Extract selected category value
+  const gradFormUrl = document.getElementById('course-grad-url') ? document.getElementById('course-grad-url').value : '';
+
   const categorySelect = document.getElementById('course-category');
   const category = categorySelect ? categorySelect.value : 'stcw';
 
-  // 2. Format Fee
-  let fee = rawFee ? (rawFee.startsWith('₱') ? rawFee : `₱${rawFee}`) : '₱0.00';
+  // Format Fees
+  const fee = rawFee ? (rawFee.startsWith('₱') ? rawFee : `₱${rawFee}`) : '₱0.00';
+  const gradFee = rawGradFee ? (rawGradFee.startsWith('₱') ? rawGradFee : `₱${rawGradFee}`) : '';
 
-  // 3. Extract schedules array
+  // Extract Schedules
   const scheduleInputs = document.querySelectorAll('.course-schedule-item');
   const schedules = Array.from(scheduleInputs)
     .map(input => input.value.trim())
     .filter(val => val.length > 0);
 
-  // 4. Construct payload for Supabase matching table columns
+  // Construct Payload
   const payload = {
     title,
     duration,
-    category, // Includes selected category in payload
+    category,
     fee,
+    gradFee,
     googleFormUrl,
     gradFormUrl,
     schedules
   };
 
   try {
+    let savedId = id ? parseInt(id) : null;
+
     if (id) {
-      // UPDATE existing row in Supabase
+      // UPDATE Supabase
       const { error } = await db
         .from('Course')
         .update(payload)
-        .eq('id', parseInt(id));
+        .eq('id', savedId);
 
       if (error) throw error;
 
       document.getElementById('editing-course-id').value = '';
       document.getElementById('course-submit-btn').textContent = 'Publish Course';
-
-      // SHOW CUSTOM MODAL FOR UPDATE
       await showAlert('Course details successfully updated!', 'success');
+
     } else {
-      // INSERT new row into Supabase
-      const { error } = await db
+      // INSERT Supabase
+      const { data, error } = await db
         .from('Course')
-        .insert([payload]);
+        .insert([payload])
+        .select();
 
       if (error) throw error;
-
-      // SHOW CUSTOM MODAL FOR PUBLISH
+      if (data && data[0]) savedId = data[0].id;
       await showAlert('Course successfully published!', 'success');
     }
 
-    // 5. Reset Form & Refresh UI from Supabase
+    const updatedCourseObj = { id: savedId, ...payload };
+
+    // --- STEP A: Update main `courses` array IN PLACE (keeps original order for Schedules tab) ---
+    const courseIndex = courses.findIndex(c => c.id == savedId);
+    if (courseIndex !== -1) {
+      courses[courseIndex] = updatedCourseObj;
+    } else {
+      courses.push(updatedCourseObj);
+    }
+
+    // --- STEP B: Push updated course to front of `featuredCourses` ONLY (for Home Page) ---
+    const featIndex = featuredCourses.findIndex(c => c.id == savedId);
+    if (featIndex !== -1) {
+      featuredCourses.splice(featIndex, 1);
+    }
+    featuredCourses.unshift(updatedCourseObj);
+
+    // --- STEP C: Reset Form & Update ONLY Home Page UI ---
     document.getElementById('course-form').reset();
     if (typeof initScheduleInputs === 'function') {
       initScheduleInputs(['']);
     }
 
-    if (typeof loadCoursesFromDatabase === 'function') {
-      await loadCoursesFromDatabase();
-    } else if (typeof renderScheduleTab === 'function') {
-      renderScheduleTab();
-    }
+    // Refresh Grids (Home Page updates, Schedule Tab remains untouched)
+    renderCourses();
+
   } catch (err) {
-    // SHOW CUSTOM MODAL FOR ERRORS
     await showAlert('Database error: ' + err.message, 'danger');
     console.error('Supabase write error:', err);
   }
@@ -867,6 +885,15 @@ function renderScheduleTab() {
         const walkInLink = course.googleFormUrl || course.enrollLink || '#';
         const freshGradLink = course.gradFormUrl || course.freshGradLink;
 
+        const walkInPrice = course.fee || '₱0.00';
+        const gradPrice = course.gradFee || course.grad_fee;
+
+        let priceBadgesHtml = `<span class="price-badge price-walkin">${walkInPrice} Walk-in</span>`;
+
+        if (gradPrice) {
+            priceBadgesHtml += ` <span class="price-badge price-alumni">${gradPrice} Alumni</span>`;
+            }
+
         let actionButtonsHtml = '';
         if (freshGradLink) {
           actionButtonsHtml = `
@@ -893,7 +920,9 @@ function renderScheduleTab() {
           <div class="schedule-card-row ${bgClass}">
             <div class="schedule-card-content">
               <div class="schedule-card-header">
-                <span class="badge-mandatory">${course.fee || 'STCW Mandatory'}</span>
+              <div class="price-badges-container">
+                          ${priceBadgesHtml}
+              </div>
               </div>
               <h3 class="course-title">${course.title || 'Untitled Course'}</h3>
               <p class="course-duration"><i class="fa-regular fa-clock"></i> Duration: ${course.duration || 'N/A'}</p>
@@ -914,59 +943,103 @@ function renderScheduleTab() {
 }
 
 // --- RENDER STANDARD COURSES TAB & ADMIN LIST ---
+let featuredCourses = []; // Dedicated list for Home Page Featured section
+
 function renderCourses() {
-  const grid = document.getElementById('courses-grid');
   const homeGrid = document.getElementById('home-featured-courses');
+  const grid = document.getElementById('courses-grid');
   const adminList = document.getElementById('admin-courses-list');
 
-  const courseCardHtml = (course) => `
-    <div class="card">
-      <div>
-        <div class="card-header">
-          <span class="tag">${course.category || 'STCW Mandatory'}</span>
-          <span class="fee">${course.fee || '₱0.00'}</span>
-        </div>
-        <h3>${course.title}</h3>
-        <p class="schedule"><i class="fa-regular fa-clock"></i> Duration: ${course.duration}</p>
-        <div style="font-size:0.8125rem; color:var(--text-muted); margin-bottom:1rem;">
-          <strong>Upcoming Dates:</strong>
-          ${
-            Array.isArray(course.schedules) && course.schedules.length > 0
-              ? course.schedules.map(s => `<div style="margin-top:2px;">• ${s}</div>`).join('')
-              : `<div style="margin-top:2px;">• Schedule to be announced</div>`
-          }
-        </div>
-      </div>
-      <a href="${course.googleFormUrl || '#'}" target="_blank" class="btn btn-primary">
-        <i class="fa-solid fa-file-pen"></i> Enroll Now
-      </a>
-    </div>
-  `;
+  // HTML generator for grid cards
+  const courseCardHtml = (course) => {
+    const walkInPrice = course.fee || '₱0.00';
+    const gradPrice = course.gradFee || course.grad_fee;
 
-  if (grid) grid.innerHTML = courses.map(courseCardHtml).join('');
-  if (homeGrid) homeGrid.innerHTML = courses.slice(0, 2).map(courseCardHtml).join('');
+    // Price Badges
+    let priceBadgesHtml = `<span class="price-badge price-walkin">${walkInPrice} Walk-in</span>`;
+    if (gradPrice) {
+      priceBadgesHtml += ` <span class="price-badge price-alumni">${gradPrice} Alumni</span>`;
+    }
 
+    // Enrollment Action Buttons
+    const walkInLink = course.googleFormUrl || course.enrollLink || '#';
+    const freshGradLink = course.gradFormUrl || course.freshGradLink;
+
+    let actionButtonsHtml = '';
+    if (freshGradLink) {
+      actionButtonsHtml = `
+        <div class="dual-btn" style="display:flex; flex-direction:column; gap:8px; margin-top: 1rem;">
+          <button class="btn-enroll-orange" onclick="window.open('${walkInLink}', '_blank')">
+            <i class="fa-solid fa-file-signature"></i> Enroll as Walk-in
+          </button>
+          <button class="btn-enroll-navy" onclick="window.open('${freshGradLink}', '_blank')">
+            <i class="fa-solid fa-graduation-cap"></i> Enroll as DMMA Fresh Grad
+          </button>
+        </div>`;
+    } else {
+      actionButtonsHtml = `
+        <a href="${walkInLink}" target="_blank" class="btn btn-primary" style="margin-top: 1rem; width: 100%; text-align: center; display: block;">
+          <i class="fa-solid fa-file-pen"></i> Enroll Now
+        </a>`;
+    }
+
+    return `
+      <div class="card">
+        <div>
+          <div class="card-header" style="margin-bottom: 0.5rem;">
+            <div class="price-badges-container">
+              ${priceBadgesHtml}
+            </div>
+          </div>
+          <h3>${course.title || 'Untitled Course'}</h3>
+          <p class="schedule" style="margin-top: 4px;"><i class="fa-regular fa-clock"></i> Duration: ${course.duration || 'N/A'}</p>
+          <div style="font-size:0.8125rem; color:var(--text-muted); margin-bottom:1rem; margin-top: 8px;">
+            <strong>Upcoming Dates:</strong>
+            ${
+              Array.isArray(course.schedules) && course.schedules.length > 0
+                ? course.schedules.map(s => `<div style="margin-top:2px;">• ${s}</div>`).join('')
+                : '<div style="margin-top:2px;">• Schedule to be announced</div>'
+            }
+          </div>
+        </div>
+        ${actionButtonsHtml}
+      </div>`;
+  };
+
+  // 1. RENDER HOME FEATURED (Uses featuredCourses list first, falls back to main list)
+  if (homeGrid) {
+    const listToRender = featuredCourses.length > 0 ? featuredCourses : courses;
+    homeGrid.innerHTML = listToRender.slice(0, 2).map(courseCardHtml).join('');
+  }
+
+  // 2. RENDER TRAININGS TAB GRID
+  if (grid) {
+    grid.innerHTML = courses.map(courseCardHtml).join('');
+  }
+
+  // 3. RENDER ADMIN LIST
   if (adminList) {
-  adminList.innerHTML = courses.map(c => `
-    <div class="admin-list-item">
-      <div class="admin-course-info">
-        <strong>${c.title} (${c.duration})</strong>
-        <p style="font-size:0.75rem; color:var(--text-muted);">
-          Schedules: ${Array.isArray(c.schedules) ? c.schedules.join(' | ') : 'N/A'}
-        </p>
+    adminList.innerHTML = courses.map(c => `
+      <div class="admin-list-item">
+        <div class="admin-course-info">
+          <strong>${c.title} (${c.duration})</strong>
+          <p style="font-size:0.75rem; color:var(--text-muted);">
+            Schedules: ${Array.isArray(c.schedules) ? c.schedules.join(' | ') : 'N/A'}
+          </p>
+        </div>
+        <div class="admin-actions">
+          <button class="btn btn-secondary btn-sm" onclick="editCourse(${c.id})">
+            <i class="fa-solid fa-pen"></i> Edit
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="deleteCourse(${c.id})">
+            <i class="fa-solid fa-trash"></i> Delete
+          </button>
+        </div>
       </div>
-      <div class="admin-actions">
-        <button class="btn btn-secondary btn-sm" onclick="editCourse(${c.id})">
-          <i class="fa-solid fa-pen"></i> Edit
-        </button>
-        <button class="btn btn-danger btn-sm" onclick="deleteCourse(${c.id})">
-          <i class="fa-solid fa-trash"></i> Delete
-        </button>
-      </div>
-    </div>
-  `).join('');
+    `).join('');
+  }
 }
-}
+
 
 function saveAndSyncCourses() {
   // Save updated array to browser storage
@@ -1301,7 +1374,13 @@ function editCourse(id) {
   document.getElementById('editing-course-id').value = course.id;
   document.getElementById('course-title').value = course.title || '';
   document.getElementById('course-duration').value = course.duration || '';
+
   document.getElementById('course-fee').value = course.fee || '';
+  
+  const gradFeeInput = document.getElementById('course-grad-fee');
+  if (gradFeeInput) {
+  gradFeeInput.value = course.gradFee || course.grad_fee || '';
+  }
   document.getElementById('course-form-url').value = course.googleFormUrl || course.enrollLink || '';
   
   if (document.getElementById('course-grad-url')) {
@@ -1397,12 +1476,7 @@ const seamanStories = [
   {
     id: "#00001",
     name: "Brian C. Estologa",
-    rank: "Deck Cadet",
-    vessel: "MV Pacific Star",
-    date: "MAR 2026",
-    vesselType: "Bulk Carrier",
     quote: "Every expert was once a beginner. Do not fear mistakes; fear the absence of trying. The harder you fall, the higher you rise.",
-    qrMessage: "MTAC ENGINE ROOM SENSOR:\nAmbient Temp: 48°C\nSweat Produced: 3 Liters\nNoise Level: WHAT? I CAN'T HEAR YOU!\nCurrent Mood: Sauna session complete! 🔧🔥",
     image: "img/stories/brian.png",
     paragraphs: [
       "My journey in the maritime industry is a story of gratitude, hard work, and unwavering determination. Life was not always easy, and there was a time when I struggled to find my true path. I once dreamed of becoming a Law Officer, but fate had different plans for me. Facing that reality felt like a failure at first, but it turned out to be a blessing in disguise. I decided to embrace the maritime world, and that decision changed my life forever. As a proud Company Scholar of Bouvet Shipping Management Corporation, I was blessed with invaluable support that covered my education needs and guided me every step of the way. From my cadetship and training days to my actual deployment, their guidance helped me transition smoothly into becoming a professional seafarer. ",
@@ -1455,10 +1529,6 @@ const seamanStories = [
   },{
     id: "#00005",
     name: "Peter John Magsayo",
-    rank: "Master Mariner",
-    vessel: "MV Ocean Guardian",
-    date: "OCT 2024",
-    vesselType: "Container Ship",
     quote: "The training center taught me the importance of teamwork, discipline, communication and quick  decision making , which are all essential qualities of a competent seafarer",
     image: "img/stories/peter.png",
     paragraphs: [
@@ -1478,63 +1548,37 @@ function renderTicketStack() {
   if (!container) return;
   
   container.innerHTML = "";
-  
 
   seamanStories.forEach((item, index) => {
     const ticketElement = document.createElement("div");
     ticketElement.className = "ticket";
     ticketElement.setAttribute("data-index", index);
 
-    // Build story paragraphs HTML dynamically
-    const paragraphsHtml = item.paragraphs.map(p => `<p>${p}</p>`).join("");
-
     ticketElement.innerHTML = `
+      <!-- Left Photo Column -->
       <div class="left">
         <div class="image" style="background-image: url('${item.image}');"></div>
-        <div class="admit-one">
-          <span>MTAC</span>
-          <span>STORIES</span>
-        </div>
-        <div class="ticket-number">${item.id}</div>
       </div>
 
+      <!-- Center Content Column -->
       <div class="ticket-info">
-        <div class="date">
-          <span>${item.vesselType}</span>
-          <span style="color:#0284c7;">${item.date}</span>
-          <span>VOYAGE</span>
-        </div>
-
+        <div class="ticket-header">MTAC STORIES</div>
         <div class="show-name">
           <h1>${item.name}</h1>
-          <span>${item.rank} • ${item.vessel}</span>
         </div>
-
         <div class="story-body">
-          <blockquote>"${item.quote}"</blockquote>
-          ${paragraphsHtml}
-        </div>
-
-        <div class="location">
-          <span>DMMA MTAC</span>
-          <span>&#9875;</span>
-          <span>Maritime Stories</span>
+          ${item.quote ? `<blockquote>"${item.quote}"</blockquote>` : ""}
+          ${item.paragraphs.map(p => `<p>${p}</p>`).join("")}
         </div>
       </div>
 
+      <!-- Right Stub Column with Pure CSS Fake Barcode -->
       <div class="right">
-        <div class="right-info-container">
-          <span style="font-size: 0.9rem; font-weight:700; color:#1e293b;">${item.rank}</span>
-          <span style="font-size: 0.8rem; color:#64748b;">${item.vessel}</span>
-        </div>
-        <div class="barcode">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(item.qrMessage)}" alt="Maritime Easter Egg QR Code" />
-        </div>
-        <span class="ticket-number" style="font-size:0.8rem; color:#94a3b8;">${item.id}</span>
+        <div class="fake-barcode"></div>
       </div>
     `;
 
-    // Click active card to cycle to the next story
+    // Click ticket to stack-rotate
     ticketElement.addEventListener("click", () => {
       nextTicket();
     });
@@ -1544,6 +1588,7 @@ function renderTicketStack() {
 
   updateStackClasses();
 }
+
 
 function updateStackClasses() {
   const tickets = document.querySelectorAll("#ticket-stack-container .ticket");
@@ -1579,4 +1624,74 @@ function nextTicket() {
 document.addEventListener("DOMContentLoaded", renderTicketStack);
 
 
+// CAROUSEL COURSE IMAGE MODAL// Carousel Auto-play Interval Setup
+let coverflowTimer = null;
+const AUTO_PLAY_SPEED = 3000; // Adjust speed (3 seconds)
 
+function startCoverflowAutoplay() {
+  if (coverflowTimer) clearInterval(coverflowTimer);
+  coverflowTimer = setInterval(() => {
+    // Triggers click on your next button ID
+    const nextBtn = document.getElementById("nextBtn");
+    if (nextBtn) nextBtn.click();
+  }, AUTO_PLAY_SPEED);
+}
+
+function stopCoverflowAutoplay() {
+  if (coverflowTimer) {
+    clearInterval(coverflowTimer);
+    coverflowTimer = null;
+  }
+}
+
+// Initialize Lightbox Modal Handlers
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("course-modal");
+  const modalImg = document.getElementById("course-modal-img");
+  const closeBtn = document.getElementById("close-course-modal");
+  const coverflowCards = document.querySelectorAll(".coverflow-card");
+
+  // Open Modal on Card Click
+  coverflowCards.forEach(card => {
+    card.addEventListener("click", (e) => {
+      // Allow modal open if active card or any clicked coverflow card
+      const img = card.querySelector(".course-poster-img");
+      if (img && modal && modalImg) {
+        stopCoverflowAutoplay(); // PAUSE CAROUSEL
+        modalImg.src = img.src;
+        modalImg.alt = img.alt || "Course Poster Preview";
+        modal.classList.add("active");
+      }
+    });
+  });
+
+  // Close Modal Handler
+function closeModal() {
+  const modal = document.getElementById("course-modal");
+  if (modal && modal.classList.contains("active")) {
+    modal.classList.remove("active"); // Triggers unpop scale back to 0.7
+    
+    // Resume auto-play after modal finish closing
+    startCoverflowAutoplay();
+  }
+}
+
+  if (closeBtn) closeBtn.addEventListener("click", closeModal);
+
+  // Close when clicking overlay backdrop
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+  }
+
+  // Close when pressing Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal && modal.classList.contains("active")) {
+      closeModal();
+    }
+  });
+
+  // Start Autoplay on load
+  startCoverflowAutoplay();
+});
