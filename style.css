@@ -802,15 +802,19 @@ img, video {
 
 /* BUTTON STYLING */
 .view-category-btn {
+  width: 100%; /* Stretches the button side-to-side across the card */
+  display: block;
+  text-align: center;
   background-color: #1e1b4b;
   color: #ffffff;
-  border: 1px;
-  padding: 0.75rem 1.05rem;
-  border-radius: 30px;
+  border: none;
+  padding: 0.85rem 1.5rem; /* Comfortably tall and wide */
+  border-radius: 10px; /* Slightly squarer modern pill shape for wide buttons */
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s ease;
   margin-top: auto;
+  box-sizing: border-box; /* Prevents overflow outside the card padding */
 }
 
 .view-category-btn:hover {
@@ -2767,6 +2771,7 @@ input[type="text"], input[type="url"] {
   border: 1px solid var(--secondary) !important;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.4);
+  margin-top: 10px;
 }
 .btn-outline-light { 
   /* Glass edge highlight */
