@@ -1474,7 +1474,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // Dataset with full multi-paragraph seaman stories
 const seamanStories = [
   {
-    id: "#00001",
     name: "Brian C. Estologa",
     quote: "Every expert was once a beginner. Do not fear mistakes; fear the absence of trying. The harder you fall, the higher you rise.",
     image: "img/stories/brian.png",
@@ -1484,7 +1483,6 @@ const seamanStories = [
     ]
   },
   {
-    id: "#00002",
     name: "D/C Renz Quion Puzon",
     rank: "Master Mariner",
     vessel: "MV Ocean Guardian",
@@ -1499,7 +1497,6 @@ const seamanStories = [
     ]
   },
   {
-    id: "#00003",
     name: "Leigh Mar Melvin Angelo F. Maza",
     rank: "Chief Engineer",
     vessel: "MT Blue Horizon",
@@ -1514,7 +1511,6 @@ const seamanStories = [
     ]
   },
   {
-    id: "#00004",
     name: "Jason R. Estremos",
     rank: "Master Mariner",
     vessel: "MV Ocean Guardian",
@@ -1526,8 +1522,8 @@ const seamanStories = [
       "My journey in the maritime field was not easy. Like many aspiring seafarers, I had big dreams, but the path toward them tested my patience and strength. I remember applying to many companies, hoping that one of them would give me the opportunity I had been working so hard for. Unfortunately, rejection became something I faced again and again. It reached a point where I felt so down, questioning myself because I was always the one not chosen. ",
       "Despite the disappointment, I held on to my goal. I continued improving myself, learning, and staying focused on why I started this journey in the first place. Then, during my very last year at DMMA, as a 3rd-year student, something finally changed. When I least expected it, TORM Shipping gave me a chance to be part of their team. That moment reminded me that all the rejections were not the end of my story—they were simply preparing me for the right opportunity. Going onboard a ship was another chapter of growth. Life at sea was challenging—long hours, demanding tasks, and being away from family—but it was also where I truly discovered my strength and discipline. Every day onboard taught me responsibility, teamwork, and resilience. I learned how important it is to stay focused, to trust your training, and to support your fellow crew members. There were moments of exhaustion, but also moments of pride—especially when I realized I was living the dream I once thought was out of reach. Looking back, I understand that success is not about how quickly you achieve your goals, but how you endure the journey. Rejections may slow you down, but they do not define your future. What matters is your perseverance, your willingness to keep going even when things feel uncertain. To anyone who is still waiting for their chance: don’t give up. Your time will come, just like mine did. Keep pushing forward, believe in yourself, and trust that every setback is leading you to something better. "
     ]
-  },{
-    id: "#00005",
+  },
+  {
     name: "Peter John Magsayo",
     quote: "The training center taught me the importance of teamwork, discipline, communication and quick  decision making , which are all essential qualities of a competent seafarer",
     image: "img/stories/peter.png",
@@ -1537,6 +1533,88 @@ const seamanStories = [
       "During my training, I gained valuable knowledge and practical skills that prepared me for real life situations at sea. The instructors provided quality education and hands on training in engine operations, firefighting, survival techniques, pollution prevention, and emergency response. The training also emphasized the importance of following international maritime regulations, especially safety procedures and protocols onboard. The training center taught me the importance of teamwork, discipline, communication, and quick decision making, which are all essential qualities of a competent seafarer.",
       "There were times when challenges tested my abilities, especially during emergency drills and demanding work schedules. However, the training center had already prepared me mentally and physically to handle pressure and adapt to life at sea. Because of the lessons and experiences I gained, I became more confident and prepared to perform my duties onboard and got very good recommendations from my senior engineers.",
       "Looking back on my journey, I can proudly say that the training center played a very important role in shaping me into a qualified and confident seafarer.As an Engine Cadet, I may still be at the beginning of my journey, but I am motivated to continue learning, improving myself, and becoming a successful marine engineer in the future. It was also a good experience to fulfill my childhood dream to visit America and different country in Asia. "
+    ]
+  },
+  {
+    name: "Jolina C. Galagaran",
+    quote: "Don't be afraid to dream big and take risks,if you succeed you'll be happy,and if you fail you'll be smarter",
+    image: "img/stories/jolina.png",
+    paragraphs: [
+      "Growing up I never dreamed, not even once of becoming a seafarer, I only wanted to become a civil engineer. However, life leads me to take different path and that is to become a seafarer. Even through uncertainty and doubts and what if's, I took the risk and disregard what other people have told me regarding my choice. They would even say 'Ayaw kuhaa ana nga kurso kay walay mo backer nimo'. Yes thats right, as a first seafarer in the family, I don't have any background about this career, the only thing that I had that time when I decided to take maritime course was my faith and determination.",
+      "As one of the many hundreds of maritime students, I am lucky enough to be part of a cadetship program of V.SHIP/V.GROUP. I am thankful for all the trainings and practical skills I learned from DMMA Maritime Training and Assessment Center which helped me to prepare myself for all the challenges at sea. Today as I started to fulfill my dream, I always carry the discipline,courage and determination inside of me. Even if there are many challenges that I may encounter, I will not stop until I achieve my goal of becoming an officer, with the help of our almighty God. "
+    ]
+  },
+  {
+    name: "Christian Paul Diangalon",
+    quote: "As the sea tests every sailor, challenges shape every cadet into a stronger and wiser mariner.",
+    image: "img/stories/christian.png",
+    paragraphs: [
+      "My journey as a deck cadet has been both challenging and rewarding. During my training and onboard experience, I learned the importance of discipline, teamwork, and responsibility at sea. I gained practical knowledge in navigation, cargo operations, safety procedures, and ship maintenance while working closely with officers and crew members. Life onboard taught me how to adapt to different situations, stay calm under pressure, and continuously improve my skills. This experience strengthened my passion for the maritime industry and motivated me to become a competent and responsible future deck officer.",
+      "As the sea tests every sailor, challenges shape every cadet into a stronger and wiser mariner."
+    ]
+  },
+  {
+    name: "Herald Jay Bambalan",
+    quote: "but always trust the process because one day you will realize that the things that make you cry today will be the cause of your smile tomorrow...",
+    image: "img/stories/herald.png",
+    paragraphs: [
+      "Through the training you will understand the importance of preparedness. Onboard you will encounter different situations and emergencies that need to be rectified before they will escalate because onboard safety is always your first priority.",
+      "Working onboard, you are going to deal with stress, work pressure, and lack of sleep, but always trust the process because one day you will realize that the things that make you cry today will be the cause of your smile tomorrow."
+    ]
+  },
+  {
+    name: "John Lyod Calawigan",
+    quote: "They taught me that even on an old ship, a strong crew can handle anything. That first ship was my classroom of hard knocks; I realize the that old ship tested me, the second ship rewarded me.",
+    image: "img/stories/john lyod.png",
+    paragraphs: [
+      "My life at sea started on November 10, 2024. To be honest, it was a rough start. I was assigned to my first vessel, an old ship that seemed to have a new problem every single day. There were times when the work felt endless and the troubles were exhausting. But I wasn't alone. My Filipino colleagues became my family. They taught me that even on an old ship, a strong crew can handle anything. That first ship was my 'classroom of hard knocks,' and it’s where I truly learned the value of teamwork.When I moved to my second vessel to finish my cadetship, everything changed. I wasn't the 'clueless' new guy anymore. I brought all the technical skills I learned at DMMA College of Southern Philippines and the grit I gained from my first ship. ",
+      "I worked hard to keep the ship running smoothly, proving to every nationality on board that a Filipino seafarer is both highly skilled and full of heart. My hard work didn't go unnoticed. By the end of that contract, I received my official recommendation. It was the proudest moment of my journey so far. It proved that the lessons from my training center work in the real world.Looking back on this one-year journey, I realize that the old ship tested me, the second ship rewarded me, and my Filipino brothers supported me through it all. I’m not just a sailor; I’m a competent seafarer who leads with kindness and skill."
+    ]
+  },
+  {
+    name: "Geo Suerte",
+    quote: "It doesn’t matter how long it takes, as long as it progresses.",
+    image: "img/stories/geo.png",
+    paragraphs: [
+      "Growing up in a broken household, he carried burdens that no child should bear. With absent parents, he became the anchor for his siblings, forced to mature before his time. Financial struggles demanded sacrifices—dreams postponed, personal needs ignored—all for the sake of keeping the family afloat. ",
+      "The sail was never smooth. Each day felt like a walk through uncertainty, with worries pressing down like heavy waves. Perseverance became his compass. Doubts from others, neglect from those who were supposed to guide him, and the absence of support could have crushed his spirit. Yet, he remained steadfast.",
+      "Life was not always kind, but he held onto faith. In moments of weakness, he reminded himself of the greatness of God’s plan—a plan bigger than his pain, stronger than his struggles. Resilience became his quiet rebellion, his way of proving that progress is not measured by speed but by endurance.",
+      "His journey is also a testament to the power of a mother’s love—a love that, even in brokenness, gave him strength to endure and courage to keep moving forward. And so, his story stands as proof: no matter how long it takes, as long as he keeps progressing, he is becoming the person he was meant to be."
+    ]
+  },
+  {
+    name: "Datu Nor Antao",
+    quote: "Whether I win or learn, my attitude matters all the time. It may be underestimated by those who are more skilled and intelligent, yet a positive attitude turns problems into opportunities.",
+    image: "img/stories/datu nor.png",
+    paragraphs: [
+      "Time flies for everyone. Looking back to the old days, submitting applications and applying for company selection was not easy. I submitted my resume daily to the office, even though there was no guarantee of being chosen, and even when there were no available openings from shipping companies.",
+      "I failed many times, but I never gave up and I have no regrets. I kept doing it, even though printing and making copies were quite expensive for a student. I did all this because I wanted to make my dreams come true to become the first person in my family to finish college And I did it. ",
+      "My journey was not smooth and easy, yet it led me to where I am today: visiting many different countries and earning the trust of my colleagues.Whether the clock ticks slowly or fast, challenges remain the same, whether the work is hard or not. I believe everything I start has its finish line.",
+      "Whether I win or learn, my attitude matters all the time. It may be underestimated by those who are more skilled and intelligent, yet a positive attitude turns problems into opportunities. It guides how I handle difficulties, especially in getting along with others of different personalities and nationalities. In our career, it has a greater impact than anything else, helping me reach the place I aim for. "
+    ]
+  },
+  {
+    name: "Leann Jainah Mari T. Uriarte",
+    quote: "The roughest seas do not come to destroy you—they come to teach you how to sail toward your dreams with strength, humility, and courage.",
+    image: "img/stories/leann.png",
+    paragraphs: [
+      "I was once just a student with a dream bigger than my fears. As a hospitality student, I always imagined myself working in places where excellence, discipline, and passion meet. I knew the road would never be easy, but I also knew I was never alone. I was blessed with parents who supported me in every possible way. They became my strength whenever I doubted myself. My sister was always beside me too—encouraging me during the moments when I felt like giving up.",
+      "Because of them, I learned how to fight quietly and work hard consistently. I carried their sacrifices with me every day, reminding myself that failure was not an option. I wanted to make them proud. I wanted every sacrifice they made to be worth it.",
+      "In 2024, I finally graduated.Holding my diploma felt surreal. It was more than just a piece of paper—it was proof of every prayer, every struggle, every breakdown, and every sleepless night I survived. But graduation was not the end of my journey. In many ways, it was only the beginning.",
+      "After graduation, I worked as a mess woman onboard. Life at sea was far from easy. The rough seas tested not only my physical strength but also my patience, discipline, and character. There were days when exhaustion felt heavier than the waves outside. I missed home, family gatherings, and simple moments with the people I love.",
+      "The ocean has a way of humbling you. It teaches you that dreams are not achieved overnight. Sometimes, before reaching the destination you prayed for, life will place you in uncomfortable situations to prepare you for greater responsibilities. The rough seas reminded me that no matter how educated or ambitious you are, you must remain grounded, hardworking, and willing to learn.",
+      "I realized that chasing dreams requires more than talent. It requires sacrifice, consistency, and courage. There will be days when nobody notices your hard work, when you feel left behind, and when quitting seems easier. But success is built during those silent battles—the moments when you continue despite being tired, afraid, or uncertain. To anyone chasing their dreams: never be ashamed of starting small. Every successful person once stood exactly where you are now—confused, struggling, and trying to survive. Trust the process. Learn from every hardship. Stay humble during the storms because they are shaping you into the person your dreams require you to become.",
+      "Today, I still carry the same dream in my heart. Maybe the journey is longer than I expected, but I know I am moving forward one step at a time. And as long as I keep believing, working hard, and remembering why I started, I know I will eventually reach the life I once only dreamed about."
+      
+    ]
+  },
+  {
+    name: "Jophet Sadava",
+    quote: "My training",
+    image: "img/stories/jophet.png",
+    paragraphs: [
+      "My life at sea started on November 10, 2024. To be honest, it was a rough start. I was assigned to my first vessel, an old ship that seemed to have a new problem every single day. There were times when the work felt endless and the troubles were exhausting. But I wasn't alone. My Filipino colleagues became my family. They taught me that even on an old ship, a strong crew can handle anything. That first ship was my 'classroom of hard knocks,' and it’s where I truly learned the value of teamwork.When I moved to my second vessel to finish my cadetship, everything changed. I wasn't the 'clueless' new guy anymore. I brought all the technical skills I learned at DMMA College of Southern Philippines and the grit I gained from my first ship. ",
+      "I worked hard to keep the ship running smoothly, proving to every nationality on board that a Filipino seafarer is both highly skilled and full of heart. My hard work didn't go unnoticed. By the end of that contract, I received my official recommendation. It was the proudest moment of my journey so far. It proved that the lessons from my training center work in the real world.Looking back on this one-year journey, I realize that the old ship tested me, the second ship rewarded me, and my Filipino brothers supported me through it all. I’m not just a sailor; I’m a competent seafarer who leads with kindness and skill."
     ]
   },
 ];

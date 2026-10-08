@@ -1455,7 +1455,6 @@ ul.nav-links {
 }
 
 .program-btn {
-  background-color: #1e1b4b; /* Primary Navy */
   color: #ffffff;
   border: none;
   padding: 1.25rem 1.5rem;
@@ -1464,11 +1463,29 @@ ul.nav-links {
   font-weight: 700;
   cursor: pointer;
   text-align: center;
-  transition: background-color 0.25s ease, transform 0.2s ease;
+
+  /* Translucent vibrant orange base */
+  background: #1e1b4b !important;
+  color: var(--white);
+  
+  /* Glass blur and color saturation */
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  
+  /* Glass edge highlight */
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  border-radius: 20px;
+  
+  /* Specular top light reflection & soft depth shadow */
+  box-shadow: 
+    0 10px 25px -5px rgba(0, 42, 255, 0.341),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.45);
+    
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .program-btn:hover {
-  background-color: #f97316; /* Secondary Orange */
+  background-color: var(--primary) !important; /* Secondary Orange */
   transform: translateY(-2px);
 }
 
@@ -1901,7 +1918,6 @@ ul.nav-links {
 
 /* BUTTON STYLING (FROM IMAGE 2) */
 .btn-enroll-orange {
-  background-color: #ff5500; /* Secondary Vibrant Orange */
   color: #ffffff;
   border: none;
   padding: 0.8rem 1.5rem;
@@ -1914,19 +1930,39 @@ ul.nav-links {
   justify-content: center;
   gap: 0.5rem;
   width: 100%;
-  transition: background-color 0.2s ease, transform 0.15s ease;
   text-decoration: none !important;
   display: inline-block;
+
+  /* Translucent vibrant orange base */
+  background: var(--primary) !important;
+  color: var(--white);
+  
+  /* Glass blur and color saturation */
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  
+  /* Glass edge highlight */
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  border-radius: 20px;
+  
+  /* Specular top light reflection & soft depth shadow */
+  box-shadow: 
+    0 10px 25px -5px rgba(255, 90, 0, 0.4),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.45);
+    
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-enroll-orange:hover {
-  background-color: #e04b00;
-  transform: translateY(-1px);
+  background: rgba(255, 90, 0, 0.75) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 15px 30px -5px rgba(255, 90, 0, 0.6),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.6); 
 }
 
 .btn-enroll-navy {
-  background-color: #1e1b4b; /* Primary Navy */
-  color: #ffffff;
   border: none;
   padding: 0.8rem 1.5rem;
   border-radius: 8px;
@@ -1938,7 +1974,26 @@ ul.nav-links {
   justify-content: center;
   gap: 0.5rem;
   width: 100%;
-  transition: background-color 0.2s ease, transform 0.15s ease;
+
+  /* Translucent vibrant orange base */
+  background: #1e1b4b !important;
+  color: var(--white);
+  
+  /* Glass blur and color saturation */
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  
+  /* Glass edge highlight */
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  border-radius: 20px;
+  
+  /* Specular top light reflection & soft depth shadow */
+  box-shadow: 
+    0 10px 25px -5px rgba(0, 76, 255, 0.323),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.45);
+    
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
 }
 
 .btn-enroll-navy:hover {
@@ -3503,7 +3558,7 @@ input[type="text"], input[type="url"] {
   font-size: 0.85rem;
   font-weight: 800;
   letter-spacing: 0.15em;
-  color: #0284c7;
+  color: #fa4c13;
   text-transform: uppercase;
   margin-bottom: 0.35rem;
 }
@@ -3998,3 +4053,58 @@ select:focus {
 
 
 
+
+
+/* WATERMARK */
+.footer-bottom {
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.08); /* Ultra-faint separator line */
+  margin-top: 28px;
+  padding: 16px 0 20px 0;
+  background: transparent;
+}
+
+.footer-bottom-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto !important;
+  padding: 0 24px;
+  display: flex !important;
+  flex-direction: column !important; /* Stacks copyright on top, name below */
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  gap: 4px; /* Minimal vertical gap between the lines */
+}
+
+/* Primary copyright line */
+.copyright-text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+}
+
+/* Subtle, minimal credit signature directly underneath */
+.developer-credit {
+  font-size: 0.52rem; /* Micro font size */
+  color: rgba(255, 255, 255, 0.28); /* Blends heavily into the background */
+  font-weight: 290;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  text-transform: uppercase; /* Clean aesthetic layout */
+  transition: opacity 0.25s ease, color 0.25s ease;
+}
+
+/* Fades in smoothly only when someone explicitly hovers over it */
+.developer-credit:hover {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+@media (min-width: 768px) {
+  .footer-bottom-content {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
