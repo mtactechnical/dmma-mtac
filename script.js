@@ -1610,11 +1610,28 @@ const seamanStories = [
   },
   {
     name: "Jophet Sadava",
-    quote: "My training",
+    quote: "My training experience at DMMA MTAC became one of the most important parts of my journey. Life onboard taught me many lessons about sacrifice and perseverance. Every successful journey starts with courage and determination",
     image: "img/stories/jophet.png",
     paragraphs: [
-      "My life at sea started on November 10, 2024. To be honest, it was a rough start. I was assigned to my first vessel, an old ship that seemed to have a new problem every single day. There were times when the work felt endless and the troubles were exhausting. But I wasn't alone. My Filipino colleagues became my family. They taught me that even on an old ship, a strong crew can handle anything. That first ship was my 'classroom of hard knocks,' and it’s where I truly learned the value of teamwork.When I moved to my second vessel to finish my cadetship, everything changed. I wasn't the 'clueless' new guy anymore. I brought all the technical skills I learned at DMMA College of Southern Philippines and the grit I gained from my first ship. ",
-      "I worked hard to keep the ship running smoothly, proving to every nationality on board that a Filipino seafarer is both highly skilled and full of heart. My hard work didn't go unnoticed. By the end of that contract, I received my official recommendation. It was the proudest moment of my journey so far. It proved that the lessons from my training center work in the real world.Looking back on this one-year journey, I realize that the old ship tested me, the second ship rewarded me, and my Filipino brothers supported me through it all. I’m not just a sailor; I’m a competent seafarer who leads with kindness and skill."
+      "My maritime journey began with a simple dream to become successful in the industry and make my family proud. As a student of DMMA College of Southern Philippines taking up Bachelor of Science in Marine Transportation (BSMT), I knew that the path would not be easy, but I remained focused on my goals.",
+      "My training experience at DMMA MTAC became one of the most important parts of my journey. The training helped me improve my knowledge, discipline, confidence, and readiness for real onboard responsibilities. Through the guidance of the instructors and staff, I learned valuable lessons that prepared me for the challenges of the maritime profession.",
+      "After graduating in 2024, I immediately continued completing my maritime trainings and certifications to prepare for better opportunities in the industry. Even though I am still at the beginning of my career, I continue to work hard, stay patient, and believe in the process. Every challenge motivates me to become stronger and more determined.",
+      "Life onboard taught me many lessons about sacrifice and perseverance. There were times when I only had 3 hours of sleep because of duties and responsibilities onboard, but surprisingly, it still made me happy because I knew I was living the dream I once prayed for. Those experiences helped me become mentally strong, disciplined, and more passionate about my chosen career.",
+      "My biggest inspiration is all OFW's who continue to sacrifice and work hard for their families despite the distance, exhaustion, and challenges they face abroad. Their determination and love for their families inspire me to keep striving and never give up on my dreams.",
+      "Coming from a simple life, my dream is not only to become a successful officer onboard someday, but also to give back to my parents for all their sacrifices and support. Their hard work inspires me to keep moving forward no matter how difficult the journey becomes.",
+      "Today, I continue building my experience and pursuing my goals in the maritime field with faith, perseverance, and dedication. I am grateful to DMMA MTAC for becoming part of my growth and helping shape me into the person I am today.",
+      "To all aspiring seafarers, trust the process, keep learning, and never give up on your dreams. Every successful journey starts with courage and determination."
+    ]
+  },
+  {
+    name: "Joshua Flores",
+    quote: "Life at sea is very hard, especially for a cadet. The beginning is always the hardest because everything is new, and every lesson comes with effort. Yet those difficult first steps build the knowledge, discipline, and character needed to become a successful marine engineer. ",
+    image: "img/stories/joshua.png",
+    paragraphs: [
+      "As an engine cadet, my first days at sea were nothing like I imagined. The engine room was hot, noisy, and filled with machinery that seemed impossible to understand. Every day started early and ended late. I spent hours cleaning equipment, carrying tools, and learning from officers who expected me to work hard and pay attention.",
+      "There were times when I felt exhausted and homesick. The ship never stopped moving, and neither did the work. Mistakes felt heavy, and every task seemed difficult. I often wondered if I was good enough for life at sea.",
+      "But with each passing day, I learned something new. I became familiar with the engines, gained confidence in my duties, and adapted to the demanding routine. The challenges that once seemed overwhelming slowly became manageable.",
+      "Looking back, I realized that the hardships were not obstacles they were part of the journey that made me stronger."
     ]
   },
 ];
