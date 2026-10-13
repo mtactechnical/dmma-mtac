@@ -49,7 +49,7 @@
 </head>
 
 <body class="maritime-bg">
-
+<div class="maritime-compass-overlay"></div>
 
 <!-- Navigation Bar -->
 <header class="navbar">
@@ -422,7 +422,6 @@
     </section>
 
 
-
 <!-- 1. SEAFARERS' UPGRADING PROGRAM (SUP) OWWA TAB IN HOME PAGE -->
 <section id="sup-tab" class="tab-content">
   <!-- Hero Banner -->
@@ -700,6 +699,11 @@
             strategic response, and the effective integration of fixed and portable firefighting 
             systems to safeguard life, property, and the marine environment.</p>
 
+            <!-- Advanced Fire Fighting Button -->
+            <button class="card-btn" onclick="openRequirementsDrawer('AFF')">
+              Requirements
+            </button>
+
           <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSfqeFgcvI2ffvrVhPYiF1Nnbtfbb6WxiqZMrTjdc1amfeby_A/viewform" 
           target="_blank" 
@@ -721,6 +725,10 @@
             fire prevention and firefighting, elementary first aid, and personal safety and 
             social responsibility. It establishes the essential knowledge, skills, and 
             attitudes required to ensure individual and collective safety onboard maritime vessels.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('WALKIN')">
+             Requirements
+            </button>
           
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSeqphSSPVGqdoRQ4r_TS9slgxORrHeB8AuiRJD-KeJF0MLNvQ/viewform" 
@@ -743,6 +751,10 @@
             fire prevention and firefighting, elementary first aid, and personal safety and 
             social responsibility. It establishes the essential knowledge, skills, and attitudes 
             required to ensure individual and collective safety onboard maritime vessels.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('FRESH')">
+             Requirements
+            </button>
           
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSfRrezw6YIL9GEIC_cP6QpOnWwVm99rNVeDBqxjazd9Q_1UYA/viewform" 
@@ -765,6 +777,10 @@
             competencies in the safe handling, transfer, and monitoring of oil and chemical cargoes. 
             It emphasizes hazard awareness, pollution prevention, and adherence to operational and 
             safety procedures to protect life, property, and the marine environment.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('BTOC')">
+             Requirements
+            </button>
           
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSeklf_qag20Nfo9mrRpY1fTRuc9arBl9pMJ6K4aJ5rA5499NA/viewform?usp=embedded_form_link" 
@@ -787,6 +803,10 @@
             medical care in cases of injury or illness onboard. It emphasizes systematic assessment, 
             stabilization, and effective response to medical emergencies to preserve life and prevent 
             further harm at sea.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('MEFA')">
+             Requirements
+            </button>
           
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSdjpMR5vSSVmjI_fxRBIbhwpJL4tEvno_pfE0t5Fd2XrYI5dA/viewform" 
@@ -809,6 +829,10 @@
             competencies in commanding and coordinating onboard firefighting operations. It 
             emphasizes the retention of critical skills, application of current procedures, and 
             effective emergency response to maintain operational readiness and safety at sea.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('RCAFF')">
+            Requirements
+            </button>
           
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSfqB5hMDCJMxBkysfB2ccn97TuKh9GJ6LgwvvBlLFObkJlyIA/viewform?usp=embedded_form_link" 
@@ -831,6 +855,10 @@
             in personal survival, fire prevention and firefighting, elementary first aid, and 
             personal safety and social responsibility. It ensures continued proficiency, compliance 
             with current standards, and sustained readiness to respond effectively to onboard emergencies.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('RCBT')">
+            Requirements
+            </button>
           
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSfwbu59Rg6G3O9QpkIp4PzuRz_CopzaUSt2TNg15rLyCPQVQA/viewform?usp=embedded_form_link" 
@@ -853,6 +881,10 @@
             in the preparation, launching, and operation of survival craft and rescue boats. 
             It emphasizes proficiency in emergency procedures, crew coordination, and life-saving 
             techniques to ensure effective response during abandonment and rescue operations at sea.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('RCSCRB')">
+            Requirements
+            </button>
           
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSe3e3cmXOLt75KlJqfCN8JMtS2xCNtblZqtYLs7w-Twta8LXQ/viewform" 
@@ -876,6 +908,10 @@
             duties safely and efficiently. It emphasizes monitoring machinery, maintaining operational 
             standards, and supporting engine-room operations to ensure the safe and continuous 
             functioning of the vessel.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('EWK')">
+            Requirements
+            </button>
           
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSc9MdxFgy1aEHoAl92Q2epFLViMHewRKocrHAEti6uiaK-8Yw/viewform?usp=embedded_form_link" 
@@ -899,6 +935,10 @@
             with STCW Regulation II/4 . Participants will acquire the requisite competencies in 
             helmmanship, look-out procedures, and bridge support functions to ensure the safe and 
             efficient navigation of the vessel.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('DWK')">
+            Requirements
+            </button>
           
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSd7FV7qxjiIUT2qpKcVig-Rch4Hway07ZFXSBJQLY2meYUkFg/viewform?usp=embedded_form_link" 
@@ -925,6 +965,10 @@
             required for crew members assigned security responsibilities, including conducting ship 
             searches, implementing security procedures, and contributing to the effective implementation 
             of the Ship Security Plan.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('SAT-SDSD')">
+            Requirements
+            </button>
           
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLScjyfMi0dXcFKrOswTWx05RcS9DLVyQbgJYadytKAZ1SuqC3Q/viewform?usp=embedded_form_link" 
@@ -949,6 +993,10 @@
             knowledge and understanding to contribute to the prevention of and response to violence 
             and harassment, including bullying and sexual assault, thereby reinforcing a culture of 
             safety, respect, and inclusivity within the maritime profession.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('UC BT-PSSR')">
+            Requirements
+            </button>
           
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSfj8UhG6hzUOPWMV5pfAaoLAXmoIgrQrdpG_at4Vf4ZDnncPA/viewform" 
@@ -988,6 +1036,10 @@
             including proper management of bilge water, ballast water, and garbage, as well as 
             accurate record-keeping in the Oil and Garbage Record Books, thereby fulfilling the 
             standards of competence prescribed in STCW Tables A-II/1, II/2, III/1, and III/2.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('MARPOL')">
+            Requirements
+            </button>
           
           <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSf7q_vtqMIRhKrWBl01pH9ZcuPu1L2OhgzQhds9i5vs_YdpFQ/viewform?usp=embedded_form_link" 
@@ -1014,6 +1066,10 @@
             calculations for intact and damage stability using both traditional methods and 
             stability software, and understand the critical measures necessary to preserve 
             stability in all conditions, including emergency situations.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('STAB&TRIM')">
+            Requirements
+            </button>
 
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSe3JU9Ab8rfLcwB4AjU1Rg8xVqnSXHNGiiQHPls74p6eZUfQw/viewform" 
@@ -1092,6 +1148,10 @@
             systematic processes of identifying training needs, developing comprehensive lesson 
             plans, and evaluating learning outcomes, thereby meeting the qualification requirements 
             for instructors in Maritime Higher Education Institutions and Maritime Training Institutes.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('IMO609')">
+            Requirements
+            </button>
           
           <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSd6OcK0b6WZmaAyDWdkOtMRt79qEyTNCRYORNiUlAagTLQkjQ/viewform" 
@@ -1118,6 +1178,10 @@
             evaluating seafarer competence, developing written and practical tests, and maintaining 
             uniform certification standards to ensure the effective implementation of the STCW 
             Convention under national law.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('IMO312')">
+            Requirements
+            </button>
           
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSfLJD9634gNRkmZ6Lx10f13lQr_MTe3hyVecbw8gDxyELwoBA/viewform" 
@@ -1143,6 +1207,10 @@
             and evaluating simulation exercises, integrating principles of simulator pedagogy and 
             effective communication to ensure the achievement of competencies set forth in the STCW 
             Convention.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('IMO610')">
+            Requirements
+            </button>
         
             <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSeyR8tCYuLJjTyBB7cHmN2385CA1VDfk0FVTkiZo_sAd5BiOw/viewform" 
@@ -1175,11 +1243,15 @@
         <img src="img/courses/safety.png" alt="Safety Training Direct Services">
       </div>
       <div class="course-card-body">
-        <h3>Safety Training for Personnel Providing Direct Services to Passengers</h3>
+        <h3>Safety Training for Personnel Providing Direct Service to Passengers in Passenger Spaces (STPPDSPPS)</h3>
         <p>This course provides shipboard personnel with the essential knowledge and skills to 
           safely assist and communicate with passengers on board passenger ships. It covers 
           passenger safety, emergency procedures, crowd management, and effective communication 
           in accordance with international maritime standards.</p>
+
+          <button class="card-btn" onclick="openRequirementsDrawer('STPPDSPPS')">
+            Requirements
+            </button>
 
          <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSe3CstSMQKiej8-rP2_3S1b-2pFbkHUs4YemoqOUqrFaP3e3g/viewform" 
@@ -1198,11 +1270,15 @@
         <img src="img/courses/crowd.png" alt="Passenger Ship Crowd Management">
       </div>
       <div class="course-card-body">
-        <h3>Passenger Ship Crowd Management Training</h3>
+        <h3>Passenger Ship Crowd Management Training (PSCMT)</h3>
         <p>This course provides shipboard personnel with the skills and knowledge needed to 
           effectively manage and control passenger movements during normal operations and 
           emergency situations. It covers crowd behavior, communication techniques, evacuation 
           procedures, and passenger assistance to help ensure safety and order on board passenger ships.</p>
+
+          <button class="card-btn" onclick="openRequirementsDrawer('PSCMT')">
+            Requirements
+            </button>
         
           <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSfQeGb8QubNJ4SFdnFPTTtOLc5raHhrtMjS04xKSq4wkNnhmw/viewform" 
@@ -1221,11 +1297,15 @@
         <img src="img/courses/crisis.png" alt="Crisis Management and Human Behaviour">
       </div>
       <div class="course-card-body">
-        <h3>Passenger Ship Crisis Management and Human Behaviour Training</h3>
+        <h3>Passenger Ship Crisis Management and Human Behaviour Training (PSCMHB)</h3>
         <p>This course equips shipboard personnel with the knowledge and skills to effectively 
           manage crisis situations and understand human behavior during emergencies on passenger 
           ships. It covers leadership, decision-making, crowd management, communication, and 
           emergency response strategies to ensure the safety and well-being of passengers and crew. </p>
+
+          <button class="card-btn" onclick="openRequirementsDrawer('PSCMHB')">
+            Requirements
+            </button>
         
           <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLScAsAx3XHtAuMars60pHwxHtXKKmMRZ2WTr9o9b0EHjQwBV1g/viewform" 
@@ -1259,6 +1339,10 @@
           <li>Safety Training for Personnel</li>
           <li>Crowd Management</li>
         </ul>
+
+        <button class="card-btn" onclick="openRequirementsDrawer('PACKAGE A')">
+            Requirements
+            </button>
         
         <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLScxPRObt9-6EQ7Dp72HI1Wm9Px5goHH_5Ty7dNtAiAd7F5u3w/viewform" 
@@ -1285,6 +1369,10 @@
           <li>Crowd Management</li>
           <li>Crisis Management</li>
         </ul>
+
+        <button class="card-btn" onclick="openRequirementsDrawer('PACKAGE B')">
+            Requirements
+            </button>
        
         <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLScxPRObt9-6EQ7Dp72HI1Wm9Px5goHH_5Ty7dNtAiAd7F5u3w/viewform" 
@@ -1546,6 +1634,55 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
     <span>Chat with Us</span>
 </a>
 
+
+<!-- FLOATING MESSENGER BUBBLE CHAT HEAD -->
+<div id="aiBubbleWidget" class="ai-bubble-widget">
+  
+  <!-- Single Chat Head Trigger -->
+  <button id="aiChatHead" class="ai-chat-head" onclick="toggleAIChatBubble()">
+  <img src="img/chatbot.png" alt="MTAC AI" style="width: 40px; height: 40px; object-fit:contain;" />
+  <span class="online-indicator"></span>
+</button>
+
+  <!-- Single Chat Window Panel -->
+  <div id="aiChatWindow" class="ai-chat-window">
+    <div class="ai-chat-header">
+      <div class="ai-profile">
+        <img src="img/chatbot.png" alt="MTAC Avatar" style="width: 45px; height: 45px; object-fit:contain;">
+        <div>
+          <strong>MTAC AI Assistant</strong>
+          <small>Online • Direct Support</small>
+        </div>
+      </div>
+      <button class="close-chat-btn" onclick="toggleAIChatBubble()">✕</button>
+    </div>
+
+    <div id="aiChatMessages" class="ai-chat-messages">
+      <div class="ai-msg bot">
+        Hello! 👋 I'm your MTAC AI guide. Ask me anything about STCW courses, schedules, rates, or enrollment requirements!
+      </div>
+    </div>
+
+    <!-- Quick Suggestion Chips -->
+    <div class="ai-quick-chips">
+      <button class="chip-btn" onclick="sendQuickQuery('BT schedule')">📅 BT Schedule</button>
+      <button class="chip-btn" onclick="sendQuickQuery('AFF price')">💳 AFF Price</button>
+      <button class="chip-btn" onclick="sendQuickQuery('How to enroll')">📝 How to Enroll</button>
+      <button class="chip-btn" onclick="sendQuickQuery('PSSR schedule')">⚓ PSSR Date</button>
+    </div>
+
+    <!-- Single Input Row -->
+    <div class="ai-chat-input-row">
+      <input type="text" id="aiUserInput" placeholder="Ask about schedules, fees, BT..." onkeypress="handleBubbleKeyPress(event)" />
+      <button onclick="sendBubbleChatMessage()">Send</button>
+    </div>
+  </div>
+
+</div>
+
+
+
+
 <!-- MANAGEMENT TAB -->
     <section id="admin-tab" class="section tab-content admin-only" style="display: none;">
       <div class="section-header flex-between">
@@ -1636,7 +1773,6 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
     </section>
 
 
-
 <!-- NOTIFICATION POPUP MESSAGE FOR PUBLISH COURSE / UPDATE COURSE -->
 <div id="custom-alert-modal" class="custom-modal hidden">
     <div class="custom-modal-content">
@@ -1662,6 +1798,57 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
         </div>
     </div>
 </div>
+
+
+
+<!-- FOR REQUIREMENTS GLASS SIDE PANEL -->
+<div id="requirementsOverlay" class="drawer-overlay" onclick="closeRequirementsDrawer()"></div>
+
+<aside id="requirementsDrawer" class="glass-drawer">
+  <!-- Close Button -->
+  <button class="drawer-close-btn" onclick="closeRequirementsDrawer()">✕</button>
+
+  <!-- Dynamic Header -->
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawerBadge">STCW MANDATORY</span>
+    <h3 id="drawerCourseTitle">Course Name</h3>
+    <p class="drawer-subtitle">Required enrollment documents & prerequisites</p>
+  </div>
+
+  <!-- Dynamic Content Area -->
+  <div class="drawer-content">
+    <div class="req-group">
+      <h4>Mandatory Documents</h4>
+      <!-- JavaScript will inject the specific course requirements here -->
+      <ul class="req-list" id="reqListContainer"></ul>
+    </div>
+
+    <!-- Quick Action Footer -->
+    <div class="drawer-action-card">
+      <div class="drawer-price-card">
+    <div class="price-group">
+    <span class="price-label">Regular Rate</span>
+    <span class="price-amount" id="drawerCoursePrice">₱0.00</span>
+    </div>
+    <div class="price-group alumni" id="alumniPriceGroup">
+    <span class="price-label">Alumni Rate</span>
+    <span class="price-amount alumni" id="drawerAlumniPrice">₱0.00</span>
+  </div>
+</div>
+
+      <a 
+        id="drawerEnrollBtn" 
+        href="javascript:void(0)" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="drawer-enroll-btn">
+        Proceed to Online Enrollment
+      </a>
+    </div>
+  </div>
+</aside>
+
+
 
   </main>
 
@@ -1711,6 +1898,7 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
 </div>
 
       </footer>
+
 
 
 

@@ -18,6 +18,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
 }
 
+
 main,
 .main-content,
 #app-container {
@@ -46,9 +47,9 @@ body {
   background-color: #f8fafc; /* Crisp, clean slate base */
 
   /* LAYER 1: Deep Navy Upward Secondary Gradient Fade
-     LAYER 2: Abstract Topographic Bathymetric Flow Lines
-     LAYER 3: Micro-Geometric Astrolabe Compass Reticle (Bottom Right)
-     LAYER 4: Celestial Starburst Ray Grid
+     LAYER 2: Topographic Contour Lines Overlay
+     LAYER 3: LEFT-SIDE Technical Sextant & Lat/Long Chart Index
+     LAYER 4: RIGHT-SIDE Astrolabe Compass Watermark
      LAYER 5: Architectural Maritime Dot Grid */
   background-image: 
     linear-gradient(
@@ -57,23 +58,23 @@ body {
       rgba(30, 27, 75, 0.12) 30%,  /* Soft upward transition */
       transparent 60%              /* Fades cleanly into light dotted grid */
     ),
-    /* LAYER 2: Abstract Topographic Contour Curves (Subtle 3% Opacity) */
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" fill="none" stroke="rgba(30, 27, 75, 0.035)" stroke-width="1"><path d="M100,-50 C350,200 500,350 300,600 C100,850 500,900 850,1000"/><path d="M180,-50 C430,200 580,350 380,600 C180,850 580,900 930,1000"/><path d="M260,-50 C510,200 660,350 460,600 C260,850 660,900 1010,1000"/><path d="M340,-50 C590,200 740,350 540,600 C340,850 740,900 1090,1000"/><path d="M420,-50 C670,200 820,350 620,600 C420,850 820,900 1170,1000"/><path d="M500,-50 C750,200 900,350 700,600 C500,850 900,900 1250,1000"/></svg>'),
+    /* LAYER 2: Abstract Topographic Contour Curves (Subtle 3.5% Opacity) */
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" fill="none" stroke="rgba(30, 27, 75, 0.035)" stroke-width="1"><path d="M100,-50 C350,200 500,350 300,600 C100,850 500,900 850,1000"/><path d="M180,-50 C430,200 580,350 380,600 C180,850 580,900 930,1000"/><path d="M260,-50 C510,200 660,350 460,600 C260,850 660,900 1010,1000"/><path d="M340,-50 C590,200 740,350 540,600 C340,850 740,900 1090,1000"/><path d="M420,-50 C670,200 820,350 620,600 C420,850 820,900 1170,1000"/></svg>'),
 
-    /* LAYER 3: Abstract Astrolabe Compass Reticle (Bottom Right Watermark) */
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none" stroke="rgba(30, 27, 75, 0.045)" stroke-width="0.75"><circle cx="200" cy="200" r="180"/><circle cx="200" cy="200" r="172" stroke-dasharray="1 3"/><circle cx="200" cy="200" r="130"/><circle cx="200" cy="200" r="85"/><circle cx="200" cy="200" r="40"/><circle cx="200" cy="200" r="4"/><line x1="10" y1="200" x2="390" y2="200"/><line x1="200" y1="10" x2="200" y2="390"/><line x1="65" y1="65" x2="335" y2="335"/><line x1="65" y1="335" x2="335" y2="65"/><polygon points="200,8 205,32 200,27 195,32" fill="rgba(30, 27, 75, 0.04)"/><polygon points="200,392 205,368 200,373 195,368" fill="rgba(30, 27, 75, 0.04)"/></svg>'),
+    /* LAYER 3: LEFT SIDE — Sextant Arc & Technical Nautical Chart Grid */
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 450" fill="none" stroke="rgba(30, 27, 75, 0.045)" stroke-width="0.8"><path d="M50,400 A350,350 0 0,1 400,50" stroke-dasharray="2 4"/><path d="M80,400 A320,320 0 0,1 400,80"/><line x1="50" y1="400" x2="400" y2="400"/><line x1="400" y1="50" x2="400" y2="400"/><line x1="50" y1="400" x2="300" y2="150" stroke-dasharray="4 4"/><circle cx="50" cy="400" r="12"/><circle cx="300" cy="150" r="6" fill="rgba(30, 27, 75, 0.04)"/><text x="70" y="385" font-family="monospace" font-size="10" fill="rgba(30, 27, 75, 0.25)">SEC-01 // LAT-GRID</text><text x="310" y="145" font-family="monospace" font-size="10" fill="rgba(30, 27, 75, 0.25)">FIX-7.04N</text></svg>'),
 
-    /* LAYER 4: Faint Celestial Navigation Rays */
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" fill="none" stroke="rgba(30, 27, 75, 0.025)" stroke-width="0.5" stroke-dasharray="4 8"><line x1="0" y1="0" x2="800" y2="800"/><line x1="800" y1="0" x2="0" y2="800"/><line x1="400" y1="0" x2="400" y2="800"/><line x1="0" y1="400" x2="800" y2="400"/></svg>'),
+    /* LAYER 4: RIGHT SIDE — Astrolabe Compass Watermark */
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none" stroke="rgba(30, 27, 75, 0.045)" stroke-width="0.8"><circle cx="200" cy="200" r="180"/><circle cx="200" cy="200" r="140" stroke-dasharray="3 3"/><circle cx="200" cy="200" r="100"/><circle cx="200" cy="200" r="40"/><line x1="20" y1="200" x2="380" y2="200"/><line x1="200" y1="20" x2="200" y2="380"/><polygon points="200,10 206,40 200,34 194,40" fill="rgba(30, 27, 75, 0.04)"/></svg>'),
 
-    /* LAYER 5: Your original dot grid base */
+    /* LAYER 5: Dotted Grid Base */
     radial-gradient(#cbd5e1 1.2px, transparent 1.2px);
 
   background-size: 
     100% 100%,        /* Upward linear gradient */
     100% 100%,        /* Topographic contour lines */
-    460px 460px,      /* Compass size */
-    100% 100%,        /* Celestial rays grid */
+    450px 450px,      /* LEFT Sextant Chart size */
+    460px 460px,      /* RIGHT Compass size */
     24px 24px;        /* Dotted grid spacing */
 
   background-repeat: 
@@ -86,14 +87,27 @@ body {
   background-position: 
     0 0, 
     0 0, 
-    right 3% bottom 4%, /* Positions compass watermark in bottom right */
-    0 0,
+    left 2% bottom 6%,  /* Sextant chart index on LEFT */
+    right 3% bottom 4%, /* Compass on RIGHT */
     0 0;
 
   background-attachment: fixed;
+  transition: background-position 0.1s ease-out;
 }
 
-/* Technical Navigation Stamp (Top Right) */
+/* Add a slow, elegant pulse to the background astrolabe compass */
+@keyframes compassRotary {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Optional subtle float for topographic lines */
+@keyframes topographicDrift {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-6px) scale(1.01); }
+}
+
+/* Technical Navigation Coordinates Stamp (Top Right) */
 .maritime-bg::before {
   content: "7°04'11.2\"N  125°36'24.8\"E  —  DMMA MTAC NAV-GRID 01";
   position: absolute;
@@ -107,6 +121,7 @@ body {
   z-index: 10;
   white-space: nowrap;
 }
+
 
 /* Layout & Containers */
 .main-container { 
@@ -168,7 +183,15 @@ body {
 /* Hero Section */
 .hero-card { background: linear-gradient(135deg, var(--secondary) 0%, #1a0d4a 100%); color: var(--white); border-radius: 16px; padding: 3.5rem 2.5rem; margin-bottom: 2rem; }
 .hero-content { max-width: 650px; }
-.hero-badge { background: rgba(255, 93, 0, 0.2); color: var(--primary); border: 1px solid rgba(255, 93, 0, 0.4); font-size: 0.75rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 20px; }
+.hero-badge { font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: rgba(249, 115, 22, 0.15);
+  color: #f97316;
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  padding: 6px 14px;
+  border-radius: 20px; }
 .hero-title { font-size: 2.25rem; font-weight: 800; margin: 1rem 0; line-height: 1.2; }
 .hero-description { color: #cbd5e1; font-size: 1rem; margin-bottom: 2rem; }
 .hero-actions { display: flex; gap: 1rem; }
@@ -532,6 +555,7 @@ body {
   overflow: hidden; /* Clips remaining 15+ dots */
   scroll-behavior: smooth;
   padding: 4px 0;
+  
 }
 
 /* Base Dot Styles */
@@ -811,13 +835,12 @@ img, video {
   }
 }
 
+
+
 .category-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 
     display: flex;
     flex-direction: column;
@@ -826,6 +849,18 @@ img, video {
     height: 100%; /* Spans full card height */
     padding: 2rem;
     box-sizing: border-box;
+    
+    background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  
+  /* Ultra-subtle gradient border to emulate frosted edge light */
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 
+    0 10px 30px -10px rgba(30, 27, 75, 0.04),
+    0 0 0 1px rgba(30, 27, 75, 0.03) !important;
+  
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .category-icon {
@@ -868,16 +903,26 @@ img, video {
   background-color: #f97316;
 }
 
+/* Card Hover Elevation */
+.category-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  background: rgba(255, 255, 255, 0.88) !important;
+  box-shadow: 
+    0 20px 40px -15px rgba(30, 27, 75, 0.08),
+    0 0 0 1px rgba(249, 115, 22, 0.3) !important; /* Soft orange accent glow on edge */
+}
+
+
 
 /* ==========================================
    HEADER AND NAVIGATION BAR CONTAINER
    ========================================== */
 .navbar {
   position: sticky;
-  top: 1.0rem;
-  z-index: 99999;
+  top: 16px;
+  z-index: 100;
   width: 100%;
-  max-width: 1380px;
+  max-width: 1370px;
   margin: 0 auto; /* Keeps sticky top: 1.25rem active */
 
   /* Flex Layout */
@@ -2093,6 +2138,7 @@ ul.nav-links {
     object-fit: contain;   /* Prevents image distortion */
     display: block;
     margin: 0 auto;
+
 }
 
 /* OWWA Banner */
@@ -3476,9 +3522,591 @@ input[type="text"], input[type="url"] {
   margin: 0;
 }
 
-/*=============================================
+/*=============================================*/
 
 
+
+/*========================================
+          AI CHATBOT DESIGN 
+/*========================================*/
+.ai-bubble-widget {
+  position: fixed;
+  bottom: 85px; /* Perfectly aligned above the Messenger bubble */
+  right: 20px;
+  z-index: 990;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.ai-bubble-widget.hidden-by-modal {
+  display: none !important;
+}
+
+/* Minimalist Chat Head Button */
+.ai-chat-head {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--border-color);
+  border: 1.5px solid #ffffff;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ai-chat-head:hover {
+  transform: scale(1.06);
+}
+
+.chat-head-icon {
+  font-size: 24px;
+}
+
+/* Subtle Pulsing Ring (Active when closed) */
+.ai-chat-head::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1.5px solid #ff6b00;
+  animation: subtlePulse 2.5s infinite ease-out;
+  pointer-events: none;
+}
+
+.ai-bubble-widget.active .ai-chat-head::before {
+  display: none;
+}
+
+@keyframes subtlePulse {
+  0% { transform: scale(0.96); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 0; }
+  100% { transform: scale(0.96); opacity: 0; }
+}
+
+.online-indicator {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 12px;
+  height: 12px;
+  background-color: #22c55e;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+}
+
+/* Minimalist Glass Panel - Matches Website Action Cards */
+.ai-chat-window {
+  display: none;
+  position: absolute;
+  bottom: 60px; /* Sits directly above the chat head */
+  right: 0;
+  width: 350px;
+  max-width: calc(100vw - 32px);
+  height: 490px;
+  max-height: calc(100vh - 160px);
+  
+  /* Website Theme Palette: Dark Translucent Navy */
+  background: rgba(18, 24, 43, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  
+  flex-direction: column;
+  overflow: hidden;
+  transform-origin: bottom right;
+}
+
+.ai-chat-window.open {
+  display: flex;
+  animation: cleanFadeIn 0.22s ease-out forwards;
+}
+
+@keyframes cleanFadeIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Clean Header */
+.ai-chat-header {
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ai-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ai-profile .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #ff6b00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ai-profile .avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ai-profile strong {
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: block;
+  letter-spacing: -0.01em;
+}
+
+.ai-profile small {
+  font-size: 0.72rem;
+  color: #4ade80;
+  font-weight: 500;
+}
+
+.close-chat-btn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.close-chat-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Messages Stream */
+.ai-chat-messages {
+  flex: 1;
+  padding: 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ai-msg {
+  max-width: 88%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  word-wrap: break-word;
+}
+
+.ai-msg.bot {
+  background: rgba(255, 255, 255, 0.06);
+  color: #e5e7eb;
+  align-self: flex-start;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom-left-radius: 3px;
+}
+
+.ai-msg.user {
+  background: #ff6b00;
+  color: #ffffff;
+  align-self: flex-end;
+  border-bottom-right-radius: 3px;
+  font-weight: 500;
+}
+
+/* Subtle Suggestion Chips */
+.ai-quick-chips {
+  display: flex;
+  gap: 6px;
+  padding: 8px 14px;
+  overflow-x: auto;
+  background: transparent;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  scrollbar-width: none;
+}
+.ai-quick-chips::-webkit-scrollbar { display: none; }
+
+.chip-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fdba74;
+  border: 1px solid rgba(253, 186, 116, 0.2);
+  padding: 5px 11px;
+  border-radius: 14px;
+  font-size: 0.73rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chip-btn:hover {
+  background: #ff6b00;
+  color: #ffffff;
+  border-color: #ff6b00;
+}
+
+/* Seamless Integrated Input Bar */
+.ai-chat-input-row {
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ai-chat-input-row input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 9px 12px;
+  border-radius: 20px;
+  outline: none;
+  font-size: 0.84rem;
+  color: #ffffff !important;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.ai-chat-input-row input::placeholder {
+  color: #9ca3af;
+}
+
+.ai-chat-input-row input:focus {
+  border-color: #ff6b00;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.ai-chat-input-row button {
+  background: #ff6b00;
+  color: #ffffff;
+  border: none;
+  padding: 9px 15px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ai-chat-input-row button:hover {
+  background: #ea580c;
+}
+
+/* Mobile Screen Layout */
+@media (max-width: 480px) {
+  .ai-bubble-widget {
+    bottom: 20px;
+    right: 25px;
+  }
+  .ai-chat-window {
+    position: absolute;
+    bottom: 60px;
+    right: 0;
+    width: calc(100vw - 32px);
+    max-width: 350px;
+    height: 480px;
+    max-height: calc(100vh - 160px);
+  }
+  .ai-chat-head {
+    height: 48px;
+    width: 48px;
+  }
+}
+
+
+/*==============================================*/
+
+
+/*=============================================*/
+/* REQUIREMENTS BUTTON FOR COURSES */
+/* Drawer Background Overlay */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 998;
+}
+
+.drawer-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Glassmorphic Sliding Drawer Container */
+.glass-drawer {
+  position: fixed;
+  top: 0;
+  right: -450px; /* Hidden offscreen by default */
+  width: 420px;
+  max-width: 90vw;
+  height: 100vh;
+  background: rgba(248, 250, 252, 0.85); /* Matches your #f8fafc base */
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-left: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: -15px 0 35px -5px rgba(30, 27, 75, 0.12);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 24px;
+  box-sizing: border-box;
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+}
+
+/* Open State Trigger */
+.glass-drawer.open {
+  right: 0;
+}
+
+/* Close Button */
+.drawer-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(30, 27, 75, 0.06);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #1e1b4b;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.drawer-close-btn:hover {
+  background: rgba(30, 27, 75, 0.15);
+}
+
+/* Header Elements */
+.drawer-badge {
+  font-family: 'Courier New', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #f97316;
+  background: rgba(249, 115, 22, 0.1);
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(249, 115, 22, 0.2);
+}
+
+.drawer-header h3 {
+  font-size: 1.4rem;
+  color: #0f172a;
+  margin: 12px 0 4px 0;
+}
+
+.drawer-subtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0 0 24px 0;
+}
+
+/* Requirements List */
+.req-group h4 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1e1b4b;
+  margin-bottom: 12px;
+}
+
+.req-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.req-list li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+}
+
+.check-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #22c55e;
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.req-list strong {
+  display: block;
+  font-size: 0.88rem;
+  color: #1e293b;
+}
+
+.req-list p {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 2px 0 0 0;
+}
+
+/* Bottom Action Footer */
+.drawer-action-card {
+  margin-top: auto;
+  padding-top: 24px;
+  border-top: 1px solid rgba(30, 27, 75, 0.08);
+}
+
+.drawer-enroll-btn {
+  display: block;               /* Stretches full width across container */
+  width: 100%;                 /* Spans side to side to the edges */
+  padding: 12px 16px;
+  background: #1e1b4b;
+  color: #ffffff;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: center;           /* Centers text horizontally */
+  text-decoration: none;        /* REMOVES THE UNDERLINE */
+  box-sizing: border-box;       /* Ensures padding doesn't overflow edge */
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.drawer-enroll-btn:hover {
+  background: #f97316;
+}
+
+
+/*--------- PRICES IN REQUIREMENT VIEW ------*/
+
+.drawer-price-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  background: rgba(30, 27, 75, 0.04);
+  border: 1px solid rgba(30, 27, 75, 0.1);
+  border-radius: 12px;
+}
+
+.price-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.price-amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e1b4b; /* Navy */
+}
+
+.price-amount.alumni {
+  color: #f97316; /* Orange accent for discount */
+}
+
+/* Push Price Card and Enroll Button to Bottom of Drawer */
+.drawer-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Spans all remaining vertical space */
+}
+
+.drawer-action-card {
+  margin-top: auto; /* Pushes price box & button to the bottom */
+  padding-top: 16px;
+}
+
+
+
+
+/*--------- REQUIREMENT BUTTON DESIGN --------*/
+.card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-bottom: 8px; /* Compact spacing above Enroll Now */
+  padding: 8px 14px;
+  
+  /* Minimal Ghost Glass Styling */
+  background: rgba(30, 27, 75, 0.03); 
+  border: 1px solid rgba(30, 27, 75, 0.12);
+  border-radius: 50px;
+  
+  /* Typography */
+  color: #1e1b4b; /* Navy accent text */
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+/* Subtle Hover Glow */
+.card-btn:hover {
+  background: rgba(30, 27, 75, 0.08);
+  border-color: rgba(30, 27, 75, 0.25);
+  color: #f97316; /* Soft orange hover text shift */
+  transform: translateY(-1px);
+}
+
+/* Active Click Effect */
+.card-btn:active {
+  transform: translateY(0);
+  background: rgba(30, 27, 75, 0.12);
+}
+
+
+
+
+
+/*==================================================*/
 
 
 /* ==========================================================

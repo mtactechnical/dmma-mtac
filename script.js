@@ -8,6 +8,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+window.supabase = db;
 
 // --- 2. GLOBAL STATE ---
 let isAdminMode = false;
@@ -1790,3 +1791,676 @@ function closeModal() {
   // Start Autoplay on load
   startCoverflowAutoplay();
 });
+
+
+
+
+// DATABASE OF COURSE REQUIREMENTS ====================================================================================================================//
+const courseRequirementsData = {
+
+  // STCW-MARINA COURSES ==============================================================================================================================//
+  "AFF": {
+    title: "Advanced Fire Fighting (AFF)",
+    badge: "STCW MANDATORY",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSfqeFgcvI2ffvrVhPYiF1Nnbtfbb6WxiqZMrTjdc1amfeby_A/viewform",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Background, White Polo Shirt)",
+      "Birth Certificate or Valid Passport",
+      "Medical Certificate (MARINA Accredited)",
+      "Basic Training Certificate (BT Certificate/COP)"
+    ]
+  },
+  "WALKIN": {
+    title: "Basic Training (BT) Walk-in",
+    badge: "STCW MANDATORY",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSeqphSSPVGqdoRQ4r_TS9slgxORrHeB8AuiRJD-KeJF0MLNvQ/viewform",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Background, White Polo Shirt)",
+      "Passport or PSA Birth Certificate",
+      "Valid Medical Certificate in PEME Form"
+    ]
+  },
+  "FRESH": {
+    title: "Basic Training (BT) DMMA Fresh Grad",
+    badge: "STCW MANDATORY",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSfRrezw6YIL9GEIC_cP6QpOnWwVm99rNVeDBqxjazd9Q_1UYA/viewform",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Background, White Polo Shirt)",
+      "Passport or PSA Birth Certificate",
+      "Valid Medical Certificate in PEME Form"
+    ]
+  },
+  "BTOC": {
+    title: "Basic Training for Oil and Chemical Tanker Cargo Operation (BTOCTCO)",
+    badge: "STCW MANDATORY",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSeklf_qag20Nfo9mrRpY1fTRuc9arBl9pMJ6K4aJ5rA5499NA/viewform?usp=embedded_form_link",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Birth Certificate or Valid Passport",
+      "Medical Certificate (MARINA Accredited)",
+      "Basic Training Certificate or BT COP"
+    ]
+  },
+  "MEFA": {
+    title: "Medical First Aid (MEFA)",
+    badge: "STCW MANDATORY",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSdjpMR5vSSVmjI_fxRBIbhwpJL4tEvno_pfE0t5Fd2XrYI5dA/viewform",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Birth Certificate or Valid Passport",
+      "Medical Certificate (MARINA Accredited)",
+      "Basic Training Certificate (BT Certificate)"
+    ]
+  },
+  "RCAFF": {
+    title: "Refresher Course on Advanced Fire Fighting (RCAFF)",
+    badge: "STCW MANDATORY",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSfqB5hMDCJMxBkysfB2ccn97TuKh9GJ6LgwvvBlLFObkJlyIA/viewform?usp=embedded_form_link",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Birth Certificate or Valid Passport",
+      "Medical Certificate (MARINA Accredited)",
+      "Valid AFF Certificate of Proficiency (COP)",
+      "Seafarer's Record Book (SRB)",
+      "First Page and Entries Showing at Least 12 Months onboard Experience within the last 5 years",
+      "Company issued Sea Service Record Showing at Least 12 Months on board Experience within the last 5 years"
+    ]
+  },
+  "RCBT": {
+    title: "Refresher Course on Basic Training (RCBT)",
+    badge: "STCW MANDATORY",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSfwbu59Rg6G3O9QpkIp4PzuRz_CopzaUSt2TNg15rLyCPQVQA/viewform?usp=embedded_form_link",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Birth Certificate or Valid Passport",
+      "Medical Certificate (PEME Form - MARINA Accredited)",
+      "Valid BT Certificate of Proficiency (COP)",
+      "Seafarer's Record Book (SRB) First Page and Entries showing at least 12 months onboard experience within the last 5 years ",
+      "Company issued Sea Service Record Showing at Least 12 Months on board Experience within the last 5 years"
+    ]
+  },
+  "RCSCRB": {
+    title: "Refresher Course on Survival Craft and Rescue Boat (RCSCRB)",
+    badge: "STCW MANDATORY",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSe3e3cmXOLt75KlJqfCN8JMtS2xCNtblZqtYLs7w-Twta8LXQ/viewform",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Birth Certificate or Valid Passport",
+      "Medical Certificate (MARINA Accredited)",
+      "Valid SCRB Certificate of Proficiency (COP)",
+      "Seafarer's Record Book (SRB)",
+      "First Page and Entries Showing at Least 12 Months onboard Experience within the last 5 years",
+      "Company issued Sea Service Record Showing at Least 12 Months on board Experience within the last 5 years"
+    ]
+  },
+  "EWK": {
+    title: "Ratings Forming Part of a Watch in a Manned Engine-room (RFPEW)",
+    badge: "STCW MANDATORY",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSc9MdxFgy1aEHoAl92Q2epFLViMHewRKocrHAEti6uiaK-8Yw/viewform?usp=embedded_form_link",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Birth Certificate or Valid Passport",
+      "Medical Certificate (MARINA Accredited)",
+      "Basic Training Certificate (BT Certificate)"
+    ]
+  },
+  "DWK": {
+    title: "Ratings Forming Part of a Navigational Watch (RFPNW)",
+    badge: "STCW MANDATORY",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSd7FV7qxjiIUT2qpKcVig-Rch4Hway07ZFXSBJQLY2meYUkFg/viewform?usp=embedded_form_link",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Birth Certificate or Valid Passport",
+      "Medical Certificate (MARINA Accredited)",
+      "Basic Training Certificate (BT Certificate)"
+    ]
+  },
+  "SAT-SDSD": {
+    title: "Security Awareness Training & Seafarers with Designated Security Duties (SAT-SDSD)",
+    badge: "STCW MANDATORY",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLScjyfMi0dXcFKrOswTWx05RcS9DLVyQbgJYadytKAZ1SuqC3Q/viewform?usp=embedded_form_link",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Birth Certificate or Valid Passport",
+      "Medical Certificate (MARINA Accredited)",
+      "Basic Training Certificate/ COP"
+    ]
+  },
+  "UC BT-PSSR": {
+    title: "Updating Course on BT-PSSR",
+    badge: "STCW MANDATORY",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSfj8UhG6hzUOPWMV5pfAaoLAXmoIgrQrdpG_at4Vf4ZDnncPA/viewform",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Birth Certificate or Valid Passport",
+      "Medical Certificate (MARINA Accredited)",
+      "Basic Training Certificate/ COP"
+    ]
+  },
+
+  // INHOUSE COURSES =================================================================================================================================//
+  "MARPOL": {
+    title: "Consolidated Marine Pollution (MARPOL)",
+    badge: "IN-HOUSE",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSf7q_vtqMIRhKrWBl01pH9ZcuPu1L2OhgzQhds9i5vs_YdpFQ/viewform?usp=embedded_form_link",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Birth Certificate or Valid Passport",
+      "BT Certificate"
+    ]
+  },
+  "STAB&TRIM": {
+    title: "Advanced Training for Stability and Trim (STAB & TRIM)",
+    badge: "IN-HOUSE",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSe3JU9Ab8rfLcwB4AjU1Rg8xVqnSXHNGiiQHPls74p6eZUfQw/viewform",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Birth Certificate or Valid Passport",
+      "BT Certificate"
+    ]
+  },
+
+  // PROFESSIONAL DEV COURSE ============================================================================================================================//
+  "IMO609": {
+    title: "IMO Model Course 6.09",
+    badge: "PROFESSIONAL DEVELOPMENT",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSd6OcK0b6WZmaAyDWdkOtMRt79qEyTNCRYORNiUlAagTLQkjQ/viewform",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Passport or PSA Birth Certificate"
+    ]
+  },
+  "IMO312": {
+    title: "IMO Model Course 3.12",
+    badge: "PROFESSIONAL DEVELOPMENT",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSfLJD9634gNRkmZ6Lx10f13lQr_MTe3hyVecbw8gDxyELwoBA/viewform",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Passport or PSA Birth Certificate",
+      "IMO Model Course 6.09 (Certificate of Completion)"
+    ]
+  },
+  "IMO610": {
+    title: "IMO Model Course 6.10",
+    badge: "PROFESSIONAL DEVELOPMENT",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSeyR8tCYuLJjTyBB7cHmN2385CA1VDfk0FVTkiZo_sAd5BiOw/viewform",
+    requirements: [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Back Ground, White Polo Shirt)",
+      "Passport or PSA Birth Certificate",
+      "IMO Model Course 6.09 (Certificate of Completion)",
+      "IMO Model Course 3.12 (Certificate of Completion)"
+    ]
+  },
+
+  // PASSENGER COURSE =================================================================================================================================//
+  "STPPDSPPS": {
+    title: "Safety Training for Personnel Providing Direct Service to Passengers in Passenger Spaces (STPPDSPPS)",
+    badge: "PASSENGER SHIP COURSE",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSe3CstSMQKiej8-rP2_3S1b-2pFbkHUs4YemoqOUqrFaP3e3g/viewform",
+    requirements: [
+      "PSA Birth Certificate / Passport ",
+      "Seafarer’s Registration Number",
+      "Valid Medical in PEME Form",
+      "BT Certificate"
+    ]
+  },
+  "PSCMT": {
+    title: "Passenger Ship Crowd Management Training (PSCMT)",
+    badge: "PASSENGER SHIP COURSE",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSfQeGb8QubNJ4SFdnFPTTtOLc5raHhrtMjS04xKSq4wkNnhmw/viewform",
+    requirements: [
+      "PSA Birth Certificate / Passport",
+      "Seafarer’s Registration Number",
+      "Valid Medical in PEME Form",
+      "Safety Training for Personnel Providing Direct Service to Passenger (STPPDSP) Certificate"
+    ]
+  },
+  "PSCMHB": {
+    title: "Passenger Ship Crisis Management and Human Behaviour Training (PSCMHB)",
+    badge: "PASSENGER SHIP COURSE",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLScAsAx3XHtAuMars60pHwxHtXKKmMRZ2WTr9o9b0EHjQwBV1g/viewform",
+    requirements: [
+      "PSA Birth Certificate / Passport",
+      "Seafarer’s Registration Number",
+      "Valid Medical in PEME Form",
+      "Safety Training for Personnel Providing Direct Service to Passenger (STPPDSP) Certificate",
+      "Passenger Ship Crowd Management (PSCM) Certificate"
+    ]
+  },
+  // PACKAGES
+  "PACKAGE A": {
+    title: "Package A",
+    badge: "COURSE PACKAGE",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLScxPRObt9-6EQ7Dp72HI1Wm9Px5goHH_5Ty7dNtAiAd7F5u3w/viewform",
+    requirements: [
+      "PSA Birth Certificate / Passport",
+      "Seafarer’s Registration Number",
+      "Valid Medical in PEME Form"
+    ]
+  },
+  "PACKAGE B": {
+    title: "Package B",
+    badge: "COURSE PACKAGE",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLScxPRObt9-6EQ7Dp72HI1Wm9Px5goHH_5Ty7dNtAiAd7F5u3w/viewform",
+    requirements: [
+      "PSA Birth Certificate / Passport",
+      "Seafarer’s Registration Number",
+      "Valid Medical in PEME Form"
+    ]
+  },
+
+};
+
+
+// FUNCTION TO OPEN DRAWER WITH DYNAMIC DATA & SUPABASE PRICES
+async function openRequirementsDrawer(courseIdentifier) {
+  const priceElem = document.getElementById('drawerCoursePrice');
+  const alumniElem = document.getElementById('drawerAlumniPrice');
+  const enrollBtn = document.getElementById('drawerEnrollBtn');
+  
+  if (priceElem) priceElem.innerText = "Loading...";
+  if (alumniElem) alumniElem.innerText = "Loading...";
+
+  // 1. Resolve local UI checklist & title
+  let localData = courseRequirementsData[courseIdentifier];
+  if (!localData && typeof courseIdentifier === 'string') {
+    const matchedKey = Object.keys(courseRequirementsData).find(
+      k => courseRequirementsData[k].title.toLowerCase() === courseIdentifier.toLowerCase()
+    );
+    if (matchedKey) localData = courseRequirementsData[matchedKey];
+  }
+
+  const initialTitle = localData ? localData.title : String(courseIdentifier);
+  document.getElementById('drawerCourseTitle').innerText = initialTitle;
+  document.getElementById('drawerBadge').innerText = localData ? localData.badge : "STCW MANDATORY";
+
+  // Fallback enrollment link
+  if (enrollBtn && localData && localData.link) {
+    enrollBtn.href = localData.link;
+    enrollBtn.target = "_blank";
+  }
+
+  // Render checklist items
+  const listContainer = document.getElementById('reqListContainer');
+  if (listContainer) {
+    listContainer.innerHTML = '';
+    const reqs = localData ? localData.requirements : [
+      "Screenshot of Seafarers Registration Number (SRN)",
+      "ID Picture (2x2, White Background, White Polo Shirt)",
+      "Birth Certificate or Valid Passport",
+      "Medical Certificate (MARINA Accredited)"
+    ];
+    reqs.forEach(reqText => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="check-icon">✓</span><div><strong>${reqText}</strong></div>`;
+      listContainer.appendChild(li);
+    });
+  }
+
+  // Open Drawer UI immediately
+  document.getElementById('requirementsDrawer').classList.add('open');
+  document.getElementById('requirementsOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  // 2. Query Supabase Client (`db`)
+  if (typeof db !== 'undefined' && db) {
+    try {
+      const { data: rows, error } = await db
+        .from('Course')
+        .select('id, title, fee, gradFee, googleFormUrl');
+
+      // DEBUGGER LOGS: Open browser console (F12) to inspect these values
+      console.log("--> SUPABASE FETCH RESULT <--");
+      console.log("Returned Rows Count:", rows ? rows.length : 0);
+      console.log("Rows Data:", rows);
+      console.log("Error Status:", error);
+
+      if (error) {
+        console.error("Supabase API Error:", error);
+        if (priceElem) priceElem.innerText = "₱0.00";
+        if (alumniElem) alumniElem.innerText = "₱0.00";
+        return;
+      }
+
+      if (rows && rows.length > 0) {
+        const searchKey = String(courseIdentifier).toLowerCase().trim();
+        const searchTitle = String(initialTitle).toLowerCase().trim();
+
+        // Match against returned DB titles
+        const dbCourse = rows.find(row => {
+          if (!row.title) return false;
+          const dbTitle = row.title.toLowerCase().trim();
+          const searchKey = String(courseIdentifier).toLowerCase().trim();
+          const searchTitle = String(initialTitle).toLowerCase().trim();
+
+          // 1. Is this a Refresher course search?
+          const isSearchRefresher = searchKey.includes('refresher') || searchTitle.includes('refresher') || searchKey.startsWith('r');
+          const isDbRefresher = dbTitle.includes('refresher');
+
+          // If one is a Refresher and the other is NOT, skip immediately
+          if (isSearchRefresher !== isDbRefresher) {
+            return false;
+          }
+
+          // 2. Exact Acronym Match inside parentheses (e.g., "(aff)" vs "(rcaff)")
+          const matchCode = dbTitle.match(/\(([^)]+)\)/);
+          const dbCode = matchCode ? matchCode[1].toLowerCase().trim() : '';
+
+          if (dbCode && (dbCode === searchKey || dbCode === searchTitle)) {
+            return true;
+          }
+
+          // 3. Exact full title match
+          if (dbTitle === searchTitle) {
+            return true;
+          }
+
+          // 4. Substring fallback (only within same course type)
+          return dbTitle.includes(searchKey) || searchTitle.includes(dbTitle);
+        });
+
+        if (dbCourse) {
+          if (dbCourse.title) {
+            document.getElementById('drawerCourseTitle').innerText = dbCourse.title;
+          }
+
+          const formatPrice = (val) => {
+            if (!val || val === 'NULL' || String(val).trim() === '') return "₱0.00";
+            if (String(val).includes('₱')) return val;
+            const num = parseFloat(String(val).replace(/[^0-9.]/g, ''));
+            return isNaN(num) ? val : new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
+          };
+
+          // Update Live Database Prices
+          if (priceElem) priceElem.innerText = formatPrice(dbCourse.fee);
+          if (alumniElem) alumniElem.innerText = formatPrice(dbCourse.gradFee);
+
+          // Update Live Registration Link
+          if (enrollBtn && dbCourse.googleFormUrl && dbCourse.googleFormUrl.trim() !== '') {
+            let formUrl = dbCourse.googleFormUrl.trim();
+            if (!formUrl.startsWith('http://') && !formUrl.startsWith('https://')) {
+              formUrl = 'https://' + formUrl;
+            }
+            enrollBtn.href = formUrl;
+            enrollBtn.target = "_blank";
+          }
+        } else {
+          console.warn("No DB record matched for courseIdentifier:", courseIdentifier);
+          if (priceElem) priceElem.innerText = "₱0.00";
+          if (alumniElem) alumniElem.innerText = "₱0.00";
+        }
+      } else {
+        console.warn("Supabase returned empty array []. Check RLS SELECT policy on 'Course' table.");
+        if (priceElem) priceElem.innerText = "₱0.00";
+        if (alumniElem) alumniElem.innerText = "₱0.00";
+      }
+    } catch (err) {
+      console.error("Execution Exception:", err);
+      if (priceElem) priceElem.innerText = "₱0.00";
+      if (alumniElem) alumniElem.innerText = "₱0.00";
+    }
+  } else {
+    console.error("Supabase 'db' variable is undefined.");
+    if (priceElem) priceElem.innerText = "₱0.00";
+    if (alumniElem) alumniElem.innerText = "₱0.00";
+  }
+}
+
+// FUNCTION TO CLOSE DRAWER
+function closeRequirementsDrawer() {
+  const drawer = document.getElementById('requirementsDrawer');
+  const overlay = document.getElementById('requirementsOverlay');
+
+  if (drawer) drawer.classList.remove('open');
+  if (overlay) overlay.classList.remove('active');
+  document.body.style.overflow = ''; // Unlocks background scroll
+}
+
+
+
+
+
+// AI CHATBOT SCRIPT ////
+
+// 1. Append User Message
+  const userDiv = document.createElement('div');
+  userDiv.className = 'ai-msg user';
+  userDiv.innerText = rawQuery;
+  container.appendChild(userDiv);
+  inputElem.value = '';
+  container.scrollTop = container.scrollHeight;
+
+  // 2. Append Animated Bot Typing Indicator
+  const botDiv = document.createElement('div');
+  botDiv.className = 'ai-msg bot';
+  botDiv.innerHTML = `
+    <div class="typing-dots">
+      <span></span><span></span><span></span>
+    </div>`;
+  container.appendChild(botDiv);
+  container.scrollTop = container.scrollHeight;
+
+  function sendQuickQuery(text) {
+  const inputElem = document.getElementById('aiUserInput');
+  if (inputElem) {
+    inputElem.value = text;
+    sendBubbleChatMessage();
+  }
+}
+
+
+// Toggle Floating Chat Head
+function toggleAIChatBubble() {
+  const widget = document.getElementById('aiBubbleWidget');
+  const chatWindow = document.getElementById('aiChatWindow');
+  
+  if (chatWindow.classList.contains('open')) {
+    chatWindow.classList.remove('open');
+    widget.classList.remove('active');
+  } else {
+    chatWindow.classList.add('open');
+    widget.classList.add('active');
+  }
+}
+
+function handleBubbleKeyPress(e) {
+  if (e.key === 'Enter') sendBubbleChatMessage();
+}
+
+async function sendBubbleChatMessage() {
+  const inputElem = document.getElementById('aiUserInput');
+  const container = document.getElementById('aiChatMessages');
+  const rawQuery = inputElem.value.trim();
+
+  if (!rawQuery) return;
+
+  const query = rawQuery.toLowerCase();
+
+  // 1. Append User Message
+  const userDiv = document.createElement('div');
+  userDiv.className = 'ai-msg user';
+  userDiv.innerText = rawQuery;
+  container.appendChild(userDiv);
+  inputElem.value = '';
+  container.scrollTop = container.scrollHeight;
+
+  // 2. Append Animated Bot Typing Indicator
+  const botDiv = document.createElement('div');
+  botDiv.className = 'ai-msg bot';
+  botDiv.innerHTML = `
+    <div class="typing-dots">
+      <span></span><span></span><span></span>
+    </div>`;
+  container.appendChild(botDiv);
+  container.scrollTop = container.scrollHeight;
+
+  try {
+    // Query Supabase live dataset
+    const { data: courses, error } = await db
+      .from('Course')
+      .select('title, fee, gradFee, duration, schedules, googleFormUrl');
+
+    if (error || !courses || courses.length === 0) {
+      botDiv.innerText = "I couldn't reach the course database right now. Please check our course cards directly!";
+      return;
+    }
+
+    const sanitizedCourses = courses.map(c => {
+      let scheduleList = [];
+      if (c.schedules) {
+        try {
+          const parsed = typeof c.schedules === 'string' ? JSON.parse(c.schedules) : c.schedules;
+          if (Array.isArray(parsed)) scheduleList = parsed;
+        } catch (_) {
+          if (typeof c.schedules === 'string' && c.schedules.trim() !== '[]' && c.schedules.trim() !== '') {
+            scheduleList = [c.schedules];
+          }
+        }
+      }
+      return {
+        title: c.title || 'Course',
+        fee: c.fee || 'N/A',
+        gradFee: c.gradFee || 'N/A',
+        duration: c.duration || 'N/A',
+        schedules: scheduleList,
+        link: c.googleFormUrl || '#'
+      };
+    });
+
+    // Helper: Typo-Tolerant Keyword Matcher
+    const hasKeyword = (terms) => terms.some(term => query.includes(term));
+
+    const isScheduleQuery = hasKeyword(['sched', 'sked', 'early', 'earl', 'date', 'when', 'time']);
+    const isPriceQuery = hasKeyword(['price', 'fee', 'rate', 'cost', 'how much', 'pay', 'tuition']);
+    const isEnrollQuery = hasKeyword(['enroll', 'enrol', 'register', 'apply', 'step', 'how to']);
+
+    // -------------------------------------------------------------
+    // INTENT 1: GLOBAL ACTION INTENTS (Enrollment / All Schedules)
+    // -------------------------------------------------------------
+    
+    // Enrollment Steps
+    if (isEnrollQuery && !hasKeyword(['bt', 'aff', 'pssr', 'mefa', 'sat'])) {
+      botDiv.innerHTML = `📝 <strong>Step-by-Step Online Enrollment Guide:</strong><br><br>` +
+        `<strong>Step 1:</strong> Select your desired course card on the homepage.<br>` +
+        `<strong>Step 2:</strong> Click <strong>Requirements</strong> to view mandatory documents.<br>` +
+        `<strong>Step 3:</strong> Click <strong>Proceed to Online Enrollment</strong> inside the drawer.<br>` +
+        `<strong>Step 4:</strong> Fill out the Google Form and upload your requirements.`;
+      container.scrollTop = container.scrollHeight;
+      return;
+    }
+
+    // Earliest / General Schedules (Catches "earliest", "earlist", "erliest", "schedules")
+    if (isScheduleQuery && !hasKeyword(['bt', 'aff', 'pssr', 'mefa', 'sat-sdsd'])) {
+      const activeSchedules = sanitizedCourses
+        .filter(c => c.schedules.length > 0)
+        .map(c => `• <strong>${c.title}</strong>: ${c.schedules.join(', ')}`);
+
+      if (activeSchedules.length > 0) {
+        botDiv.innerHTML = `📅 <strong>All Upcoming Course Schedules:</strong><br><br>` + activeSchedules.join('<br>');
+      } else {
+        botDiv.innerText = "No upcoming course schedules are currently posted in the system.";
+      }
+      container.scrollTop = container.scrollHeight;
+      return;
+    }
+
+    // -------------------------------------------------------------
+    // INTENT 2: SPECIFIC COURSE SEARCH
+    // -------------------------------------------------------------
+    const isWalkIn = hasKeyword(['walk', 'regular', 'standard']);
+    const isGrad = hasKeyword(['grad', 'alumni', 'fresh']);
+
+    const stopWords = ['how', 'to', 'can', 'i', 'the', 'for', 'of', 'in', 'on', 'a', 'an', 'what', 'is', 'are', 'schedule', 'schedules', 'sched', 'sked', 'price', 'prices', 'rate', 'rates', 'cost', 'fee', 'fees', 'walk-in', 'walkin', 'fresh', 'grad', 'alumni', 'earliest', 'earlist'];
+    const queryTokens = query.replace(/[^\w\s-]/gi, '').split(/\s+/).filter(t => !stopWords.includes(t) && t.length > 1);
+
+    let bestMatch = null;
+    let highestScore = 0;
+
+    sanitizedCourses.forEach(c => {
+      const titleLower = c.title.toLowerCase();
+      const codeMatch = titleLower.match(/\(([^)]+)\)/);
+      const acronym = codeMatch ? codeMatch[1].toLowerCase().trim() : '';
+      let score = 0;
+
+      if (acronym && queryTokens.includes(acronym)) score += 60;
+
+      if (query.includes('pssr') && titleLower.includes('pssr')) score += 80;
+      if (query.includes('pssr') && !titleLower.includes('pssr')) score -= 50;
+
+      if ((query.includes('refresher') || query.includes('rcbt') || query.includes('rcaff')) && titleLower.includes('refresher')) {
+        score += 80;
+      }
+      if (!query.includes('refresher') && titleLower.includes('refresher') && !query.includes('rcbt') && !query.includes('rcaff')) {
+        score -= 40;
+      }
+
+      queryTokens.forEach(token => {
+        if (titleLower.includes(token)) score += 25;
+      });
+
+      if (score > highestScore) {
+        highestScore = score;
+        bestMatch = c;
+      }
+    });
+
+    if (bestMatch && highestScore >= 20) {
+      const schedText = bestMatch.schedules.length > 0 
+        ? bestMatch.schedules.map(s => `<strong>${s}</strong>`).join(', ') 
+        : '<em>No active upcoming schedule listed (Please inquire with Admin)</em>';
+
+      let rateText = `• <strong>Walk-in / Regular Rate:</strong> ${bestMatch.fee}<br>• <strong>Fresh Grad / Alumni Rate:</strong> ${bestMatch.gradFee}`;
+      
+      if (isWalkIn) rateText = `• <strong>Walk-in / Regular Rate:</strong> <strong>${bestMatch.fee}</strong>`;
+      else if (isGrad) rateText = `• <strong>Fresh Grad / Alumni Rate:</strong> <strong>${bestMatch.gradFee}</strong>`;
+
+      if (isScheduleQuery) {
+        botDiv.innerHTML = `📅 <strong>${bestMatch.title} Schedule:</strong><br><br>` +
+          `• <strong>Upcoming Dates:</strong> ${schedText}<br>` +
+          `• <strong>Duration:</strong> ${bestMatch.duration}<br><br>` +
+          `${rateText}`;
+      } else if (isPriceQuery) {
+        botDiv.innerHTML = `💳 <strong>${bestMatch.title} Pricing:</strong><br><br>` +
+          `${rateText}<br>` +
+          `• <strong>Duration:</strong> ${bestMatch.duration}`;
+      } else {
+        botDiv.innerHTML = `⚓ <strong>${bestMatch.title}</strong><br><br>` +
+          `${rateText}<br>` +
+          `• <strong>Duration:</strong> ${bestMatch.duration}<br>` +
+          `• <strong>Upcoming Dates:</strong> ${schedText}`;
+      }
+
+      container.scrollTop = container.scrollHeight;
+      return;
+    }
+
+    // Fallback
+    botDiv.innerHTML = `Hello! 👋 How can I assist you? Try asking:<br><br>` +
+      `• <em>"How to enroll"</em><br>` +
+      `• <em>"BT walk-in schedule"</em><br>` +
+      `• <em>"AFF price"</em><br>` +
+      `• <em>"PSSR schedule"</em>`;
+
+  } catch (err) {
+    botDiv.innerText = "Connection issue. Please try again!";
+  }
+
+  container.scrollTop = container.scrollHeight;
+}
