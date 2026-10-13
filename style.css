@@ -3086,7 +3086,37 @@ input[type="text"], input[type="url"] {
   justify-content: center;
   text-decoration: none;
   font-size: 1.1rem;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Universal Lift Animation on Hover */
+.footer-socials a:hover {
+  transform: translateY(-1.5px); /* Gentle 1.5px lift */
+  border-color: transparent;
+}
+
+/* 1. Facebook Hover (#1877F2) */
+.footer-socials a.facebook:hover {
+  background-color: #1877f2;
+  box-shadow: 0 4px 10px rgba(24, 119, 242, 0.35);
+}
+
+/* 2. Instagram Hover (Signature Gradient) */
+.footer-socials a.instagram:hover {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  box-shadow: 0 4px 10px rgba(220, 39, 67, 0.35);
+}
+
+/* 3. TikTok Hover (#000000 with Subtle Glow) */
+.footer-socials a.tiktok:hover {
+  background-color: #000000;
+  box-shadow: -1px 1px 8px rgba(254, 44, 85, 0.4), 1px -1px 8px rgba(37, 244, 238, 0.4);
+}
+
+/* 4. YouTube Hover (#FF0000) */
+.footer-socials a.youtube:hover {
+  background-color: #ff0000;
+  box-shadow: 0 4px 10px rgba(255, 0, 0, 0.35);
 }
 
 
