@@ -3813,7 +3813,7 @@ input[type="text"], input[type="url"] {
 /* Mobile Screen Layout */
 @media (max-width: 480px) {
   .ai-bubble-widget {
-    bottom: 20px;
+    bottom: 85px;
     right: 25px;
   }
   .ai-chat-window {
