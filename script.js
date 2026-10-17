@@ -2464,3 +2464,197 @@ async function sendBubbleChatMessage() {
 
   container.scrollTop = container.scrollHeight;
 }
+
+
+/* ============================================================
+   GLASS SEARCH OVERLAY & DIRECT COURSE SCROLL HIGHLIGHT
+   ============================================================ */
+
+function openSearchModal() {
+  const modal = document.getElementById('courseSearchModal');
+  if (modal) {
+    modal.classList.add('active');
+    setTimeout(() => {
+      const input = document.getElementById('courseSearchInput');
+      if (input) input.focus();
+    }, 100);
+  }
+}
+
+function closeSearchModal() {
+  const modal = document.getElementById('courseSearchModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function handleModalBackdropClick(e) {
+  if (e.target.id === 'courseSearchModal') {
+    closeSearchModal();
+  }
+}
+
+function clearCourseSearch() {
+  const input = document.getElementById('courseSearchInput');
+  const resultsContainer = document.getElementById('searchDropdownMenu');
+  const clearBtn = document.getElementById('modalClearBtn');
+  
+  if (input) input.value = '';
+  if (resultsContainer) resultsContainer.innerHTML = '';
+  if (clearBtn) clearBtn.style.display = 'none';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeSearchModal();
+});
+
+
+function handleSearchInput() {
+  const input = document.getElementById('courseSearchInput');
+  const query = input ? input.value.trim().toLowerCase() : '';
+  const resultsContainer = document.getElementById('searchDropdownMenu');
+  const clearBtn = document.getElementById('modalClearBtn');
+
+  if (!resultsContainer) return;
+
+  if (clearBtn) {
+    clearBtn.style.display = query.length > 0 ? 'block' : 'none';
+  }
+
+  if (query.length === 0) {
+    resultsContainer.innerHTML = '';
+    return;
+  }
+
+  // Exact 4 sub-tab section IDs
+  const targetSubTabs = [
+    { id: 'stcw-tab', label: 'STCW' },
+    { id: 'in-house-tab', label: 'IN-HOUSE' },
+    { id: 'prof-tab', label: 'PROFESSIONAL' },
+    { id: 'passenger-courses-landing', label: 'PASSENGER' }
+  ];
+
+  const matchedCourses = [];
+  const seenTitles = new Set();
+
+  targetSubTabs.forEach(({ id: tabId, label: tabLabel }) => {
+    const tabSection = document.getElementById(tabId);
+    if (!tabSection) return;
+
+    // Target every .course-card directly inside the sub-tab section
+    const cards = tabSection.querySelectorAll('.course-card');
+
+    cards.forEach((card) => {
+      // Find course title heading inside the card
+      const titleElem = card.querySelector('h1, h2, h3, h4, h5, h6, .course-title, .card-title, strong');
+      if (!titleElem) return;
+
+      const fullTitle = titleElem.textContent.trim();
+      const cleanKey = fullTitle.toLowerCase().replace(/\s+/g, ' ');
+
+      // Ignore general section headings
+      if (
+        cleanKey.includes('trainings offered') || 
+        cleanKey.includes('maritime training') ||
+        cleanKey.includes('in-house maritime training courses')
+      ) {
+        return;
+      }
+
+      if (cleanKey.includes(query) && !seenTitles.has(cleanKey)) {
+        seenTitles.add(cleanKey);
+
+        // Assign ID directly to <div class="course-card">
+        if (!card.id) {
+          card.id = 'course-card-' + cleanKey.replace(/[^a-z0-9]/g, '-');
+        }
+
+        matchedCourses.push({
+          cardId: card.id,
+          title: fullTitle,
+          tabId: tabId,
+          tabLabel: tabLabel
+        });
+      }
+    });
+  });
+
+  // Render Results List with Tab Tag
+  if (matchedCourses.length === 0) {
+    resultsContainer.innerHTML = `
+      <div class="search-no-results">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <p>No training courses found matching "${query}"</p>
+      </div>
+    `;
+  } else {
+    resultsContainer.innerHTML = matchedCourses.map(course => `
+      <div class="search-result-item" onclick="selectAndHighlightCourse('${course.cardId}', '${course.tabId}')">
+        <span class="result-title">${course.title}</span>
+        <span class="result-category-tag">${course.tabLabel}</span>
+      </div>
+    `).join('');
+  }
+}
+
+
+function selectAndHighlightCourse(cardId, tabId) {
+  closeSearchModal();
+  clearCourseSearch();
+
+  // 1. Unhide target sub-tab section
+  const allTabs = ['stcw-tab', 'in-house-tab', 'prof-tab', 'passenger-courses-landing'];
+  
+  allTabs.forEach(id => {
+    const section = document.getElementById(id);
+    if (section) {
+      if (id === tabId) {
+        section.classList.remove('hidden');
+        section.style.display = 'block';
+      } else {
+        section.classList.add('hidden');
+        section.style.display = 'none';
+      }
+    }
+  });
+
+  if (typeof switchTab === 'function' && tabId) {
+    try { switchTab(tabId); } catch (e) {}
+  }
+
+  window.location.hash = tabId;
+
+  // 2. Clear old highlights
+  document.querySelectorAll('.card-highlight-active').forEach(c => {
+    c.classList.remove('card-highlight-active');
+  });
+
+  // 3. Scroll & apply highlight to the full <div class="course-card">
+  setTimeout(() => {
+    const targetCard = document.getElementById(cardId);
+
+    if (targetCard) {
+      // Unhide parent containers up DOM tree if hidden
+      let ancestor = targetCard;
+      while (ancestor && ancestor !== document.body) {
+        ancestor.classList.remove('hidden');
+        if (window.getComputedStyle(ancestor).display === 'none') {
+          ancestor.style.display = 'block';
+        }
+        ancestor = ancestor.parentElement;
+      }
+
+      // Smooth scroll target card into center view
+      targetCard.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+
+      // Add glow ring around the ENTIRE outer <div class="course-card">
+      targetCard.classList.add('card-highlight-active');
+
+      // Auto-remove highlight after 3.5 seconds
+      setTimeout(() => {
+        targetCard.classList.remove('card-highlight-active');
+      }, 1000);
+    }
+  }, 250);
+}

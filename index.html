@@ -79,6 +79,10 @@
     <li><a href="#gallery-tab" onclick="event.preventDefault(); switchTab('gallery-tab');" class="nav-link">Gallery</a></li>
     </ul>
 
+    <button class="nav-search-trigger-btn" onclick="openSearchModal()" aria-label="Open Course Search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+
     <!-- Dynamic Auth Button -->
     <div class="nav-buttons">
   <!-- 1. Google Login (Shown when logged OUT) -->
@@ -1019,10 +1023,10 @@
     <h2>In-House Maritime Training Courses</h2>
   </div>
   <div class="inhouse-container">
-    <div class="inhouse-grid">
+    <div class="course-grid">
 
 <!-- 1. MARPOL -->
-      <div class="inhouse-card">
+      <div class="course-card">
         <div class="inhouse-card-img">
           <img src="img/courses/marpol.jpg" alt="MARPOL Training" />
         </div>
@@ -1053,7 +1057,7 @@
       </div>
 
 <!-- 2. STAB & TRIM -->
-      <div class="inhouse-card">
+      <div class="course-card">
         <div class="inhouse-card-img">
           <img src="img/courses/stab&trim.jpg" alt="Stab & Trim Training" />
         </div>
@@ -1083,7 +1087,7 @@
       </div>
 
 <!-- 3. HAZMAT -->
-      <div class="inhouse-card">
+      <div class="course-card">
         <div class="inhouse-card-img">
           <img src="img/courses/hazmat.jpg" alt="HAZMAT Training" />
         </div>
@@ -1103,7 +1107,7 @@
       </div>
 
 <!-- 4. PADAMS -->
-      <div class="inhouse-card">
+      <div class="course-card">
         <div class="inhouse-card-img">
           <img src="img/courses/padams.png" alt="PADAMS Training" />
         </div>
@@ -1606,7 +1610,6 @@
   </div>
 </div>
 
-
 <!-- STORIES TAB -->
 <section id="stories-tab" class="tab-content">
   <div class="stories-container">
@@ -1626,14 +1629,11 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
   </div>
 </section>
 
-
-
 <!--MESSAGER CTA-->
 <a href="https://www.facebook.com/dmmacspmtac" class="messenger-cta">
     <i class="fa-brands fa-facebook-messenger"></i>
     <span>Chat with Us</span>
 </a>
-
 
 <!-- FLOATING MESSENGER BUBBLE CHAT HEAD -->
 <div id="aiBubbleWidget" class="ai-bubble-widget">
@@ -1679,8 +1679,6 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
   </div>
 
 </div>
-
-
 
 
 <!-- MANAGEMENT TAB -->
@@ -1772,7 +1770,6 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
       </div>
     </section>
 
-
 <!-- NOTIFICATION POPUP MESSAGE FOR PUBLISH COURSE / UPDATE COURSE -->
 <div id="custom-alert-modal" class="custom-modal hidden">
     <div class="custom-modal-content">
@@ -1800,10 +1797,8 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
 </div>
 
 
-
 <!-- FOR REQUIREMENTS GLASS SIDE PANEL -->
 <div id="requirementsOverlay" class="drawer-overlay" onclick="closeRequirementsDrawer()"></div>
-
 <aside id="requirementsDrawer" class="glass-drawer">
   <!-- Close Button -->
   <button class="drawer-close-btn" onclick="closeRequirementsDrawer()">✕</button>
@@ -1848,6 +1843,37 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
   </div>
 </aside>
 
+
+<!-- SEARCH MODAL OVERLAY -->
+<div id="courseSearchModal" class="search-modal-overlay" onclick="handleModalBackdropClick(event)">
+  <div class="search-modal-card">
+    
+    <!-- Input Header Bar -->
+    <div class="search-modal-header">
+      <div class="search-modal-input-group">
+        <i class="fa-solid fa-magnifying-glass search-modal-icon"></i>
+        <input 
+          type="text" 
+          id="courseSearchInput" 
+          placeholder="Type to search courses (e.g., AFF, STCW, BT)..." 
+          oninput="handleSearchInput()" 
+          autocomplete="off"
+        />
+        <button type="button" id="modalClearBtn" class="search-modal-clear" onclick="clearCourseSearch()" style="display: none;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <button class="search-modal-close" onclick="closeSearchModal()" aria-label="Close search">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Live Search Results Stream -->
+    <div id="searchDropdownMenu" class="search-modal-results"></div>
+
+  </div>
+</div>
 
 
   </main>
