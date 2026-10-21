@@ -821,9 +821,6 @@ document.querySelectorAll('.nav-link, [data-tab]').forEach(tabBtn => {
   });
 });
 
-// SYNC TAB SWITCHING WITH URL HASH FRAGMENTS ---
-
-
 
 
 // --- RENDER SCHEDULE TAB (STATIC CATEGORY HEADERS) ---
@@ -893,7 +890,7 @@ function renderScheduleTab() {
           actionButtonsHtml = `
             <div class="schedule-card-action">
               <button class="btn-enroll-orange" onclick="window.open('${walkInLink}', '_blank')">
-                Enroll Now
+                <i class="fa-solid fa-file-signature"></i> Enroll Now
               </button>
             </div>`;
         }
@@ -2013,8 +2010,8 @@ const courseRequirementsData = {
   },
 
   // PASSENGER COURSE =================================================================================================================================//
-  "STPPDSPPS": {
-    title: "Safety Training for Personnel Providing Direct Service to Passengers in Passenger Spaces (STPPDSPPS)",
+  "STPPDSPPST": {
+    title: "Safety Training for Personnel Providing Direct Service to Passengers in Passenger Spaces Training (STPPDSPPST)",
     badge: "PASSENGER SHIP COURSE",
     link: "https://docs.google.com/forms/d/e/1FAIpQLSe3CstSMQKiej8-rP2_3S1b-2pFbkHUs4YemoqOUqrFaP3e3g/viewform",
     requirements: [
@@ -2035,8 +2032,8 @@ const courseRequirementsData = {
       "Safety Training for Personnel Providing Direct Service to Passenger (STPPDSP) Certificate"
     ]
   },
-  "PSCMHB": {
-    title: "Passenger Ship Crisis Management and Human Behaviour Training (PSCMHB)",
+  "PSCMHBT": {
+    title: "Passenger Ship Crisis Management and Human Behavior Training (PSCMHBT)",
     badge: "PASSENGER SHIP COURSE",
     link: "https://docs.google.com/forms/d/e/1FAIpQLScAsAx3XHtAuMars60pHwxHtXKKmMRZ2WTr9o9b0EHjQwBV1g/viewform",
     requirements: [
@@ -2190,37 +2187,45 @@ async function openRequirementsDrawer(courseIdentifier) {
       });
 
       if (dbCourse) {
-        // Safe field extractions from database
-        const dbFee = dbCourse.fee ?? dbCourse.price ?? dbCourse.regular_price ?? dbCourse.walkin_fee ?? dbCourse.walk_in_fee ?? 0;
-        const dbGradFee = dbCourse.gradFee ?? dbCourse.alumni_price ?? dbCourse.grad_fee ?? dbCourse.alumni_fee ?? dbCourse.fresh_grad_fee ?? dbCourse.alumni_rate ?? null;
+      // Safe field extractions from database
+      const dbFee = dbCourse.fee ?? dbCourse.price ?? dbCourse.regular_price ?? dbCourse.walkin_fee ?? dbCourse.walk_in_fee ?? 0;
+      const dbGradFee = dbCourse.gradFee ?? dbCourse.alumni_price ?? dbCourse.grad_fee ?? dbCourse.alumni_fee ?? dbCourse.fresh_grad_fee ?? dbCourse.alumni_rate ?? null;
 
-        const formattedRegular = formatPrice(dbFee);
-        const formattedAlumni = dbGradFee !== null ? formatPrice(dbGradFee) : "N/A";
+      const formattedRegular = formatPrice(dbFee);
+      const formattedAlumni = dbGradFee !== null ? formatPrice(dbGradFee) : "N/A";
 
-        if (isFreshGrad) {
-          // BT DMMA Fresh Grad Drawer: Displays Alumni Discount for both fields
-          if (priceElem) priceElem.innerText = formattedAlumni;
-          if (alumniElem) alumniElem.innerText = formattedAlumni;
-        } else {
-          // Regular Walk-in Drawers: Displays standard Regular Rate and Alumni Rate
-          if (priceElem) priceElem.innerText = formattedRegular;
-          if (alumniElem) alumniElem.innerText = formattedAlumni;
-        }
+      if (isFreshGrad) {
+        // BT DMMA Fresh Grad Drawer: Displays Alumni Discount for both fields
+        if (priceElem) priceElem.innerText = formattedAlumni;
+        if (alumniElem) alumniElem.innerText = formattedAlumni;
+      } else {
+        // Regular Walk-in Drawers: Displays standard Regular Rate and Alumni Rate
+        if (priceElem) priceElem.innerText = formattedRegular;
+        if (alumniElem) alumniElem.innerText = formattedAlumni;
+      }
 
-        // Update registration link dynamically from Supabase
-        const dbUrl = dbCourse.googleFormUrl || dbCourse.form_url || dbCourse.link || dbCourse.registration_link;
-        if (enrollBtn && dbUrl && String(dbUrl).trim() !== '') {
+      // Update registration link dynamically without overwriting Fresh Grad
+      const dbUrl = isFreshGrad 
+        ? (dbCourse.gradFormUrl || dbCourse.fresh_grad_form || dbCourse.grad_link || null)
+        : (dbCourse.googleFormUrl || dbCourse.form_url || dbCourse.link || dbCourse.registration_link);
+
+      if (enrollBtn) {
+        if (dbUrl && String(dbUrl).trim() !== '') {
           let formUrl = String(dbUrl).trim();
           if (!formUrl.startsWith('http://') && !formUrl.startsWith('https://')) {
             formUrl = 'https://' + formUrl;
           }
           enrollBtn.href = formUrl;
+        } else if (localData && localData.link) {
+          // Keep local JSON link if no separate DB column exists for Fresh Grad form
+          enrollBtn.href = localData.link;
         }
-      } else {
-        // Fallback if no matching DB record exists
-        if (priceElem) priceElem.innerText = "N/A";
-        if (alumniElem) alumniElem.innerText = "N/A";
       }
+    } else {
+      // Fallback if no matching DB record exists
+      if (priceElem) priceElem.innerText = "N/A";
+      if (alumniElem) alumniElem.innerText = "N/A";
+    }
     }
     } catch (err) {
       console.error("Execution Exception:", err);
@@ -2242,10 +2247,7 @@ function closeRequirementsDrawer() {
 
 
 
-
-
 // AI CHATBOT SCRIPT ////
-
 // 1. Append User Message
   const userDiv = document.createElement('div');
   userDiv.className = 'ai-msg user';

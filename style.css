@@ -863,10 +863,11 @@ img, video {
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-.category-icon {
+.category-icon img{
   font-size: 2.2rem;
+  width:90px;
+  height:90px;
   color: #f97316; /* Brand Orange */
-  margin-bottom: 1rem;
 }
 
 .category-card h3 {
