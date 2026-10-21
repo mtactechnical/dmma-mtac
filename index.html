@@ -172,7 +172,6 @@
     </div>
   </section>
 
-
 <!-- HOME TAB -->
     <section id="home-tab" class="tab-content active">
       <div class="hero-card">
@@ -375,6 +374,17 @@
   </div>
 </div>
 
+<!-- PUBLIC ANNOUNCEMENT SECTION BELOW CAROUSEL -->
+<div class="container" style="margin-top: 30px; margin-bottom: 20px;">
+  <section id="publicAnnouncementSection" class="announcement-public-container">
+    <div class="announcement-header-title">ANNOUNCEMENTS:
+    </div>
+    <div id="announcementDisplay" class="announcement-display-wrapper">
+      <!-- Dynamic Announcement Cards Render Here -->
+    </div>
+  </section>
+</div>
+
 <!--FEATURED TRAININGS-->
       <div class="landing-section">
         <div class="section-header flex-between">
@@ -424,7 +434,6 @@
         </div>
       </div>
     </section>
-
 
 <!-- 1. SEAFARERS' UPGRADING PROGRAM (SUP) OWWA TAB IN HOME PAGE -->
 <section id="sup-tab" class="tab-content">
@@ -661,7 +670,6 @@
   </div>
 </section>  
       
-
 <!-- SCHEDULE NAV BAR -->
 <section id="schedule-tab" class="tab-content">
   <div class="disclaimer-banner">
@@ -1094,6 +1102,10 @@
         <div class="inhouse-card-body">
           <h3>HAZMAT</h3>
           <p>Hazardous Materials</p>
+
+          <button class="card-btn" onclick="openRequirementsDrawer('HAZMAT')">
+            Requirements
+            </button>
           
           <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSfhFYH4csN9_q0KK7i0d1TWcQrvCXEpIqoYs147gjT0lNABAA/viewform" 
@@ -1114,6 +1126,10 @@
         <div class="inhouse-card-body">
           <h3>PADAMS</h3>
           <p>Prevention of Alcohol and Drug Abuse in The Maritime Sector</p>
+
+          <button class="card-btn" onclick="openRequirementsDrawer('PADAMS')">
+            Requirements
+            </button>
 
           <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSdkl4IC1fgRQMjp29K_4agq5-BwHtYMiSYFn4n9cuKGUKlLqA/viewform" 
@@ -1391,6 +1407,46 @@
   </div>
 </section>
 
+<!-- UPGRADING COURSES SUB-PAGE TAB TO ADD
+<section id="upgrading-tab" class="tab-content">
+  <div class="course-hero">
+    <h2>Upgrading Courses</h2>
+  </div>
+
+  <div class="course-container">
+    <div class="course-grid">
+
+      <div class="course-card">
+        <div class="course-card-img">
+          <img src="img/courses/6.09.jpg" alt="IMO Model Course 6.09" />
+        </div>
+        <div class="course-card-body">
+          <h3>IMO Model Course 6.09</h3>
+          <p>This IMO Model Course 6.09 provides maritime professionals with the advanced 
+            pedagogical competencies to deliver STCW-compliant training, equipping them with 
+            the theoretical foundations and practical methodologies for effective course design, 
+            instructional delivery, and trainee assessment . Participants will master the 
+            systematic processes of identifying training needs, developing comprehensive lesson 
+            plans, and evaluating learning outcomes, thereby meeting the qualification requirements 
+            for instructors in Maritime Higher Education Institutions and Maritime Training Institutes.</p>
+
+            <button class="card-btn" onclick="openRequirementsDrawer('IMO609')">
+            Requirements
+            </button>
+          
+          <a 
+          href="https://docs.google.com/forms/d/e/1FAIpQLSd6OcK0b6WZmaAyDWdkOtMRt79qEyTNCRYORNiUlAagTLQkjQ/viewform" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-enroll-orange">
+          Enroll Now
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
 
 <!-- ABOUT US TAB -->
     <section id="about-tab" class="tab-content">
@@ -1681,7 +1737,7 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
 </div>
 
 
-<!-- MANAGEMENT TAB -->
+<!-- MANAGEMENT PANEL -->
     <section id="admin-tab" class="section tab-content admin-only" style="display: none;">
       <div class="section-header flex-between">
         <div>
@@ -1690,8 +1746,6 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
         </div>
         <span class="badge-admin"><i class="fa-solid fa-pen-to-square"></i> Editing Enabled</span>
       </div>
-
-  
 
       <!-- Add/Edit Course Form -->
       <div class="admin-card">
@@ -1709,6 +1763,7 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
               <option value="inhouse">In-House Maritime Training Courses</option>
               <option value="professional">Professional Development Courses</option>
               <option value="passenger">Passenger Ship Courses</option>
+              <option value="upgrading">Upgrading Courses</option>
             </select>
 
             <div class="currency-input-wrapper">
@@ -1750,6 +1805,46 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
         <div id="admin-courses-list" class="admin-list"></div>
       </div>
 
+      
+<!-- ADMIN ANNOUNCEMENT CONTROL PANEL -->
+<div id="adminAnnouncementPanel" class="admin-card announcement-admin-card">
+  <h3><i class="fa-solid fa-bullhorn"></i> Post New Announcement</h3>
+  <form id="announcementForm" onsubmit="handlePostAnnouncement(event)" class="form-stack">
+    <!-- Hidden input to hold edit record ID -->
+    <input type="hidden" id="editingAnnouncementId" value="" />
+
+    <div class="form-row">
+      <div class="form-group" style="flex: 2;">
+        <label>Title</label>
+        <input type="text" id="announcementTitle" class="form-control" placeholder="e.g., Enrollment Deadline Extended" required />
+      </div>
+      <div class="form-group" style="flex: 1;">
+        <label>Type</label>
+        <select id="announcementType" class="form-control">
+          <option value="info">🔵 General Info </option>
+          <option value="notice">🟠 Important Notice </option>
+          <option value="attention">🔴 Attention </option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Content</label>
+      <textarea id="announcementContent" class="form-control" rows="4" placeholder="Enter announcement details..." required></textarea>
+    </div>
+    
+    <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+      <button type="submit" id="btnPublishAnnouncement" class="btn btn-primary" style="flex: 1;">Publish Announcement</button>
+      <button type="button" id="btnCancelEditAnnouncement" class="btn btn-secondary" onclick="cancelEditAnnouncement()" style="display: none;">Cancel Edit</button>
+    </div>
+  </form>
+
+  <hr class="admin-divider" style="margin: 1.5rem 0; border: 0; border-top: 1px solid rgba(0,0,0,0.1);" />
+
+  <h4>Active Announcements</h4>
+  <div id="adminAnnouncementList" class="admin-announcement-list"></div>
+</div>
+
+
 <!-- Manage Photo Gallery -->
       <div class="admin-card">
         <h3><i class="fa-solid fa-image"></i> Manage Photos</h3>
@@ -1781,7 +1876,7 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
     </div>
 </div>
 
-<!-- WARNING MESSAGE POPUP DELETE -->
+<!-- WARNING MESSAGE POPUP DELETE FOR COURSES-->
 <div id="custom-confirm-modal" class="custom-modal-overlay" style="display: none;">
     <div class="custom-modal-box">
         <div class="custom-modal-header">
@@ -1794,6 +1889,22 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
             <button id="custom-modal-confirm" class="btn btn-danger">Delete</button>
         </div>
     </div>
+</div>
+
+<!-- SYSTEM CONFIRMATION / ALERT MODAL FOR ANNOUNCEMENT -->
+<div id="customConfirmModal" class="custom-modal-overlay" style="display: none;">
+  <div class="custom-modal-box">
+    <div id="confirmModalIcon" class="custom-modal-icon warning">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <div id="confirmModalText" class="custom-modal-message">
+      Are you sure you want to perform this action?
+    </div>
+    <div id="confirmModalActions" class="custom-modal-actions">
+      <button id="btnConfirmCancel" class="btn-modal-cancel">Cancel</button>
+      <button id="btnConfirmOk" class="btn-modal-action danger">Yes, Proceed</button>
+    </div>
+  </div>
 </div>
 
 
@@ -1850,19 +1961,16 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
     
     <!-- Input Header Bar -->
     <div class="search-modal-header">
-      <div class="search-modal-input-group">
         <i class="fa-solid fa-magnifying-glass search-modal-icon"></i>
         <input 
           type="text" 
-          id="courseSearchInput" 
-          placeholder="Type to search courses (e.g., AFF, STCW, BT)..." 
+          id="courseSearchInput"
           oninput="handleSearchInput()" 
           autocomplete="off"
         />
         <button type="button" id="modalClearBtn" class="search-modal-clear" onclick="clearCourseSearch()" style="display: none;">
           <i class="fa-solid fa-xmark"></i>
         </button>
-      </div>
 
       <button class="search-modal-close" onclick="closeSearchModal()" aria-label="Close search">
         <i class="fa-solid fa-xmark"></i>
@@ -1871,7 +1979,6 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
 
     <!-- Live Search Results Stream -->
     <div id="searchDropdownMenu" class="search-modal-results"></div>
-
   </div>
 </div>
 

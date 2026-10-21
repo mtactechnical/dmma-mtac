@@ -611,25 +611,6 @@ window.onload = async function () {
     await loadGalleryFromDatabase();
 };
 
-// 1. Toggle Admin Mode
-function toggleAdminMode(enable) {
-    isAdminMode = enable;
-    const adminBanner = document.getElementById('admin-banner'); //
-    const adminTabBtn = document.getElementById('admin-tab-btn'); //
-    const adminGateBtn = document.getElementById('admin-gate-btn');
-
-    if (isAdminMode) {
-        if (adminBanner) adminBanner.classList.remove('hidden'); //
-        if (adminTabBtn) adminTabBtn.classList.remove('hidden'); //
-        if (adminGateBtn) adminGateBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Admin';
-        switchTab('admin-tab'); //
-    } else {
-        if (adminBanner) adminBanner.classList.add('hidden'); //
-        if (adminTabBtn) adminTabBtn.classList.add('hidden'); //
-        if (adminGateBtn) adminGateBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Admin';
-        switchTab('home-tab'); //
-    }
-}
 
 
 // TAB SWITCHER
@@ -857,7 +838,9 @@ function renderScheduleTab() {
     { key: 'stcw', title: 'STCW-MARINA TRAINING COURSES' },
     { key: 'inhouse', title: 'IN-HOUSE MARITIME TRAINING COURSES' },
     { key: 'professional', title: 'PROFESSIONAL DEVELOPMENT COURSES' },
-    { key: 'passenger', title: 'PASSENGER SHIP COURSES' }
+    { key: 'passenger', title: 'PASSENGER SHIP COURSES' },
+    { key: 'upgrading', title: 'UPGRADING COURSES' }
+
   ];
 
   let fullHtml = '';
@@ -1973,6 +1956,26 @@ const courseRequirementsData = {
       "BT Certificate"
     ]
   },
+  "HAZMAT": {
+    title: "HAZMAT",
+    badge: "IN-HOUSE",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSfhFYH4csN9_q0KK7i0d1TWcQrvCXEpIqoYs147gjT0lNABAA/viewform",
+    requirements: [
+      "PSA Birth Certificate or Valid Passport",
+      "Seafarer's Registration Number",
+      "BT Certificate"
+    ]
+  },
+  "PADAMS": {
+    title: "PADAMS",
+    badge: "IN-HOUSE",
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSdkl4IC1fgRQMjp29K_4agq5-BwHtYMiSYFn4n9cuKGUKlLqA/viewform",
+    requirements: [
+      "PSA Birth Certificate or Valid Passport",
+      "Seafarer's Registration Number",
+      "BT Certificate"
+    ]
+  },
 
   // PROFESSIONAL DEV COURSE ============================================================================================================================//
   "IMO609": {
@@ -2074,11 +2077,12 @@ async function openRequirementsDrawer(courseIdentifier) {
   const priceElem = document.getElementById('drawerCoursePrice');
   const alumniElem = document.getElementById('drawerAlumniPrice');
   const enrollBtn = document.getElementById('drawerEnrollBtn');
-  
+
+  // Reset display to loading status
   if (priceElem) priceElem.innerText = "Loading...";
   if (alumniElem) alumniElem.innerText = "Loading...";
 
-  // 1. Resolve local UI checklist & title
+  // 1. Resolve local UI checklist and title
   let localData = courseRequirementsData[courseIdentifier];
   if (!localData && typeof courseIdentifier === 'string') {
     const matchedKey = Object.keys(courseRequirementsData).find(
@@ -2088,16 +2092,31 @@ async function openRequirementsDrawer(courseIdentifier) {
   }
 
   const initialTitle = localData ? localData.title : String(courseIdentifier);
-  document.getElementById('drawerCourseTitle').innerText = initialTitle;
-  document.getElementById('drawerBadge').innerText = localData ? localData.badge : "STCW MANDATORY";
+  const isFreshGrad = String(courseIdentifier).toUpperCase().includes('FRESH') || initialTitle.toLowerCase().includes('fresh');
 
-  // Fallback enrollment link
+  // Set Title & Badge
+  const titleElem = document.getElementById('drawerCourseTitle');
+  const badgeElem = document.getElementById('drawerBadge');
+
+  if (titleElem) titleElem.innerText = initialTitle;
+  if (badgeElem) badgeElem.innerText = localData ? localData.badge : "STCW MANDATORY";
+
+  // Set Default Enrollment Link
   if (enrollBtn && localData && localData.link) {
     enrollBtn.href = localData.link;
     enrollBtn.target = "_blank";
   }
 
-  // Render checklist items
+  // Price Currency Formatter
+  const formatPrice = (val, fallbackVal = 'N/A') => {
+    if (val === null || val === undefined || val === '' || val === 'NULL') return fallbackVal;
+    if (String(val).includes('₱')) return val;
+    const num = parseFloat(String(val).replace(/[^0-9.]/g, ''));
+    if (isNaN(num) || num === 0) return fallbackVal;
+    return new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
+  };
+
+  // Render Requirements Checklist Items
   const listContainer = document.getElementById('reqListContainer');
   if (listContainer) {
     listContainer.innerHTML = '';
@@ -2115,111 +2134,99 @@ async function openRequirementsDrawer(courseIdentifier) {
   }
 
   // Open Drawer UI immediately
-  document.getElementById('requirementsDrawer').classList.add('open');
-  document.getElementById('requirementsOverlay').classList.add('active');
+  const drawer = document.getElementById('requirementsDrawer');
+  const overlay = document.getElementById('requirementsOverlay');
+  if (drawer) drawer.classList.add('open');
+  if (overlay) overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 
-  // 2. Query Supabase Client (`db`)
+  // 2. Fetch Live Prices directly from Supabase Database per specific course
   if (typeof db !== 'undefined' && db) {
     try {
       const { data: rows, error } = await db
         .from('Course')
-        .select('id, title, fee, gradFee, googleFormUrl');
-
-      // DEBUGGER LOGS: Open browser console (F12) to inspect these values
-      console.log("--> SUPABASE FETCH RESULT <--");
-      console.log("Returned Rows Count:", rows ? rows.length : 0);
-      console.log("Rows Data:", rows);
-      console.log("Error Status:", error);
+        .select('*');
 
       if (error) {
         console.error("Supabase API Error:", error);
-        if (priceElem) priceElem.innerText = "₱0.00";
-        if (alumniElem) alumniElem.innerText = "₱0.00";
+        if (priceElem) priceElem.innerText = "N/A";
+        if (alumniElem) alumniElem.innerText = "N/A";
         return;
       }
 
       if (rows && rows.length > 0) {
-        const searchKey = String(courseIdentifier).toLowerCase().trim();
-        const searchTitle = String(initialTitle).toLowerCase().trim();
+      const targetSearchKey = String(courseIdentifier).toLowerCase().trim();
+      const targetTitleKey = String(initialTitle).toLowerCase().trim();
 
-        // Match against returned DB titles
-        const dbCourse = rows.find(row => {
-          if (!row.title) return false;
-          const dbTitle = row.title.toLowerCase().trim();
-          const searchKey = String(courseIdentifier).toLowerCase().trim();
-          const searchTitle = String(initialTitle).toLowerCase().trim();
+      // Extract Acronym inside parentheses if present, e.g., "aff", "btoctco"
+      const acronymMatch = targetTitleKey.match(/\(([^)]+)\)/);
+      const acronym = acronymMatch ? acronymMatch[1].toLowerCase().trim() : '';
 
-          // 1. Is this a Refresher course search?
-          const isSearchRefresher = searchKey.includes('refresher') || searchTitle.includes('refresher') || searchKey.startsWith('r');
-          const isDbRefresher = dbTitle.includes('refresher');
+      // Check if the current card is specifically standard "Basic Training (BT)"
+      const isBTStandardCard = targetTitleKey.startsWith("basic training (bt)") || 
+                               targetTitleKey === "walkin" || 
+                               targetTitleKey === "fresh" || 
+                               targetTitleKey.includes("dmma fresh grad") ||
+                               targetTitleKey.includes("bt walk-in");
 
-          // If one is a Refresher and the other is NOT, skip immediately
-          if (isSearchRefresher !== isDbRefresher) {
-            return false;
-          }
+      // Match the specific DB row for the clicked course
+      const dbCourse = rows.find(row => {
+        const rawTitle = (row.title || row.course_title || row.name || '').toLowerCase().trim();
+        if (!rawTitle) return false;
 
-          // 2. Exact Acronym Match inside parentheses (e.g., "(aff)" vs "(rcaff)")
-          const matchCode = dbTitle.match(/\(([^)]+)\)/);
-          const dbCode = matchCode ? matchCode[1].toLowerCase().trim() : '';
+        // 1. Exact title or key match
+        if (rawTitle === targetTitleKey || rawTitle === targetSearchKey) return true;
 
-          if (dbCode && (dbCode === searchKey || dbCode === searchTitle)) {
-            return true;
-          }
+        // 2. ONLY map Basic Training Walk-in/Fresh Grad cards to standard BT row
+        if (isBTStandardCard) {
+          return rawTitle === "basic training" || rawTitle === "basic training (bt)" || rawTitle === "bt";
+        }
 
-          // 3. Exact full title match
-          if (dbTitle === searchTitle) {
-            return true;
-          }
+        // 3. Match Acronym in parentheses for other courses (e.g., AFF, BTOCTCO)
+        if (acronym && rawTitle.includes(`(${acronym})`)) return true;
 
-          // 4. Substring fallback (only within same course type)
-          return dbTitle.includes(searchKey) || searchTitle.includes(dbTitle);
-        });
+        // 4. Substring containment fallback for other courses
+        return rawTitle.includes(targetTitleKey) || targetTitleKey.includes(rawTitle);
+      });
 
-        if (dbCourse) {
-          if (dbCourse.title) {
-            document.getElementById('drawerCourseTitle').innerText = dbCourse.title;
-          }
+      if (dbCourse) {
+        // Safe field extractions from database
+        const dbFee = dbCourse.fee ?? dbCourse.price ?? dbCourse.regular_price ?? dbCourse.walkin_fee ?? dbCourse.walk_in_fee ?? 0;
+        const dbGradFee = dbCourse.gradFee ?? dbCourse.alumni_price ?? dbCourse.grad_fee ?? dbCourse.alumni_fee ?? dbCourse.fresh_grad_fee ?? dbCourse.alumni_rate ?? null;
 
-          const formatPrice = (val) => {
-            if (!val || val === 'NULL' || String(val).trim() === '') return "₱0.00";
-            if (String(val).includes('₱')) return val;
-            const num = parseFloat(String(val).replace(/[^0-9.]/g, ''));
-            return isNaN(num) ? val : new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
-          };
+        const formattedRegular = formatPrice(dbFee);
+        const formattedAlumni = dbGradFee !== null ? formatPrice(dbGradFee) : "N/A";
 
-          // Update Live Database Prices
-          if (priceElem) priceElem.innerText = formatPrice(dbCourse.fee);
-          if (alumniElem) alumniElem.innerText = formatPrice(dbCourse.gradFee);
-
-          // Update Live Registration Link
-          if (enrollBtn && dbCourse.googleFormUrl && dbCourse.googleFormUrl.trim() !== '') {
-            let formUrl = dbCourse.googleFormUrl.trim();
-            if (!formUrl.startsWith('http://') && !formUrl.startsWith('https://')) {
-              formUrl = 'https://' + formUrl;
-            }
-            enrollBtn.href = formUrl;
-            enrollBtn.target = "_blank";
-          }
+        if (isFreshGrad) {
+          // BT DMMA Fresh Grad Drawer: Displays Alumni Discount for both fields
+          if (priceElem) priceElem.innerText = formattedAlumni;
+          if (alumniElem) alumniElem.innerText = formattedAlumni;
         } else {
-          console.warn("No DB record matched for courseIdentifier:", courseIdentifier);
-          if (priceElem) priceElem.innerText = "₱0.00";
-          if (alumniElem) alumniElem.innerText = "₱0.00";
+          // Regular Walk-in Drawers: Displays standard Regular Rate and Alumni Rate
+          if (priceElem) priceElem.innerText = formattedRegular;
+          if (alumniElem) alumniElem.innerText = formattedAlumni;
+        }
+
+        // Update registration link dynamically from Supabase
+        const dbUrl = dbCourse.googleFormUrl || dbCourse.form_url || dbCourse.link || dbCourse.registration_link;
+        if (enrollBtn && dbUrl && String(dbUrl).trim() !== '') {
+          let formUrl = String(dbUrl).trim();
+          if (!formUrl.startsWith('http://') && !formUrl.startsWith('https://')) {
+            formUrl = 'https://' + formUrl;
+          }
+          enrollBtn.href = formUrl;
         }
       } else {
-        console.warn("Supabase returned empty array []. Check RLS SELECT policy on 'Course' table.");
-        if (priceElem) priceElem.innerText = "₱0.00";
-        if (alumniElem) alumniElem.innerText = "₱0.00";
+        // Fallback if no matching DB record exists
+        if (priceElem) priceElem.innerText = "N/A";
+        if (alumniElem) alumniElem.innerText = "N/A";
       }
+    }
     } catch (err) {
       console.error("Execution Exception:", err);
-      if (priceElem) priceElem.innerText = "₱0.00";
-      if (alumniElem) alumniElem.innerText = "₱0.00";
+      if (priceElem) priceElem.innerText = "N/A";
+      if (alumniElem) alumniElem.innerText = "N/A";
     }
-  } else {
-    console.error("Supabase 'db' variable is undefined.");
-    if (priceElem) priceElem.innerText = "₱0.00";
-    if (alumniElem) alumniElem.innerText = "₱0.00";
   }
 }
 
@@ -2657,4 +2664,387 @@ function selectAndHighlightCourse(cardId, tabId) {
       }, 1000);
     }
   }, 250);
+}
+
+
+/* ============================================================
+   AUTOMATIC & PERSISTENT ANNOUNCEMENT SYSTEM
+   ============================================================ */
+
+async function loadAnnouncementsFromDatabase() {
+  const publicDisplay = document.getElementById('announcementDisplay');
+  const adminContainer = document.getElementById('adminAnnouncementList');
+
+  // Ensure db exists before querying
+  if (typeof db === 'undefined' || !db) return false;
+
+  try {
+    const { data: announcements, error } = await db
+      .from('Announcement')
+      .select('*')
+      .order('id', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching announcements:', error);
+      if (publicDisplay) {
+        publicDisplay.innerHTML = `
+          <div class="no-announcements-placeholder">
+            <i class="fa-solid fa-bell-slash"></i> NO ANNOUNCEMENTS!
+          </div>`;
+      }
+      return true;
+    }
+
+    currentAnnouncementsList = announcements || [];
+
+    // 1. Render Public Homepage Banner
+    if (publicDisplay) {
+      if (!announcements || announcements.length === 0) {
+        publicDisplay.innerHTML = `
+          <div class="no-announcements-placeholder">
+            <i class="fa-solid fa-bell-slash"></i> NO ANNOUNCEMENTS!
+          </div>`;
+      } else {
+        publicDisplay.innerHTML = announcements.map((ann, index) => `
+          <div class="announcement-card-public type-${ann.type || 'info'}" onclick="openAnnouncementModal(${index})" style="cursor: pointer;">
+            <div class="ann-badge-row">
+              <span class="ann-badge ann-badge-${ann.type || 'info'}">${(ann.type || 'INFO').toUpperCase()}</span>
+              <span class="ann-date"><i class="fa-regular fa-clock"></i> ${new Date(ann.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            </div>
+            <h4 class="ann-title">${ann.title}</h4>
+            <p class="ann-body">${ann.content}</p>
+          </div>
+        `).join('');
+      }
+    }
+
+    // 2. Render Admin Dashboard Active List (With Edit & Delete Buttons)
+    if (adminContainer) {
+      if (!announcements || announcements.length === 0) {
+        adminContainer.innerHTML = `<p style="color: #64748b; font-size: 0.9rem; margin-top: 10px; font-weight: 600;">NO ANNOUNCEMENTS POSTED YET</p>`;
+      } else {
+        adminContainer.innerHTML = announcements.map(ann => `
+          <div class="admin-ann-row">
+            <div class="admin-ann-info">
+              <strong>${ann.title}</strong>
+              <span class="ann-type-tag type-${ann.type || 'info'}">${(ann.type || 'INFO').toUpperCase()}</span>
+              <div class="admin-ann-date">${new Date(ann.created_at || Date.now()).toLocaleString()}</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="startEditAnnouncement(${ann.id})">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+              </button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="deleteAnnouncement(${ann.id})">
+                <i class="fa-solid fa-trash"></i> Delete
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    return true;
+  } catch (err) {
+    console.error('Exception in loadAnnouncementsFromDatabase:', err);
+    return false;
+  }
+}
+
+// Poller loop to ensure database read executes as soon as Supabase connects
+let annPoller = setInterval(async () => {
+  const loaded = await loadAnnouncementsFromDatabase();
+  if (loaded) clearInterval(annPoller);
+}, 250);
+
+// Hook into page load and tab changes
+document.addEventListener('DOMContentLoaded', loadAnnouncementsFromDatabase);
+window.addEventListener('load', loadAnnouncementsFromDatabase);
+window.addEventListener('hashchange', () => setTimeout(loadAnnouncementsFromDatabase, 150));
+
+// Also call inside your existing loadCoursesFromDatabase function
+async function loadCoursesFromDatabase() {
+  try {
+    const { data, error } = await db
+      .from('Course')
+      .select('*')
+      .order('order_index', { ascending: true });
+
+    if (error) {
+      console.error('Supabase fetch error:', error);
+      return;
+    }
+
+    courses = data || [];
+    if (typeof renderCourses === 'function') renderCourses();
+    if (typeof renderScheduleTab === 'function') renderScheduleTab();
+
+    // Trigger announcements immediately alongside courses
+    await loadAnnouncementsFromDatabase();
+  } catch (err) {
+    console.error('Database connection failed:', err);
+  }
+}
+
+// Post Announcement
+async function handlePostAnnouncement(event) {
+  event.preventDefault();
+
+  const title = document.getElementById('announcementTitle').value.trim();
+  const type = document.getElementById('announcementType').value;
+  const content = document.getElementById('announcementContent').value.trim();
+  
+  // Check if we are editing an existing record
+  const editInput = document.getElementById('editingAnnouncementId');
+  const editId = editInput ? editInput.value : '';
+
+  if (!title || !content) return;
+
+  try {
+    if (editId) {
+      // --- UPDATE EXISTING RECORD IN SUPABASE ---
+      const { error } = await db
+        .from('Announcement')
+        .update({ title, type, content })
+        .eq('id', editId);
+
+      if (error) {
+        alert("Failed to update announcement: " + error.message);
+      } else {
+        alert("Announcement updated successfully!");
+        // Clear editing ID tracker and reset button label
+        if (editInput) editInput.value = '';
+        const submitBtn = document.querySelector('#announcementForm button[type="submit"]');
+        if (submitBtn) submitBtn.textContent = "Publish Announcement";
+
+        document.getElementById('announcementForm').reset();
+        await loadAnnouncementsFromDatabase();
+      }
+    } else {
+      // --- CREATE NEW RECORD IN SUPABASE ---
+      const { error } = await db
+        .from('Announcement')
+        .insert([{ title, type, content, is_active: true }]);
+
+      if (error) {
+        alert("Failed to post announcement: " + error.message);
+      } else {
+        document.getElementById('announcementForm').reset();
+        await loadAnnouncementsFromDatabase();
+        alert("Announcement published successfully!");
+      }
+    }
+  } catch (err) {
+    console.error("Error submitting announcement:", err);
+  }
+}
+
+// Delete Announcement
+async function deleteAnnouncement(id) {
+  if (!confirm("Are you sure you want to delete this announcement?")) return;
+
+  try {
+    const { error } = await db
+      .from('Announcement')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      alert("Delete failed: " + error.message);
+    } else {
+      await loadAnnouncementsFromDatabase();
+    }
+  } catch (err) {
+    console.error("Error deleting announcement:", err);
+  }
+}
+
+/* ============================================================
+   EDIT & MODAL HELPERS
+   ============================================================ */
+
+// Populate fields for Editing
+async function startEditAnnouncement(id) {
+  if (typeof db === 'undefined' || !db) return;
+
+  try {
+    const { data: ann, error } = await db
+      .from('Announcement')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error || !ann) return;
+
+    let editInput = document.getElementById('editingAnnouncementId');
+    if (!editInput) {
+      editInput = document.createElement('input');
+      editInput.type = 'hidden';
+      editInput.id = 'editingAnnouncementId';
+      document.getElementById('announcementForm').appendChild(editInput);
+    }
+    
+    editInput.value = ann.id;
+    document.getElementById('announcementTitle').value = ann.title;
+    document.getElementById('announcementType').value = ann.type || 'info';
+    document.getElementById('announcementContent').value = ann.content;
+
+    const publishBtn = document.querySelector('#announcementForm button[type="submit"]');
+    if (publishBtn) publishBtn.textContent = "Update Announcement";
+
+    document.getElementById('announcementForm').scrollIntoView({ behavior: 'smooth' });
+  } catch (err) {
+    console.error("Edit load failed:", err);
+  }
+}
+
+/* ============================================================
+  CONFIRMATION & ALERT MODALS POPUP MESSAGE FOR ANNOUNCEMENTS
+   ============================================================ */
+
+function showCustomConfirm(message, confirmText = "Yes, Delete", type = "warning") {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('customConfirmModal');
+    const msgEl = document.getElementById('confirmModalText');
+    const iconEl = document.getElementById('confirmModalIcon');
+    const cancelBtn = document.getElementById('btnConfirmCancel');
+    const okBtn = document.getElementById('btnConfirmOk');
+
+    msgEl.innerHTML = message;
+    okBtn.textContent = confirmText;
+    cancelBtn.style.display = 'inline-block';
+
+    // Set Icon and Button Themes
+    if (type === 'danger' || type === 'warning') {
+      iconEl.className = 'custom-modal-icon warning';
+      iconEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+      okBtn.className = 'btn-modal-action danger';
+    } else {
+      iconEl.className = 'custom-modal-icon info';
+      iconEl.innerHTML = '<i class="fa-solid fa-circle-info"></i>';
+      okBtn.className = 'btn-modal-action primary';
+    }
+
+    modal.style.display = 'flex';
+
+    const cleanup = () => {
+      modal.style.display = 'none';
+      okBtn.removeEventListener('click', onOk);
+      cancelBtn.removeEventListener('click', onCancel);
+    };
+
+    const onOk = () => { cleanup(); resolve(true); };
+    const onCancel = () => { cleanup(); resolve(false); };
+
+    okBtn.addEventListener('click', onOk);
+    cancelBtn.addEventListener('click', onCancel);
+  });
+}
+
+function showCustomAlert(message, type = "success") {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('customConfirmModal');
+    const msgEl = document.getElementById('confirmModalText');
+    const iconEl = document.getElementById('confirmModalIcon');
+    const cancelBtn = document.getElementById('btnConfirmCancel');
+    const okBtn = document.getElementById('btnConfirmOk');
+
+    msgEl.innerHTML = message;
+    okBtn.textContent = "OK";
+    cancelBtn.style.display = 'none';
+
+    if (type === 'success') {
+      iconEl.className = 'custom-modal-icon success';
+      iconEl.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+      okBtn.className = 'btn-modal-action success';
+    } else {
+      iconEl.className = 'custom-modal-icon warning';
+      iconEl.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+      okBtn.className = 'btn-modal-action danger';
+    }
+
+    modal.style.display = 'flex';
+
+    const onOk = () => {
+      modal.style.display = 'none';
+      okBtn.removeEventListener('click', onOk);
+      resolve(true);
+    };
+
+    okBtn.addEventListener('click', onOk);
+  });
+}
+
+/* ============================================================
+   UPDATED DELETE & POST HANDLERS POPUP MESSAGE FOR ANNOUNCEMENTS
+   ============================================================ */
+
+// Delete Announcement Handler
+async function deleteAnnouncement(id) {
+  const confirmed = await showCustomConfirm("Are you sure you want to delete this announcement permanently?", "Yes", "danger");
+  if (!confirmed) return;
+
+  try {
+    const { error } = await db
+      .from('Announcement')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      await showCustomAlert("Delete failed: " + error.message, "danger");
+    } else {
+      await loadAnnouncementsFromDatabase();
+      await showCustomAlert("Announcement deleted successfully!", "success");
+    }
+  } catch (err) {
+    console.error("Error deleting announcement:", err);
+  }
+}
+
+// Post/Update Announcement Handler
+async function handlePostAnnouncement(event) {
+  event.preventDefault();
+
+  const title = document.getElementById('announcementTitle').value.trim();
+  const type = document.getElementById('announcementType').value;
+  const content = document.getElementById('announcementContent').value.trim();
+  
+  const editInput = document.getElementById('editingAnnouncementId');
+  const editId = editInput ? editInput.value : '';
+
+  if (!title || !content) return;
+
+  try {
+    if (editId) {
+      const { error } = await db
+        .from('Announcement')
+        .update({ title, type, content })
+        .eq('id', editId);
+
+      if (error) {
+        await showCustomAlert("Failed to update announcement: " + error.message, "danger");
+      } else {
+        if (editInput) editInput.value = '';
+        const submitBtn = document.querySelector('#announcementForm button[type="submit"]');
+        if (submitBtn) submitBtn.textContent = "Publish Announcement";
+
+        document.getElementById('announcementForm').reset();
+        await loadAnnouncementsFromDatabase();
+        await showCustomAlert("Announcement updated successfully!", "success");
+      }
+    } else {
+      const { error } = await db
+        .from('Announcement')
+        .insert([{ title, type, content, is_active: true }]);
+
+      if (error) {
+        await showCustomAlert("Failed to post announcement: " + error.message, "danger");
+      } else {
+        document.getElementById('announcementForm').reset();
+        await loadAnnouncementsFromDatabase();
+        await showCustomAlert("Announcement published successfully!", "success");
+      }
+    }
+  } catch (err) {
+    console.error("Error submitting announcement:", err);
+  }
 }
