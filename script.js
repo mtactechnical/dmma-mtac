@@ -2054,32 +2054,103 @@ const courseRequirementsData = {
       "Seafarer’s Registration Number",
       "Valid Medical in PEME Form"
     ]
-  },
-  "PACKAGE B": {
-    title: "Package B",
-    badge: "COURSE PACKAGE",
-    link: "https://docs.google.com/forms/d/e/1FAIpQLScxPRObt9-6EQ7Dp72HI1Wm9Px5goHH_5Ty7dNtAiAd7F5u3w/viewform",
-    requirements: [
-      "PSA Birth Certificate / Passport",
-      "Seafarer’s Registration Number",
-      "Valid Medical in PEME Form"
-    ]
-  },
+  }
 
 };
 
 
 // FUNCTION TO OPEN DRAWER WITH DYNAMIC DATA & SUPABASE PRICES
+
 async function openRequirementsDrawer(courseIdentifier) {
   const priceElem = document.getElementById('drawerCoursePrice');
   const alumniElem = document.getElementById('drawerAlumniPrice');
   const enrollBtn = document.getElementById('drawerEnrollBtn');
 
-  // Reset display to loading status
+  // Price Currency Formatter Helper
+  const formatPrice = (val, fallbackVal = 'N/A') => {
+    if (val === null || val === undefined || val === '' || val === 'NULL') return fallbackVal;
+    if (String(val).includes('₱')) return val;
+    const num = parseFloat(String(val).replace(/[^0-9.]/g, ''));
+    if (isNaN(num) || num === 0) return fallbackVal;
+    return new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
+  };
+
+  // Helper function to safely render checklist items matching your HTML element ID (reqListContainer)
+  const renderRequirementsList = (reqs) => {
+    const listContainer = document.getElementById('reqListContainer') || document.getElementById('reqlistContainer');
+    if (listContainer && Array.isArray(reqs)) {
+      listContainer.innerHTML = '';
+      reqs.forEach(reqText => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="check-icon">✓</span><div><strong>${reqText}</strong></div>`;
+        listContainer.appendChild(li);
+      });
+    }
+  };
+
+  // -------------------------------------------------------------
+  // DIRECT OVERRIDE ONLY FOR REFRESHER COURSES (RCAFF, RCBT, RCSCRB)
+  // -------------------------------------------------------------
+  const rawKey = String(courseIdentifier).toUpperCase().trim();
+  if (['RCAFF', 'RCBT', 'RCSCRB'].includes(rawKey)) {
+    if (priceElem) priceElem.innerText = "Loading...";
+    if (alumniElem) alumniElem.innerText = "N/A";
+
+    const localData = typeof courseRequirementsData !== 'undefined' ? courseRequirementsData[rawKey] : null;
+    if (localData) {
+      if (document.getElementById('drawerCourseTitle')) {
+        document.getElementById('drawerCourseTitle').innerText = localData.title;
+      }
+      if (document.getElementById('drawerBadge')) {
+        document.getElementById('drawerBadge').innerText = localData.badge || "STCW MANDATORY";
+      }
+      if (enrollBtn && localData.link) {
+        enrollBtn.href = localData.link;
+        enrollBtn.target = "_blank";
+      }
+      renderRequirementsList(localData.requirements);
+    }
+
+    const drawer = document.getElementById('requirementsDrawer');
+    const overlay = document.getElementById('requirementsOverlay');
+    if (drawer) drawer.classList.add('open');
+    if (overlay) overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    if (typeof db !== 'undefined' && db) {
+      const targetId = rawKey === 'RCAFF' ? '14' : rawKey === 'RCBT' ? '15' : '16';
+      try {
+        const { data, error } = await db.from('Course').select('*').eq('id', targetId).single();
+        if (data && !error && priceElem) {
+          const dbFee = data.fee ?? data.price ?? data.regular_price ?? 0;
+          priceElem.innerText = formatPrice(dbFee);
+        } else if (priceElem) {
+          priceElem.innerText = "N/A";
+        }
+      } catch (e) {
+        if (priceElem) priceElem.innerText = "N/A";
+      }
+    }
+    return;
+  }
+
+  // -------------------------------------------------------------
+  // STANDARD FUNCTIONALITY FOR ALL OTHER COURSES
+  // -------------------------------------------------------------
+  const refresherMap = {
+    'rcaff': 'Refresher Course on Advanced Fire Fighting (RCAFF)',
+    'rcbt': 'Refresher Course on Basic Training (RCBT)',
+    'rcscrb': 'Refresher Course on Survival Craft and Rescue Boat (RCSCRB)'
+  };
+
+  const keyLower = String(courseIdentifier).toLowerCase().trim();
+  if (refresherMap[keyLower]) {
+    courseIdentifier = refresherMap[keyLower];
+  }
+
   if (priceElem) priceElem.innerText = "Loading...";
   if (alumniElem) alumniElem.innerText = "Loading...";
 
-  // 1. Resolve local UI checklist and title
   let localData = courseRequirementsData[courseIdentifier];
   if (!localData && typeof courseIdentifier === 'string') {
     const matchedKey = Object.keys(courseRequirementsData).find(
@@ -2091,58 +2162,34 @@ async function openRequirementsDrawer(courseIdentifier) {
   const initialTitle = localData ? localData.title : String(courseIdentifier);
   const isFreshGrad = String(courseIdentifier).toUpperCase().includes('FRESH') || initialTitle.toLowerCase().includes('fresh');
 
-  // Set Title & Badge
   const titleElem = document.getElementById('drawerCourseTitle');
   const badgeElem = document.getElementById('drawerBadge');
 
   if (titleElem) titleElem.innerText = initialTitle;
   if (badgeElem) badgeElem.innerText = localData ? localData.badge : "STCW MANDATORY";
 
-  // Set Default Enrollment Link
   if (enrollBtn && localData && localData.link) {
     enrollBtn.href = localData.link;
     enrollBtn.target = "_blank";
   }
 
-  // Price Currency Formatter
-  const formatPrice = (val, fallbackVal = 'N/A') => {
-    if (val === null || val === undefined || val === '' || val === 'NULL') return fallbackVal;
-    if (String(val).includes('₱')) return val;
-    const num = parseFloat(String(val).replace(/[^0-9.]/g, ''));
-    if (isNaN(num) || num === 0) return fallbackVal;
-    return new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
-  };
+  const defaultReqs = localData ? localData.requirements : [
+    "Screenshot of Seafarers Registration Number (SRN)",
+    "ID Picture (2x2, White Background, White Polo Shirt)",
+    "Birth Certificate or Valid Passport",
+    "Medical Certificate (MARINA Accredited)"
+  ];
+  renderRequirementsList(defaultReqs);
 
-  // Render Requirements Checklist Items
-  const listContainer = document.getElementById('reqListContainer');
-  if (listContainer) {
-    listContainer.innerHTML = '';
-    const reqs = localData ? localData.requirements : [
-      "Screenshot of Seafarers Registration Number (SRN)",
-      "ID Picture (2x2, White Background, White Polo Shirt)",
-      "Birth Certificate or Valid Passport",
-      "Medical Certificate (MARINA Accredited)"
-    ];
-    reqs.forEach(reqText => {
-      const li = document.createElement('li');
-      li.innerHTML = `<span class="check-icon">✓</span><div><strong>${reqText}</strong></div>`;
-      listContainer.appendChild(li);
-    });
-  }
-
-  // Open Drawer UI immediately
   const drawer = document.getElementById('requirementsDrawer');
   const overlay = document.getElementById('requirementsOverlay');
   if (drawer) drawer.classList.add('open');
   if (overlay) overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 
-  // 2. Fetch Live Prices directly from Supabase Database per specific course
   if (typeof db !== 'undefined' && db) {
     try {
-      const { data: rows, error } = await db
-        .from('Course')
-        .select('*');
+      const { data: rows, error } = await db.from('Course').select('*');
 
       if (error) {
         console.error("Supabase API Error:", error);
@@ -2152,81 +2199,74 @@ async function openRequirementsDrawer(courseIdentifier) {
       }
 
       if (rows && rows.length > 0) {
-      const targetSearchKey = String(courseIdentifier).toLowerCase().trim();
-      const targetTitleKey = String(initialTitle).toLowerCase().trim();
+        const targetSearchKey = String(courseIdentifier).toLowerCase().trim();
+        let targetTitleKey = String(initialTitle).toLowerCase().trim();
 
-      // Extract Acronym inside parentheses if present, e.g., "aff", "btoctco"
-      const acronymMatch = targetTitleKey.match(/\(([^)]+)\)/);
-      const acronym = acronymMatch ? acronymMatch[1].toLowerCase().trim() : '';
+        const acronymMatch = targetTitleKey.match(/\(([^)]+)\)/);
+        const acronym = acronymMatch ? acronymMatch[1].toLowerCase().trim() : targetSearchKey;
 
-      // Check if the current card is specifically standard "Basic Training (BT)"
-      const isBTStandardCard = targetTitleKey.startsWith("basic training (bt)") || 
-                               targetTitleKey === "walkin" || 
-                               targetTitleKey === "fresh" || 
-                               targetTitleKey.includes("dmma fresh grad") ||
-                               targetTitleKey.includes("bt walk-in");
+        const isBTStandardCard = (
+          targetTitleKey.startsWith("basic training (bt)") ||
+          targetSearchKey === "walkin" ||
+          targetSearchKey === "fresh" ||
+          targetTitleKey.includes("dmma fresh grad") ||
+          targetTitleKey.includes("bt walk-in")
+        ) && !targetTitleKey.includes("refresher");
 
-      // Match the specific DB row for the clicked course
-      const dbCourse = rows.find(row => {
-        const rawTitle = (row.title || row.course_title || row.name || '').toLowerCase().trim();
-        if (!rawTitle) return false;
+        const dbCourse = rows.find(row => {
+          const rawTitle = (row.title || row.course_title || row.name || '').toLowerCase().trim();
+          if (!rawTitle) return false;
 
-        // 1. Exact title or key match
-        if (rawTitle === targetTitleKey || rawTitle === targetSearchKey) return true;
+          if (rawTitle === targetTitleKey || rawTitle === targetSearchKey) return true;
 
-        // 2. ONLY map Basic Training Walk-in/Fresh Grad cards to standard BT row
-        if (isBTStandardCard) {
-          return rawTitle === "basic training" || rawTitle === "basic training (bt)" || rawTitle === "bt";
-        }
-
-        // 3. Match Acronym in parentheses for other courses (e.g., AFF, BTOCTCO)
-        if (acronym && rawTitle.includes(`(${acronym})`)) return true;
-
-        // 4. Substring containment fallback for other courses
-        return rawTitle.includes(targetTitleKey) || targetTitleKey.includes(rawTitle);
-      });
-
-      if (dbCourse) {
-      // Safe field extractions from database
-      const dbFee = dbCourse.fee ?? dbCourse.price ?? dbCourse.regular_price ?? dbCourse.walkin_fee ?? dbCourse.walk_in_fee ?? 0;
-      const dbGradFee = dbCourse.gradFee ?? dbCourse.alumni_price ?? dbCourse.grad_fee ?? dbCourse.alumni_fee ?? dbCourse.fresh_grad_fee ?? dbCourse.alumni_rate ?? null;
-
-      const formattedRegular = formatPrice(dbFee);
-      const formattedAlumni = dbGradFee !== null ? formatPrice(dbGradFee) : "N/A";
-
-      if (isFreshGrad) {
-        // BT DMMA Fresh Grad Drawer: Displays Alumni Discount for both fields
-        if (priceElem) priceElem.innerText = formattedAlumni;
-        if (alumniElem) alumniElem.innerText = formattedAlumni;
-      } else {
-        // Regular Walk-in Drawers: Displays standard Regular Rate and Alumni Rate
-        if (priceElem) priceElem.innerText = formattedRegular;
-        if (alumniElem) alumniElem.innerText = formattedAlumni;
-      }
-
-      // Update registration link dynamically without overwriting Fresh Grad
-      const dbUrl = isFreshGrad 
-        ? (dbCourse.gradFormUrl || dbCourse.fresh_grad_form || dbCourse.grad_link || null)
-        : (dbCourse.googleFormUrl || dbCourse.form_url || dbCourse.link || dbCourse.registration_link);
-
-      if (enrollBtn) {
-        if (dbUrl && String(dbUrl).trim() !== '') {
-          let formUrl = String(dbUrl).trim();
-          if (!formUrl.startsWith('http://') && !formUrl.startsWith('https://')) {
-            formUrl = 'https://' + formUrl;
+          if (isBTStandardCard) {
+            return rawTitle === "basic training" || rawTitle === "basic training (bt)" || rawTitle === "bt";
           }
-          enrollBtn.href = formUrl;
-        } else if (localData && localData.link) {
-          // Keep local JSON link if no separate DB column exists for Fresh Grad form
-          enrollBtn.href = localData.link;
+
+          if (acronym && (rawTitle.includes(`(${acronym})`) || rawTitle.endsWith(` ${acronym}`))) return true;
+
+          return rawTitle.includes(targetTitleKey) || targetTitleKey.includes(rawTitle);
+        });
+
+        if (dbCourse) {
+          const dbFee = dbCourse.fee ?? dbCourse.price ?? dbCourse.regular_price ?? dbCourse.walkin_fee ?? dbCourse.walk_in_fee ?? 0;
+          let dbGradFee = dbCourse.gradFee ?? dbCourse.alumni_price ?? dbCourse.grad_fee ?? dbCourse.alumni_fee ?? dbCourse.fresh_grad_fee ?? dbCourse.alumni_rate ?? null;
+
+          if (dbGradFee === 'EMPTY' || dbGradFee === 'NULL' || String(dbGradFee).trim() === '') {
+            dbGradFee = null;
+          }
+
+          const formattedRegular = formatPrice(dbFee);
+          const formattedAlumni = dbGradFee !== null ? formatPrice(dbGradFee) : "N/A";
+
+          if (isFreshGrad) {
+            if (priceElem) priceElem.innerText = formattedAlumni;
+            if (alumniElem) alumniElem.innerText = formattedAlumni;
+          } else {
+            if (priceElem) priceElem.innerText = formattedRegular;
+            if (alumniElem) alumniElem.innerText = formattedAlumni;
+          }
+
+          const dbUrl = isFreshGrad
+            ? (dbCourse.gradFormUrl || dbCourse.fresh_grad_form || dbCourse.grad_link || null)
+            : (dbCourse.googleFormUrl || dbCourse.form_url || dbCourse.link || dbCourse.registration_link);
+
+          if (enrollBtn) {
+            if (dbUrl && String(dbUrl).trim() !== '') {
+              let formUrl = String(dbUrl).trim();
+              if (!formUrl.startsWith('http://') && !formUrl.startsWith('https://')) {
+                formUrl = 'https://' + formUrl;
+              }
+              enrollBtn.href = formUrl;
+            } else if (localData && localData.link) {
+              enrollBtn.href = localData.link;
+            }
+          }
+        } else {
+          if (priceElem) priceElem.innerText = "N/A";
+          if (alumniElem) alumniElem.innerText = "N/A";
         }
       }
-    } else {
-      // Fallback if no matching DB record exists
-      if (priceElem) priceElem.innerText = "N/A";
-      if (alumniElem) alumniElem.innerText = "N/A";
-    }
-    }
     } catch (err) {
       console.error("Execution Exception:", err);
       if (priceElem) priceElem.innerText = "N/A";
@@ -2246,35 +2286,7 @@ function closeRequirementsDrawer() {
 }
 
 
-
 // AI CHATBOT SCRIPT ////
-// 1. Append User Message
-  const userDiv = document.createElement('div');
-  userDiv.className = 'ai-msg user';
-  userDiv.innerText = rawQuery;
-  container.appendChild(userDiv);
-  inputElem.value = '';
-  container.scrollTop = container.scrollHeight;
-
-  // 2. Append Animated Bot Typing Indicator
-  const botDiv = document.createElement('div');
-  botDiv.className = 'ai-msg bot';
-  botDiv.innerHTML = `
-    <div class="typing-dots">
-      <span></span><span></span><span></span>
-    </div>`;
-  container.appendChild(botDiv);
-  container.scrollTop = container.scrollHeight;
-
-  function sendQuickQuery(text) {
-  const inputElem = document.getElementById('aiUserInput');
-  if (inputElem) {
-    inputElem.value = text;
-    sendBubbleChatMessage();
-  }
-}
-
-
 // Toggle Floating Chat Head
 function toggleAIChatBubble() {
   const widget = document.getElementById('aiBubbleWidget');
