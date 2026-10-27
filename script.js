@@ -3086,26 +3086,40 @@ self.addEventListener('fetch', (event) => {
 //INSTALL BUTTON ADD HOMESCREEN
 let deferredPrompt;
 
+// Catch the Chrome / Android PWA Install Event
 window.addEventListener('beforeinstallprompt', (e) => {
-  // Prevent Chrome from showing the mini-infobar automatically
   e.preventDefault();
-  // Stash the event so it can be triggered later
   deferredPrompt = e;
-  // Show your custom "Install App" button in the navbar or banner
-  const installBtn = document.getElementById('pwaInstallBtn');
-  if (installBtn) installBtn.style.display = 'inline-flex';
+
+  // Show the toast if the user hasn't dismissed it in this session
+  if (sessionStorage.getItem('pwa_toast_dismissed') !== 'true') {
+    const toast = document.getElementById('pwaInstallToast');
+    if (toast) {
+      toast.classList.remove('is-hidden');
+    }
+  }
 });
 
+// Triggered when user clicks "Install" inside the toast
 function triggerPWAInstall() {
+  const toast = document.getElementById('pwaInstallToast');
   if (!deferredPrompt) return;
-  // Show the prompt
+
   deferredPrompt.prompt();
-  // Wait for the user to respond to the prompt
   deferredPrompt.userChoice.then((choiceResult) => {
     if (choiceResult.outcome === 'accepted') {
-      console.log('User accepted the PWA install prompt');
+      console.log('Seafarer accepted PWA installation');
     }
     deferredPrompt = null;
-    document.getElementById('pwaInstallBtn').style.display = 'none';
+    if (toast) toast.classList.add('is-hidden');
   });
+}
+
+// Triggered when user clicks "X" inside the toast
+function dismissPWAToast() {
+  const toast = document.getElementById('pwaInstallToast');
+  if (toast) {
+    toast.classList.add('is-hidden');
+    sessionStorage.setItem('pwa_toast_dismissed', 'true');
+  }
 }

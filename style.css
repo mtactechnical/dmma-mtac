@@ -5002,7 +5002,117 @@ input[type="text"], input[type="url"] {
   line-height: 1.4;
 }
 
+/* ============================================================
+   FLOATING PWA INSTALL TOAST BANNER
+   ============================================================ */
+.pwa-toast {
+  position: fixed;
+  bottom: 80px; /* Positioned cleanly above bottom floating chat buttons */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 440px;
+  background: rgba(18, 24, 41, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
 
+.pwa-toast.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 30px);
+}
+
+.pwa-toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pwa-toast-icon img {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.pwa-toast-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.pwa-toast-text strong {
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.pwa-toast-text span {
+  color: #a0aec0;
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+.pwa-toast-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pwa-btn-primary {
+  background: linear-gradient(135deg, #ff6b00, #ff8800);
+  color: #ffffff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(255, 107, 0, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pwa-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(255, 107, 0, 0.5);
+}
+
+.pwa-btn-close {
+  background: transparent;
+  border: none;
+  color: #a0aec0;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.pwa-btn-close:hover {
+  color: #ffffff;
+}
+
+@media (max-width: 480px) {
+  .pwa-toast {
+    bottom: 85px;
+    width: 92%;
+    padding: 10px 14px;
+  }
+}
 
 
 

@@ -2059,9 +2059,7 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
   </div>
 </div>
 
-<button id="pwaInstallBtn" class="nav-btn" style="display: none;" onclick="triggerPWAInstall()">
-  <i class="fa-solid fa-download"></i> Install App
-</button>
+
 
   </main>
 <!-- MAIN FOOTER -->
@@ -2120,6 +2118,30 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
       </footer>
 
 
+
+      
+<!-- FLOATING PWA INSTALL TOAST BANNER -->
+<div id="pwaInstallToast" class="pwa-toast is-hidden">
+  <div class="pwa-toast-content">
+    <div class="pwa-toast-icon">
+      <img src="img/logo.png" alt="DMMA MTAC App Icon" />
+    </div>
+    <div class="pwa-toast-text">
+      <strong>Install DMMA MTAC App</strong>
+      <span>Access requirements & schedules offline</span>
+    </div>
+  </div>
+  <div class="pwa-toast-actions">
+    <button class="pwa-btn-primary" onclick="triggerPWAInstall()">
+      <i class="fa-solid fa-download"></i> Install
+    </button>
+    <button class="pwa-btn-close" onclick="dismissPWAToast()" aria-label="Close Toast">
+      &times;
+    </button>
+  </div>
+</div>
+
+
   <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -2128,7 +2150,7 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
         .catch(err => console.error('SW Registration Failed:', err));
     });
   }
-</script>
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
