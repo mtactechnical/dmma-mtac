@@ -3062,3 +3062,22 @@ async function handlePostAnnouncement(event) {
     console.error("Error submitting announcement:", err);
   }
 }
+
+
+// Service Worker for DMMA MTAC PWA App Mode
+const CACHE_NAME = 'dmma-mtac-v1';
+
+self.addEventListener('install', (event) => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(clients.claim());
+});
+
+self.addEventListener('fetch', (event) => {
+  // Serves network content normally while satisfying PWA requirements
+  event.respondWith(
+    fetch(event.request).catch(() => caches.match(event.request))
+  );
+});

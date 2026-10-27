@@ -50,6 +50,16 @@
   ]
   </script>
 
+  <!-- PWA Web App Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- Mobile & iOS Fullscreen App Tags -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DMMA MTAC">
+<link rel="apple-touch-icon" href="img/logo.png">
+
 <!-- Canonical Tag (Prevents Duplicate Content Issues) -->
 <link rel="canonical" href="https://dmma-mtac.vercel.app/">
 
@@ -75,10 +85,17 @@
       </div>
     </div>
 
+    <div class="mobile-actions">
+      <!-- Search Button for Mobile -->
+      <button class="nav-search-trigger-btn mobile-search-btn" onclick="openSearchModal()" aria-label="Open Course Search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+
     <!-- Mobile Hamburger Toggle Button -->
     <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle Navigation">
       <i class="fa-solid fa-bars"></i>
     </button>
+    </div>
 
     <!-- Navigation Menu (Links + Action Buttons) -->
     <nav class="nav-menu" id="nav-menu">
@@ -91,9 +108,11 @@
     <li><a href="#gallery-tab" onclick="event.preventDefault(); switchTab('gallery-tab');" class="nav-link">Gallery</a></li>
     </ul>
 
-    <button class="nav-search-trigger-btn" onclick="openSearchModal()" aria-label="Open Course Search">
-      <i class="fa-solid fa-magnifying-glass"></i>
-    </button>
+    <div class="nav-buttons">
+        <!-- Search Button (Desktop: Placed beside Google Login) -->
+        <button class="nav-search-trigger-btn desktop-search-btn" onclick="openSearchModal()" aria-label="Open Course Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
 
     <!-- Dynamic Auth Button -->
     <div class="nav-buttons">
@@ -116,6 +135,7 @@
   <button id="logoutBtn" class="nav-btn btn-danger is-hidden" onclick="handleLogout()">
     <span>Logout</span>
   </button>
+  </div>
 
       </div>
     </nav>
@@ -2098,7 +2118,15 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
       </footer>
 
 
-
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('PWA Service Worker Registered!'))
+        .catch(err => console.error('Service Worker Error:', err));
+    });
+  }
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

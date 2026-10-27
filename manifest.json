@@ -1,0 +1,22 @@
+{
+  "name": "DMMA MTAC Maritime Center",
+  "short_name": "DMMA MTAC",
+  "description": "DMMA Maritime Training and Assessment Center Course Requirements & Schedules",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#121829",
+  "theme_color": "#1a233a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "img/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "img/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

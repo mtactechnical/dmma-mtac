@@ -3852,8 +3852,8 @@ input[type="text"], input[type="url"] {
     bottom: 60px;
     right: 0;
     width: calc(100vw - 32px);
-    max-width: 350px;
-    height: 480px;
+    max-width: 290px;
+    height: 455px;
     max-height: calc(100vh - 160px);
   }
   .ai-chat-head {
@@ -3868,27 +3868,74 @@ input[type="text"], input[type="url"] {
 /* ============================================================
    NAVBAR SEARCH TRIGGER BUTTON
    ============================================================ */
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
+/* Base style for search buttons */
 .nav-search-trigger-btn {
   background: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  font-size: 0.9rem;
   cursor: pointer;
-  backdrop-filter: blur(12px);
   transition: all 0.25s ease;
+  backdrop-filter: blur(12px);
 }
 
 .nav-search-trigger-btn:hover {
   background: #ff6b00;
-  border-color: #ff6b00;
-  box-shadow: 0 0 12px rgba(255, 107, 0, 0.5);
+  border-color: #ff5b00;
+}
+
+/* Visibility Rules */
+.mobile-search-btn {
+  display: none; /* Hide mobile search on wide screens */
+}
+
+/* Mobile View Styles */
+@media (max-width: 768px) {
+  .mobile-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mobile-search-btn {
+    display: flex; /* Show search next to hamburger on mobile */
+    width: 32px;
+    height: 32px;
+  }
+
+  .desktop-search-btn {
+    display: none; /* Hide desktop search inside dropdown on mobile */
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Remove borders and divider lines in mobile menu */
+  .nav-menu hr,
+  .nav-buttons hr {
+    display: none !important;
+  }
+
+  .nav-buttons {
+    border: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    padding-top: 8px;
+    margin-top: 0;
+  }
 }
 
 /* ============================================================
