@@ -869,10 +869,10 @@ function renderScheduleTab() {
         const walkInPrice = course.fee || '₱0.00';
         const gradPrice = course.gradFee || course.grad_fee;
 
-        let priceBadgesHtml = `<span class="price-badge price-walkin">${walkInPrice} Walk-in</span>`;
+        let priceBadgesHtml = `<span class="price-badge price-walkin">Non-Alumni: ${walkInPrice}</span>`;
 
         if (gradPrice) {
-            priceBadgesHtml += ` <span class="price-badge price-alumni">${gradPrice} Alumni</span>`;
+            priceBadgesHtml += ` <span class="price-badge price-alumni">DMMA Alumni: ${gradPrice}</span>`;
             }
 
         let actionButtonsHtml = '';
@@ -880,7 +880,7 @@ function renderScheduleTab() {
           actionButtonsHtml = `
             <div class="schedule-card-action dual-btn">
               <button class="btn-enroll-orange" onclick="window.open('${walkInLink}', '_blank')">
-                <i class="fa-solid fa-file-signature"></i> Enroll as Walk-in
+                <i class="fa-solid fa-file-signature"></i> Enroll as Non-Alumni
               </button>
               <button class="btn-enroll-navy" onclick="window.open('${freshGradLink}', '_blank')">
                 <i class="fa-solid fa-graduation-cap"></i> Enroll as DMMA Fresh Grad
@@ -937,9 +937,9 @@ function renderCourses() {
     const gradPrice = course.gradFee || course.grad_fee;
 
     // Price Badges
-    let priceBadgesHtml = `<span class="price-badge price-walkin">${walkInPrice} Walk-in</span>`;
+    let priceBadgesHtml = `<span class="price-badge price-walkin">Non-Alumni: ${walkInPrice}</span>`;
     if (gradPrice) {
-      priceBadgesHtml += ` <span class="price-badge price-alumni">${gradPrice} Alumni</span>`;
+      priceBadgesHtml += ` <span class="price-badge price-alumni">DMMA Alumni: ${gradPrice}</span>`;
     }
 
     // Enrollment Action Buttons
@@ -951,7 +951,7 @@ function renderCourses() {
       actionButtonsHtml = `
         <div class="dual-btn" style="display:flex; flex-direction:column; gap:8px; margin-top: 1rem;">
           <button class="btn-enroll-orange" onclick="window.open('${walkInLink}', '_blank')">
-            <i class="fa-solid fa-file-signature"></i> Enroll as Walk-in
+            <i class="fa-solid fa-file-signature"></i> Enroll as Non-Alumni
           </button>
           <button class="btn-enroll-navy" onclick="window.open('${freshGradLink}', '_blank')">
             <i class="fa-solid fa-graduation-cap"></i> Enroll as DMMA Fresh Grad
@@ -1792,7 +1792,7 @@ const courseRequirementsData = {
     ]
   },
   "WALKIN": {
-    title: "Basic Training (BT) Walk-in",
+    title: "Basic Training (BT) Non-Alumni",
     badge: "STCW MANDATORY",
     link: "https://docs.google.com/forms/d/e/1FAIpQLSeqphSSPVGqdoRQ4r_TS9slgxORrHeB8AuiRJD-KeJF0MLNvQ/viewform",
     requirements: [
@@ -1803,7 +1803,7 @@ const courseRequirementsData = {
     ]
   },
   "FRESH": {
-    title: "Basic Training (BT) DMMA Fresh Grad",
+    title: "Basic Training (BT) DMMA Alumni",
     badge: "STCW MANDATORY",
     link: "https://docs.google.com/forms/d/e/1FAIpQLSfRrezw6YIL9GEIC_cP6QpOnWwVm99rNVeDBqxjazd9Q_1UYA/viewform",
     requirements: [
