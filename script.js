@@ -3081,3 +3081,31 @@ self.addEventListener('fetch', (event) => {
     fetch(event.request).catch(() => caches.match(event.request))
   );
 });
+
+
+//INSTALL BUTTON ADD HOMESCREEN
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent Chrome from showing the mini-infobar automatically
+  e.preventDefault();
+  // Stash the event so it can be triggered later
+  deferredPrompt = e;
+  // Show your custom "Install App" button in the navbar or banner
+  const installBtn = document.getElementById('pwaInstallBtn');
+  if (installBtn) installBtn.style.display = 'inline-flex';
+});
+
+function triggerPWAInstall() {
+  if (!deferredPrompt) return;
+  // Show the prompt
+  deferredPrompt.prompt();
+  // Wait for the user to respond to the prompt
+  deferredPrompt.userChoice.then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the PWA install prompt');
+    }
+    deferredPrompt = null;
+    document.getElementById('pwaInstallBtn').style.display = 'none';
+  });
+}

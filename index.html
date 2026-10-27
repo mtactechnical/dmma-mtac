@@ -51,7 +51,7 @@
   </script>
 
   <!-- PWA Web App Manifest -->
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="./manifest.json">
 
 <!-- Mobile & iOS Fullscreen App Tags -->
 <meta name="mobile-web-app-capable" content="yes">
@@ -2059,9 +2059,11 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
   </div>
 </div>
 
+<button id="pwaInstallBtn" class="nav-btn" style="display: none;" onclick="triggerPWAInstall()">
+  <i class="fa-solid fa-download"></i> Install App
+</button>
 
   </main>
-
 <!-- MAIN FOOTER -->
       <footer class="site-footer">
         <div class="footer-container">
@@ -2121,12 +2123,12 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
   <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('PWA Service Worker Registered!'))
-        .catch(err => console.error('Service Worker Error:', err));
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker Active!'))
+        .catch(err => console.error('SW Registration Failed:', err));
     });
   }
-  </script>
+</script>
 
   <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
