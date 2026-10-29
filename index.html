@@ -1826,7 +1826,7 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
 
       <!-- Add/Edit Course Form -->
       <div class="admin-card">
-        <h3 id="course-form-title"><i class="fa-solid fa-book-open"></i> Add / Edit Training Course</h3>
+        <h3 id="course-form-title"><i></i>🕮 Add / Edit Training Course</h3>
         <form id="course-form" onsubmit="handleSaveCourse(event)" class="form-stack">
           <input type="hidden" id="editing-course-id" />
           
@@ -1885,7 +1885,7 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
       
 <!-- ADMIN ANNOUNCEMENT CONTROL PANEL -->
 <div id="adminAnnouncementPanel" class="admin-card announcement-admin-card">
-  <h3>Post New Announcement</h3>
+  <h3>🕭 Post New Announcement</h3>
   <form id="announcementForm" onsubmit="handlePostAnnouncement(event)" class="form-stack">
     <!-- Hidden input to hold edit record ID -->
     <input type="hidden" id="editingAnnouncementId" value="" />
@@ -1908,6 +1908,13 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
       <label>Content</label>
       <textarea id="announcementContent" class="form-control" rows="4" placeholder="Enter announcement details..." required></textarea>
     </div>
+
+    <div class="form-group-checkbox" style="margin: 7px 0;">
+  <label style="display: flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer;">
+    <input type="checkbox" id="announcementIsPinned" />
+    <i></i>🖈Pin announcement to top
+  </label>
+</div>
     
     <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
       <button type="submit" id="btnPublishAnnouncement" class="btn btn-primary" style="flex: 1;">Publish Announcement</button>
@@ -2133,7 +2140,7 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
   </div>
   <div class="pwa-toast-actions">
     <button class="pwa-btn-primary" onclick="triggerPWAInstall()">
-      <i class="fa-solid fa-download"></i> Install
+      Install
     </button>
     <button class="pwa-btn-close" onclick="dismissPWAToast()" aria-label="Close Toast">
       &times;

@@ -146,137 +146,6 @@ async function handleSaveCourse(e) {
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-/* THIS IS FOR LANDING PAGE WHERE IT HAS REQUIREMENTS LIST AND THE GOOGLE FORM HARDCODED (OPTIONAL)
-// Database of course details with UNIQUE form links, titles, and requirements
-const courseData = {
-  // Passenger Ship Courses
-  'PSCMHB': {
-    title: 'PASSENGER SHIP CRISIS MANAGEMENT AND HUMAN BEHAVIOR (PSCMHB)',
-    desc: 'This course equips shipboard personnel with the knowledge and skills to effectively manage crisis situations and understand human behavior during emergencies on passenger ships.',
-    requirements: [
-      'PSA Birth Certificate / Passport',
-      'Seafarer\'s Registration Number',
-      'Valid Medical in PEME Form',
-      'Safety Training for Personnel Providing Direct Service to Passengers (STPPDSP) Certificate',
-      'Passenger Ship Crowd Management (PSCM) Certificate'
-    ],
-    heroImg: 'img/pscmhb-hero.jpg',
-    formUrl: 'https://docs.google.com/forms/d/e/YOUR_PSCMHB_FORM_ID/viewform' // UNIQUE FORM
-  },
-  'STPPDSP': {
-    title: 'SAFETY TRAINING FOR PERSONNEL PROVIDING DIRECT SERVICES TO PASSENGERS',
-    desc: 'Training for personnel providing direct safety services to passengers in passenger spaces.',
-    requirements: [
-      'PSA Birth Certificate / Passport',
-      'Seafarer\'s Registration Number',
-      'Valid Medical in PEME Form'
-    ],
-    heroImg: 'img/stppdsp-hero.jpg',
-    formUrl: 'https://docs.google.com/forms/d/e/YOUR_STPPDSP_FORM_ID/viewform' // UNIQUE FORM
-  },
-  'PSCM': {
-    title: 'PASSENGER SHIP CROWD MANAGEMENT TRAINING (PSCM)',
-    desc: 'Essential crowd management training for ship officers and personnel designated to assist passengers in emergency situations.',
-    requirements: [
-      'PSA Birth Certificate / Passport',
-      'Seafarer\'s Registration Number',
-      'Valid Medical in PEME Form'
-    ],
-    heroImg: 'img/pscm-hero.jpg',
-    formUrl: 'https://docs.google.com/forms/d/e/YOUR_PSCM_FORM_ID/viewform' // UNIQUE FORM
-  },
-
-  // STCW Mandatory Courses
-  'AFF': {
-    title: 'ADVANCED FIRE FIGHTING (AFF)',
-    desc: 'Comprehensive training in controlling firefighting operations aboard ship, organizing fire parties, and inspecting fire systems.',
-    requirements: [
-      'PSA Birth Certificate / Passport',
-      'Seafarer\'s Registration Number',
-      'Valid Medical in PEME Form',
-      'Basic Training (BT) Certificate'
-    ],
-    heroImg: 'img/aff-hero.jpg',
-    formUrl: 'https://docs.google.com/forms/d/e/YOUR_AFF_FORM_ID/viewform' // UNIQUE FORM
-  },
-  'BT': {
-    title: 'BASIC TRAINING (BT)',
-    desc: 'Mandatory safety training covering Personal Survival Techniques, Fire Prevention, Elementary First Aid, and Personal Safety.',
-    requirements: [
-      'PSA Birth Certificate / Passport',
-      'Seafarer\'s Registration Number',
-      'Valid Medical in PEME Form'
-    ],
-    heroImg: 'img/bt-hero.jpg',
-    formUrl: 'https://docs.google.com/forms/d/e/YOUR_BT_FORM_ID/viewform' // UNIQUE FORM
-  },
-
-  // Offered Packages
-  'PACKAGE_A': {
-    title: 'PASSENGER SHIP SAFETY PACKAGE A',
-    desc: 'Bundled training package including BT, SAT/SDSD, Safety Training for Personnel, and Crowd Management.',
-    requirements: [
-      'PSA Birth Certificate / Passport',
-      'Seafarer\'s Registration Number',
-      'Valid Medical in PEME Form'
-    ],
-    heroImg: 'img/package-a-hero.jpg',
-    formUrl: 'https://docs.google.com/forms/d/e/YOUR_PACKAGE_A_FORM_ID/viewform' // UNIQUE FORM
-  },
-  'PACKAGE_B': {
-    title: 'PASSENGER SHIP SAFETY PACKAGE B',
-    desc: 'Complete training bundle including BT, SAT/SDSD, Safety Training for Personnel, Crowd Management, and Crisis Management.',
-    requirements: [
-      'PSA Birth Certificate / Passport',
-      'Seafarer\'s Registration Number',
-      'Valid Medical in PEME Form'
-    ],
-    heroImg: 'img/package-b-hero.jpg',
-    formUrl: 'https://docs.google.com/forms/d/e/YOUR_PACKAGE_B_FORM_ID/viewform' // UNIQUE FORM
-  }
-};
-// ENROLLMENT FORM WITH REQUIREMENTS LANDING PAGE
-function openEnrollmentLanding(courseKey) {
-  const data = courseData[courseKey];
-
-  if (!data) {
-    console.error(`Course key "${courseKey}" not found in courseData.`);
-    return;
-  }
-
-  // 1. Update text, headings, image, and link dynamically
-  document.getElementById('detail-course-title').textContent = data.title;
-  document.getElementById('detail-portal-course-tag').textContent = data.title;
-  document.getElementById('detail-course-desc').textContent = data.desc;
-  document.getElementById('detail-hero-img').src = data.heroImg;
-  
-  // Update unique form link
-  const formBtn = document.getElementById('detail-form-link');
-  formBtn.href = data.formUrl;
-
-  // 2. Render dynamic requirements list
-  const reqList = document.getElementById('detail-requirements-list');
-  reqList.innerHTML = '';
-  data.requirements.forEach(req => {
-    const li = document.createElement('li');
-    li.textContent = req;
-    reqList.appendChild(li);
-  });
-
-  // 3. Navigate to landing view
-  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-  document.querySelectorAll('.sub-landing-tab').forEach(sub => sub.classList.add('hidden'));
-  
-  const landing = document.getElementById('enrollment-detail-landing');
-  landing.classList.remove('hidden');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}*/
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
 
 // --- ADMIN & GOOGLE OAUTH CONFIGURATION ---
 const ALLOWED_ADMIN_EMAILS = [
@@ -2616,7 +2485,6 @@ function handleSearchInput() {
   }
 }
 
-
 function selectAndHighlightCourse(cardId, tabId) {
   closeSearchModal();
   clearCourseSearch();
@@ -2681,6 +2549,7 @@ function selectAndHighlightCourse(cardId, tabId) {
 }
 
 
+
 /* ============================================================
    AUTOMATIC & PERSISTENT ANNOUNCEMENT SYSTEM
    ============================================================ */
@@ -2696,7 +2565,8 @@ async function loadAnnouncementsFromDatabase() {
     const { data: announcements, error } = await db
       .from('Announcement')
       .select('*')
-      .order('id', { ascending: false });
+      .order('is_pinned', { ascending: false }) // <-- Pinned posts come first
+      .order('id', { ascending: false });       // <-- Newest posts second
 
     if (error) {
       console.error('Error fetching announcements:', error);
@@ -2719,16 +2589,49 @@ async function loadAnnouncementsFromDatabase() {
             <i class="fa-solid fa-bell-slash"></i> NO ANNOUNCEMENTS!
           </div>`;
       } else {
-        publicDisplay.innerHTML = announcements.map((ann, index) => `
-          <div class="announcement-card-public type-${ann.type || 'info'}" onclick="openAnnouncementModal(${index})" style="cursor: pointer;">
-            <div class="ann-badge-row">
-              <span class="ann-badge ann-badge-${ann.type || 'info'}">${(ann.type || 'INFO').toUpperCase()}</span>
-              <span class="ann-date"><i class="fa-regular fa-clock"></i> ${new Date(ann.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+        // 1. Separate announcements into pinned and regular arrays
+        const pinnedItems = announcements.filter(ann => ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1);
+        const regularItems = announcements.filter(ann => !(ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1));
+
+        // 2. Helper function to render individual announcement card HTML
+        const renderCardHTML = (ann, index) => {
+          const isPinned = ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1;
+          const pinBadge = isPinned 
+            ? `<span class="ann-pinned-minimal" title="Pinned Announcement" style="color: #ff6b00; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 107, 0, 0.1); padding: 2px 8px; border-radius: 6px;"><i class="fa-solid fa-thumbtack"></i> Pinned</span>` 
+            : '';
+          const pinnedClass = isPinned ? 'is-pinned-card' : '';
+
+          return `
+            <div class="announcement-card-public type-${ann.type || 'info'} ${pinnedClass}" onclick="openAnnouncementModal(${index})" style="cursor: pointer;">
+              <div class="ann-badge-row">
+                <span class="ann-badge ann-badge-${ann.type || 'info'}">${(ann.type || 'INFO').toUpperCase()}</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  ${pinBadge}
+                  <span class="ann-date"><i class="fa-regular fa-clock"></i> ${new Date(ann.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                </div>
+              </div>
+              <h4 class="ann-title">${ann.title}</h4>
+              <p class="ann-body">${ann.content}</p>
             </div>
-            <h4 class="ann-title">${ann.title}</h4>
-            <p class="ann-body">${ann.content}</p>
-          </div>
-        `).join('');
+          `;
+        };
+
+        // 3. Render pinned cards first
+        let htmlOutput = pinnedItems.map((ann, idx) => renderCardHTML(ann, idx)).join('');
+
+        // 4. Insert divider line ONLY IF both pinned AND regular posts exist
+        if (pinnedItems.length > 0 && regularItems.length > 0) {
+          htmlOutput += `
+            <div class="announcement-divider">
+              <span>📢Recent Updates</span>
+            </div>
+          `;
+        }
+
+        // 5. Append regular cards below the divider
+        htmlOutput += regularItems.map((ann, idx) => renderCardHTML(ann, pinnedItems.length + idx)).join('');
+
+        publicDisplay.innerHTML = htmlOutput;
       }
     }
 
@@ -2737,23 +2640,33 @@ async function loadAnnouncementsFromDatabase() {
       if (!announcements || announcements.length === 0) {
         adminContainer.innerHTML = `<p style="color: #64748b; font-size: 0.9rem; margin-top: 10px; font-weight: 600;">NO ANNOUNCEMENTS POSTED YET</p>`;
       } else {
-        adminContainer.innerHTML = announcements.map(ann => `
-          <div class="admin-ann-row">
-            <div class="admin-ann-info">
-              <strong>${ann.title}</strong>
-              <span class="ann-type-tag type-${ann.type || 'info'}">${(ann.type || 'INFO').toUpperCase()}</span>
-              <div class="admin-ann-date">${new Date(ann.created_at || Date.now()).toLocaleString()}</div>
-            </div>
-            <div style="display: flex; gap: 8px;">
-              <button type="button" class="btn btn-secondary btn-sm" onclick="startEditAnnouncement(${ann.id})">
-                <i class="fa-solid fa-pen-to-square"></i> Edit
-              </button>
-              <button type="button" class="btn btn-danger btn-sm" onclick="deleteAnnouncement(${ann.id})">
-                <i class="fa-solid fa-trash"></i> Delete
-              </button>
-            </div>
-          </div>
-        `).join('');
+        adminContainer.innerHTML = announcements.map(ann => {
+  const isPinned = ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1;
+  const pinTag = isPinned 
+    ? `<span style="color: #ff6b00; font-size: 0.72rem; font-weight: 700; background: rgba(255, 107, 0, 0.1); padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">🖈PINNED</span>` 
+    : '';
+
+  return `
+    <div class="admin-ann-row">
+      <div class="admin-ann-info">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <strong>${ann.title}</strong>
+          ${pinTag}
+          <span class="ann-type-tag type-${ann.type || 'info'}">${(ann.type || 'INFO').toUpperCase()}</span>
+        </div>
+        <div class="admin-ann-date" style="margin-top: 4px;">${new Date(ann.created_at || Date.now()).toLocaleString()}</div>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="startEditAnnouncement(${ann.id})">
+          <i class="fa-solid fa-pen-to-square"></i> Edit
+        </button>
+        <button type="button" class="btn btn-danger btn-sm" onclick="deleteAnnouncement(${ann.id})">
+          <i class="fa-solid fa-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+  `;
+}).join('');
       }
     }
 
@@ -2803,48 +2716,88 @@ async function loadCoursesFromDatabase() {
 async function handlePostAnnouncement(event) {
   event.preventDefault();
 
-  const title = document.getElementById('announcementTitle').value.trim();
-  const type = document.getElementById('announcementType').value;
-  const content = document.getElementById('announcementContent').value.trim();
-  
-  // Check if we are editing an existing record
+  // 1. Capture all form values at the very start
+  const titleInput = document.getElementById('announcementTitle');
+  const typeInput = document.getElementById('announcementType');
+  const contentInput = document.getElementById('announcementContent');
+  const pinCheckbox = document.getElementById('announcementIsPinned');
   const editInput = document.getElementById('editingAnnouncementId');
+
+  const title = titleInput ? titleInput.value.trim() : '';
+  const type = typeInput ? typeInput.value : 'info';
+  const content = contentInput ? contentInput.value.trim() : '';
+  const isPinned = pinCheckbox ? Boolean(pinCheckbox.checked) : false;
   const editId = editInput ? editInput.value : '';
 
-  if (!title || !content) return;
+  if (!title || !content) {
+    if (typeof showCustomAlert === 'function') {
+      await showCustomAlert("Please fill in both title and content.", "warning");
+    } else {
+      alert("Please fill in both title and content.");
+    }
+    return;
+  }
 
   try {
     if (editId) {
       // --- UPDATE EXISTING RECORD IN SUPABASE ---
       const { error } = await db
         .from('Announcement')
-        .update({ title, type, content })
+        .update({ 
+          title: title, 
+          type: type, 
+          content: content, 
+          is_pinned: isPinned 
+        })
         .eq('id', editId);
 
       if (error) {
-        alert("Failed to update announcement: " + error.message);
+        if (typeof showCustomAlert === 'function') {
+          await showCustomAlert("Failed to update announcement: " + error.message, "danger");
+        } else {
+          alert("Failed to update announcement: " + error.message);
+        }
       } else {
-        alert("Announcement updated successfully!");
-        // Clear editing ID tracker and reset button label
         if (editInput) editInput.value = '';
         const submitBtn = document.querySelector('#announcementForm button[type="submit"]');
         if (submitBtn) submitBtn.textContent = "Publish Announcement";
 
         document.getElementById('announcementForm').reset();
         await loadAnnouncementsFromDatabase();
+
+        if (typeof showCustomAlert === 'function') {
+          await showCustomAlert("Announcement updated successfully!", "success");
+        } else {
+          alert("Announcement updated successfully!");
+        }
       }
     } else {
       // --- CREATE NEW RECORD IN SUPABASE ---
       const { error } = await db
         .from('Announcement')
-        .insert([{ title, type, content, is_active: true }]);
+        .insert([{ 
+          title: title, 
+          type: type, 
+          content: content, 
+          is_active: true, 
+          is_pinned: isPinned 
+        }]);
 
       if (error) {
-        alert("Failed to post announcement: " + error.message);
+        if (typeof showCustomAlert === 'function') {
+          await showCustomAlert("Failed to post announcement: " + error.message, "danger");
+        } else {
+          alert("Failed to post announcement: " + error.message);
+        }
       } else {
         document.getElementById('announcementForm').reset();
         await loadAnnouncementsFromDatabase();
-        alert("Announcement published successfully!");
+
+        if (typeof showCustomAlert === 'function') {
+          await showCustomAlert("Announcement published successfully!", "success");
+        } else {
+          alert("Announcement published successfully!");
+        }
       }
     }
   } catch (err) {
@@ -2889,6 +2842,7 @@ async function startEditAnnouncement(id) {
 
     if (error || !ann) return;
 
+    // Set or create hidden editing ID input
     let editInput = document.getElementById('editingAnnouncementId');
     if (!editInput) {
       editInput = document.createElement('input');
@@ -2896,15 +2850,24 @@ async function startEditAnnouncement(id) {
       editInput.id = 'editingAnnouncementId';
       document.getElementById('announcementForm').appendChild(editInput);
     }
-    
     editInput.value = ann.id;
-    document.getElementById('announcementTitle').value = ann.title;
-    document.getElementById('announcementType').value = ann.type || 'info';
-    document.getElementById('announcementContent').value = ann.content;
 
+    // Populate form inputs
+    document.getElementById('announcementTitle').value = ann.title || '';
+    document.getElementById('announcementType').value = ann.type || 'info';
+    document.getElementById('announcementContent').value = ann.content || '';
+
+    // POPULATE PINNED CHECKBOX ACCORDINGLY
+    const pinCheckbox = document.getElementById('announcementIsPinned');
+    if (pinCheckbox) {
+      pinCheckbox.checked = (ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1);
+    }
+
+    // Change button text to indicate update mode
     const publishBtn = document.querySelector('#announcementForm button[type="submit"]');
     if (publishBtn) publishBtn.textContent = "Update Announcement";
 
+    // Smooth scroll to form
     document.getElementById('announcementForm').scrollIntoView({ behavior: 'smooth' });
   } catch (err) {
     console.error("Edit load failed:", err);
@@ -3014,57 +2977,22 @@ async function deleteAnnouncement(id) {
   }
 }
 
-// Post/Update Announcement Handler
-async function handlePostAnnouncement(event) {
-  event.preventDefault();
 
-  const title = document.getElementById('announcementTitle').value.trim();
-  const type = document.getElementById('announcementType').value;
-  const content = document.getElementById('announcementContent').value.trim();
-  
+// HANDLE CANCEL BUTTON
+function cancelEditAnnouncement() {
   const editInput = document.getElementById('editingAnnouncementId');
-  const editId = editInput ? editInput.value : '';
+  if (editInput) editInput.value = '';
+  
+  const submitBtn = document.querySelector('#announcementForm button[type="submit"]');
+  if (submitBtn) submitBtn.textContent = "Publish Announcement";
 
-  if (!title || !content) return;
-
-  try {
-    if (editId) {
-      const { error } = await db
-        .from('Announcement')
-        .update({ title, type, content })
-        .eq('id', editId);
-
-      if (error) {
-        await showCustomAlert("Failed to update announcement: " + error.message, "danger");
-      } else {
-        if (editInput) editInput.value = '';
-        const submitBtn = document.querySelector('#announcementForm button[type="submit"]');
-        if (submitBtn) submitBtn.textContent = "Publish Announcement";
-
-        document.getElementById('announcementForm').reset();
-        await loadAnnouncementsFromDatabase();
-        await showCustomAlert("Announcement updated successfully!", "success");
-      }
-    } else {
-      const { error } = await db
-        .from('Announcement')
-        .insert([{ title, type, content, is_active: true }]);
-
-      if (error) {
-        await showCustomAlert("Failed to post announcement: " + error.message, "danger");
-      } else {
-        document.getElementById('announcementForm').reset();
-        await loadAnnouncementsFromDatabase();
-        await showCustomAlert("Announcement published successfully!", "success");
-      }
-    }
-  } catch (err) {
-    console.error("Error submitting announcement:", err);
-  }
+  document.getElementById('announcementForm').reset();
 }
 
 
-// Service Worker for DMMA MTAC PWA App Mode
+
+
+// Service Worker for DMMA MTAC PWA App Mode STANDALONE INSTALL
 const CACHE_NAME = 'dmma-mtac-v1';
 
 self.addEventListener('install', (event) => {
@@ -3123,3 +3051,5 @@ function dismissPWAToast() {
     sessionStorage.setItem('pwa_toast_dismissed', 'true');
   }
 }
+
+
