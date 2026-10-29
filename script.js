@@ -2621,12 +2621,12 @@ async function loadAnnouncementsFromDatabase() {
 
         // 4. Insert divider line ONLY IF both pinned AND regular posts exist
         if (pinnedItems.length > 0 && regularItems.length > 0) {
-          htmlOutput += `
-            <div class="announcement-divider">
-              <span>📢Recent Updates</span>
-            </div>
-          `;
-        }
+        htmlOutput += `
+        <div class="announcement-divider">
+        <span><i class="fa-regular fa-clock" style="font-size: 0.7rem; margin-right: 5px;"></i> Recent Updates</span>
+      </div>
+  `;
+}
 
         // 5. Append regular cards below the divider
         htmlOutput += regularItems.map((ann, idx) => renderCardHTML(ann, pinnedItems.length + idx)).join('');
