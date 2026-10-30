@@ -2558,6 +2558,17 @@ async function loadAnnouncementsFromDatabase() {
   const publicDisplay = document.getElementById('announcementDisplay');
   const adminContainer = document.getElementById('adminAnnouncementList');
 
+  // 1. Offline handling
+  if (!navigator.onLine) {
+    const offlineData = localStorage.getItem('cached_announcements');
+    if (offlineData) {
+      const cachedAnnouncements = JSON.parse(offlineData);
+      currentAnnouncementsList = cachedAnnouncements;
+      if (publicDisplay) renderPublicAnnouncements(cachedAnnouncements);
+      return true;
+    }
+  }
+
   // Ensure db exists before querying
   if (typeof db === 'undefined' || !db) return false;
 
@@ -2565,8 +2576,8 @@ async function loadAnnouncementsFromDatabase() {
     const { data: announcements, error } = await db
       .from('Announcement')
       .select('*')
-      .order('is_pinned', { ascending: false }) // <-- Pinned posts come first
-      .order('id', { ascending: false });       // <-- Newest posts second
+      .order('is_pinned', { ascending: false })
+      .order('id', { ascending: false });
 
     if (error) {
       console.error('Error fetching announcements:', error);
@@ -2579,6 +2590,8 @@ async function loadAnnouncementsFromDatabase() {
       return true;
     }
 
+    // Persist dynamic data locally for offline viewing
+    localStorage.setItem('cached_announcements', JSON.stringify(announcements || []));
     currentAnnouncementsList = announcements || [];
 
     // 1. Render Public Homepage Banner
@@ -2589,15 +2602,13 @@ async function loadAnnouncementsFromDatabase() {
             <i class="fa-solid fa-bell-slash"></i> NO ANNOUNCEMENTS!
           </div>`;
       } else {
-        // 1. Separate announcements into pinned and regular arrays
         const pinnedItems = announcements.filter(ann => ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1);
         const regularItems = announcements.filter(ann => !(ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1));
 
-        // 2. Helper function to render individual announcement card HTML
         const renderCardHTML = (ann, index) => {
           const isPinned = ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1;
           const pinBadge = isPinned 
-            ? `<span class="ann-pinned-minimal" title="Pinned Announcement" style="color: #ff6b00; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 107, 0, 0.1); padding: 2px 8px; border-radius: 6px;"><i class="fa-solid fa-thumbtack"></i> Pinned</span>` 
+            ? `<span class="ann-pinned-minimal" title="Pinned Announcement" style="color: #ff6b00; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 107, 0, 0.1); padding: 2px 8px; border-radius: 6px;">🖈Pinned</span>` 
             : '';
           const pinnedClass = isPinned ? 'is-pinned-card' : '';
 
@@ -2616,63 +2627,66 @@ async function loadAnnouncementsFromDatabase() {
           `;
         };
 
-        // 3. Render pinned cards first
         let htmlOutput = pinnedItems.map((ann, idx) => renderCardHTML(ann, idx)).join('');
 
-        // 4. Insert divider line ONLY IF both pinned AND regular posts exist
         if (pinnedItems.length > 0 && regularItems.length > 0) {
-        htmlOutput += `
-        <div class="announcement-divider">
-        <span><i class="fa-regular fa-clock" style="font-size: 0.7rem; margin-right: 5px;"></i> Recent Updates</span>
-      </div>
-  `;
-}
+          htmlOutput += `
+            <div class="announcement-divider">
+              <span><i class="fa-regular fa-clock" style="font-size: 0.7rem; margin-right: 5px;"></i> Recent Updates</span>
+            </div>
+          `;
+        }
 
-        // 5. Append regular cards below the divider
         htmlOutput += regularItems.map((ann, idx) => renderCardHTML(ann, pinnedItems.length + idx)).join('');
-
         publicDisplay.innerHTML = htmlOutput;
       }
     }
 
-    // 2. Render Admin Dashboard Active List (With Edit & Delete Buttons)
+    // 2. Render Admin Dashboard Active List
     if (adminContainer) {
       if (!announcements || announcements.length === 0) {
         adminContainer.innerHTML = `<p style="color: #64748b; font-size: 0.9rem; margin-top: 10px; font-weight: 600;">NO ANNOUNCEMENTS POSTED YET</p>`;
       } else {
         adminContainer.innerHTML = announcements.map(ann => {
-  const isPinned = ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1;
-  const pinTag = isPinned 
-    ? `<span style="color: #ff6b00; font-size: 0.72rem; font-weight: 700; background: rgba(255, 107, 0, 0.1); padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">🖈PINNED</span>` 
-    : '';
+          const isPinned = ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1;
+          const pinTag = isPinned 
+            ? `<span style="color: #ff6b00; font-size: 0.72rem; font-weight: 700; background: rgba(255, 107, 0, 0.1); padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">🖈PINNED</span>` 
+            : '';
 
-  return `
-    <div class="admin-ann-row">
-      <div class="admin-ann-info">
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-          <strong>${ann.title}</strong>
-          ${pinTag}
-          <span class="ann-type-tag type-${ann.type || 'info'}">${(ann.type || 'INFO').toUpperCase()}</span>
-        </div>
-        <div class="admin-ann-date" style="margin-top: 4px;">${new Date(ann.created_at || Date.now()).toLocaleString()}</div>
-      </div>
-      <div style="display: flex; gap: 8px; align-items: center;">
-        <button type="button" class="btn btn-secondary btn-sm" onclick="startEditAnnouncement(${ann.id})">
-          <i class="fa-solid fa-pen-to-square"></i> Edit
-        </button>
-        <button type="button" class="btn btn-danger btn-sm" onclick="deleteAnnouncement(${ann.id})">
-          <i class="fa-solid fa-trash"></i> Delete
-        </button>
-      </div>
-    </div>
-  `;
-}).join('');
+          return `
+            <div class="admin-ann-row">
+              <div class="admin-ann-info">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <strong>${ann.title}</strong>
+                  ${pinTag}
+                  <span class="ann-type-tag type-${ann.type || 'info'}">${(ann.type || 'INFO').toUpperCase()}</span>
+                </div>
+                <div class="admin-ann-date" style="margin-top: 4px;">${new Date(ann.created_at || Date.now()).toLocaleString()}</div>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="startEditAnnouncement(${ann.id})">
+                  <i class="fa-solid fa-pen-to-square"></i> Edit
+                </button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="deleteAnnouncement(${ann.id})">
+                  <i class="fa-solid fa-trash"></i> Delete
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
       }
     }
 
     return true;
   } catch (err) {
     console.error('Exception in loadAnnouncementsFromDatabase:', err);
+    
+    // Fallback to offline cache if query throws an exception
+    const offlineData = localStorage.getItem('cached_announcements');
+    if (offlineData && publicDisplay) {
+      renderPublicAnnouncements(JSON.parse(offlineData));
+    }
+    
     return false;
   }
 }
@@ -2995,52 +3009,131 @@ function cancelEditAnnouncement() {
 // Service Worker for DMMA MTAC PWA App Mode STANDALONE INSTALL
 const CACHE_NAME = 'dmma-mtac-v1';
 
+// 1. Files required for offline loading
+const ASSETS_TO_CACHE = [
+  '/',
+  '/index.html',
+  '/styles.css',
+  '/script.js',
+  '/manifest.json',
+  '/img/logo.png',
+  // Include FontAwesome or icon CDN files if locally stored, plus main fallback images
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+];
+
+// 2. INSTALL EVENT: Pre-cache core files immediately
 self.addEventListener('install', (event) => {
-  self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log('[PWA SW] Pre-caching offline assets...');
+      return cache.addAll(ASSETS_TO_CACHE);
+    }).then(() => self.skipWaiting())
+  );
 });
 
+// 3. ACTIVATE EVENT: Clean up old cache versions
 self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            console.log('[PWA SW] Removing old cache:', cache);
+            return caches.delete(cache);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
 });
 
+// 4. FETCH EVENT: Stale-While-Revalidate / Cache First Strategy
 self.addEventListener('fetch', (event) => {
-  // Serves network content normally while satisfying PWA requirements
+  // Ignore non-GET requests (e.g. Supabase POST/UPDATE calls)
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
+    caches.match(event.request).then((cachedResponse) => {
+      // Fetch from network and update cache in the background
+      const fetchPromise = fetch(event.request)
+        .then((networkResponse) => {
+          // If valid response, update the cache with the fresh copy
+          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          // Network failed, fallback is handled by cachedResponse below
+        });
+
+      // Return cached version immediately if available, otherwise wait for network fetch
+      return cachedResponse || fetchPromise;
+    })
   );
 });
 
 
 //INSTALL BUTTON ADD HOMESCREEN
-let deferredPrompt;
+let deferredPrompt = null;
 
 // Catch the Chrome / Android PWA Install Event
+// Function to detect iOS / Safari
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+
+function isAppInstalled() {
+  return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+}
+
+// 1. Chrome / Android / Chromium-based browsers
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
 
-  // Show the toast if the user hasn't dismissed it in this session
-  if (sessionStorage.getItem('pwa_toast_dismissed') !== 'true') {
+  if (!isAppInstalled() && sessionStorage.getItem('pwa_toast_dismissed') !== 'true') {
+    const toast = document.getElementById('pwaInstallToast');
+    if (toast) toast.classList.remove('is-hidden');
+  }
+});
+
+// 2. Safari / iOS Fallback on Page Load
+document.addEventListener('DOMContentLoaded', () => {
+  // If user is on iOS Safari and app is not installed yet
+  if (isIOS() && !isAppInstalled() && sessionStorage.getItem('pwa_toast_dismissed') !== 'true') {
     const toast = document.getElementById('pwaInstallToast');
     if (toast) {
+      // Show toast on iOS Safari
       toast.classList.remove('is-hidden');
     }
   }
 });
 
-// Triggered when user clicks "Install" inside the toast
+// 3. Updated Install Trigger Button Handler
 function triggerPWAInstall() {
   const toast = document.getElementById('pwaInstallToast');
-  if (!deferredPrompt) return;
 
-  deferredPrompt.prompt();
-  deferredPrompt.userChoice.then((choiceResult) => {
-    if (choiceResult.outcome === 'accepted') {
-      console.log('Seafarer accepted PWA installation');
-    }
-    deferredPrompt = null;
-    if (toast) toast.classList.add('is-hidden');
-  });
+  if (deferredPrompt) {
+    // Chrome / Android standard prompt
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('PWA installation accepted');
+      }
+      deferredPrompt = null;
+      if (toast) toast.classList.add('is-hidden');
+    });
+  } else if (isIOS()) {
+    // iOS Safari step-by-step instruction alert
+    alert('To install DMMA MTAC App on iOS:\n1. Tap the Share button (square with arrow pointing up)\n2. Scroll down and tap "Add to Home Screen"');
+  } else {
+    // Other unsupported browsers
+    alert('To install this app, please use your browser settings menu and select "Add to Home Screen" or "Install App".');
+  }
 }
 
 // Triggered when user clicks "X" inside the toast
