@@ -1826,7 +1826,7 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
 
       <!-- Add/Edit Course Form -->
       <div class="admin-card">
-        <h3 id="course-form-title"><i></i>🕮 Add / Edit Training Course</h3>
+        <h3 id="course-form-title" style="margin-bottom: 1rem;"><i></i>📚 Add / Edit Training Course</h3>
         <form id="course-form" onsubmit="handleSaveCourse(event)" class="form-stack">
           <input type="hidden" id="editing-course-id" />
           
@@ -1884,19 +1884,17 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
 
       
 <!-- ADMIN ANNOUNCEMENT CONTROL PANEL -->
-<div id="adminAnnouncementPanel" class="admin-card announcement-admin-card">
-  <h3>🕭 Post New Announcement</h3>
+<div id="adminAnnouncementPanel" class="admin-card announcement-admin-card" >
+  <h3 style="margin-bottom: 1rem;">🔔 Post New Announcement</h3>
   <form id="announcementForm" onsubmit="handlePostAnnouncement(event)" class="form-stack">
     <!-- Hidden input to hold edit record ID -->
     <input type="hidden" id="editingAnnouncementId" value="" />
 
     <div class="form-row">
       <div class="form-group" style="flex: 2;">
-        <label>Title</label>
-        <input type="text" id="announcementTitle" class="form-control" placeholder="e.g., Enrollment Deadline Extended" required />
+        <input type="text" id="announcementTitle" class="form-control" placeholder="Title: e.g., Enrollment Deadline Extended" required />
       </div>
       <div class="form-group" style="flex: 1;">
-        <label>Type</label>
         <select id="announcementType" class="form-control">
           <option value="info">🔵 General Info </option>
           <option value="notice">🟠 Important Notice </option>
@@ -1905,7 +1903,6 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
       </div>
     </div>
     <div class="form-group">
-      <label>Content</label>
       <textarea id="announcementContent" class="form-control" rows="4" placeholder="Enter announcement details..." required></textarea>
     </div>
 
@@ -1931,7 +1928,7 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
 
 <!-- Manage Photo Gallery -->
       <div class="admin-card">
-        <h3><i class="fa-solid fa-image"></i> Manage Photos</h3>
+        <h3  style="margin-bottom: 1rem;"><i></i>🖼️ Manage Photos</h3>
         <form onsubmit="handleUploadPhoto(event)" class="form-stack">
           <div class="form-row">
             <input type="text" id="photo-url" placeholder="Image URL (or upload file below)" />
@@ -2134,15 +2131,20 @@ A collection of inspiring journeys from our trainees—showcasing their growth, 
       <img src="img/logo.png" alt="DMMA MTAC App Icon" />
     </div>
     <div class="pwa-toast-text">
-      <strong>Install DMMA MTAC App</strong>
-      <span>Install the app directly to your home screen or desktop</span>
+      <div class="pwa-toast-title-row">
+        <strong>DMMA MTAC</strong>
+        <span class="pwa-official-badge">
+          <i class="fa-solid fa-circle-check"></i> Official
+        </span>
+      </div>
+      <span>Install directly to your home screen or desktop</span>
     </div>
   </div>
   <div class="pwa-toast-actions">
-    <button class="pwa-btn-primary" onclick="triggerPWAInstall()">
+    <button type="button" class="pwa-btn-primary" onclick="triggerPWAInstall()">
       Install
     </button>
-    <button class="pwa-btn-close" onclick="dismissPWAToast()" aria-label="Close Toast">
+    <button type="button" class="pwa-btn-close" onclick="dismissPWAToast()" aria-label="Close Toast">
       &times;
     </button>
   </div>

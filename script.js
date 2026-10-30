@@ -2608,7 +2608,7 @@ async function loadAnnouncementsFromDatabase() {
         const renderCardHTML = (ann, index) => {
           const isPinned = ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1;
           const pinBadge = isPinned 
-            ? `<span class="ann-pinned-minimal" title="Pinned Announcement" style="color: #ff6b00; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 107, 0, 0.1); padding: 2px 8px; border-radius: 6px;">🖈Pinned</span>` 
+            ? `<span class="ann-pinned-minimal" title="Pinned Announcement" style="color: #ff6b00; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 107, 0, 0.1); padding: 2px 8px; border-radius: 6px;">⟟ Pinned</span>` 
             : '';
           const pinnedClass = isPinned ? 'is-pinned-card' : '';
 
@@ -2650,7 +2650,7 @@ async function loadAnnouncementsFromDatabase() {
         adminContainer.innerHTML = announcements.map(ann => {
           const isPinned = ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1;
           const pinTag = isPinned 
-            ? `<span style="color: #ff6b00; font-size: 0.72rem; font-weight: 700; background: rgba(255, 107, 0, 0.1); padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">🖈PINNED</span>` 
+            ? `<span style="color: #ff6b00; font-size: 0.72rem; font-weight: 700; background: rgba(255, 107, 0, 0.1); padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">⟟ PINNED</span>` 
             : '';
 
           return `
