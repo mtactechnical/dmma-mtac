@@ -2316,9 +2316,9 @@ async function sendBubbleChatMessage() {
         ? bestMatch.schedules.map(s => `<strong>${s}</strong>`).join(', ') 
         : '<em>No active upcoming schedule listed (Please inquire with Admin)</em>';
 
-      let rateText = `• <strong>Walk-in / Regular Rate:</strong> ${bestMatch.fee}<br>• <strong>Fresh Grad / Alumni Rate:</strong> ${bestMatch.gradFee}`;
+      let rateText = `• <strong>Non-Alumni / Regular Rate:</strong> ${bestMatch.fee}<br>• <strong>Fresh Grad / Alumni Rate:</strong> ${bestMatch.gradFee}`;
       
-      if (isWalkIn) rateText = `• <strong>Walk-in / Regular Rate:</strong> <strong>${bestMatch.fee}</strong>`;
+      if (isWalkIn) rateText = `• <strong>Non-Alumni / Regular Rate:</strong> <strong>${bestMatch.fee}</strong>`;
       else if (isGrad) rateText = `• <strong>Fresh Grad / Alumni Rate:</strong> <strong>${bestMatch.gradFee}</strong>`;
 
       if (isScheduleQuery) {
@@ -2344,7 +2344,7 @@ async function sendBubbleChatMessage() {
     // Fallback
     botDiv.innerHTML = `Hello! 👋 How can I assist you? Try asking:<br><br>` +
       `• <em>"How to enroll"</em><br>` +
-      `• <em>"BT walk-in schedule"</em><br>` +
+      `• <em>"BT Non-Alumni schedule"</em><br>` +
       `• <em>"AFF price"</em><br>` +
       `• <em>"PSSR schedule"</em>`;
 
