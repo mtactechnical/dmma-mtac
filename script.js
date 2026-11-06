@@ -2839,6 +2839,137 @@ async function deleteAnnouncement(id) {
   }
 }
 
+
+// Render function for Public Homepage Display + Modal Handler
+function renderPublicAnnouncements(announcements) {
+  const publicDisplay = document.getElementById('announcementDisplay');
+  if (!publicDisplay) return;
+
+  if (!announcements || announcements.length === 0) {
+    publicDisplay.innerHTML = `
+      <div class="no-announcements-placeholder">
+        <i class="fa-solid fa-bell-slash"></i> NO ANNOUNCEMENTS!
+      </div>`;
+    return;
+  }
+
+  // 1. Separate into Pinned and Regular items
+  const pinnedItems = announcements.filter(ann => ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1);
+  const regularItems = announcements.filter(ann => !(ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1));
+
+  // Combine into single array with Pinned items strictly at top
+  const sortedAnnouncements = [...pinnedItems, ...regularItems];
+
+  // Helper to render individual card HTML
+  const renderCardHTML = (ann, index) => {
+    const isPinned = ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1;
+    const pinBadge = isPinned 
+      ? `<span class="ann-pinned-minimal" title="Pinned Announcement" style="color: #ff6b00; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 107, 0, 0.1); padding: 2px 8px; border-radius: 6px;"><i class="fa-solid fa-thumbtack"></i> Pinned</span>` 
+      : '';
+    const pinnedClass = isPinned ? 'is-pinned-card' : '';
+
+    return `
+      <div class="announcement-card-public type-${ann.type || 'info'} ${pinnedClass}" onclick="openAnnouncementModal(${index})" style="cursor: pointer;">
+        <div class="ann-badge-row">
+          <span class="ann-badge ann-badge-${ann.type || 'info'}">${(ann.type || 'INFO').toUpperCase()}</span>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            ${pinBadge}
+            <span class="ann-date"><i class="fa-regular fa-clock"></i> ${new Date(ann.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+          </div>
+        </div>
+        <h4 class="ann-title">${ann.title}</h4>
+        <p class="ann-body">${ann.content}</p>
+      </div>
+    `;
+  };
+
+  // 2. HOMEPAGE VIEW: Limit homepage to max 3 announcements (e.g. pinned + latest) to prevent crowding
+  const homepageItems = sortedAnnouncements.slice(0, 3);
+  let homepageHTML = '';
+
+  const homepagePinned = homepageItems.filter(ann => ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1);
+  const homepageRegular = homepageItems.filter(ann => !(ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1));
+
+  homepageHTML += homepagePinned.map((ann, idx) => renderCardHTML(ann, idx)).join('');
+
+  if (homepagePinned.length > 0 && homepageRegular.length > 0) {
+    homepageHTML += `
+      <div class="announcement-divider">
+        <span><i class="fa-regular fa-clock" style="font-size: 0.7rem; margin-right: 5px;"></i> Recent Updates</span>
+      </div>
+    `;
+  }
+
+  homepageHTML += homepageRegular.map((ann, idx) => renderCardHTML(ann, homepagePinned.length + idx)).join('');
+  publicDisplay.innerHTML = homepageHTML;
+}
+
+// Open Modal & Load ALL Announcements (Pinned First)
+function openAllAnnouncementsModal() {
+  const modal = document.getElementById('allAnnouncementsModal');
+  const modalList = document.getElementById('allAnnouncementsList');
+  
+  if (!modal || !modalList) return;
+
+  const announcements = currentAnnouncementsList || [];
+
+  if (announcements.length === 0) {
+    modalList.innerHTML = `<p style="text-align: center; color: #64748b;">No announcements to display.</p>`;
+  } else {
+    const pinnedItems = announcements.filter(ann => ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1);
+    const regularItems = announcements.filter(ann => !(ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1));
+
+    const renderCardHTML = (ann, index) => {
+      const isPinned = ann.is_pinned === true || ann.is_pinned === 'true' || ann.is_pinned === 1;
+      const pinBadge = isPinned 
+        ? `<span class="ann-pinned-minimal" style="color: #ff6b00; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 107, 0, 0.1); padding: 2px 8px; border-radius: 6px;"><i class="fa-solid fa-thumbtack"></i> Pinned</span>` 
+        : '';
+      const pinnedClass = isPinned ? 'is-pinned-card' : '';
+
+      return `
+        <div class="announcement-card-public type-${ann.type || 'info'} ${pinnedClass}">
+          <div class="ann-badge-row">
+            <span class="ann-badge ann-badge-${ann.type || 'info'}">${(ann.type || 'INFO').toUpperCase()}</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              ${pinBadge}
+              <span class="ann-date"><i class="fa-regular fa-clock"></i> ${new Date(ann.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            </div>
+          </div>
+          <h4 class="ann-title">${ann.title}</h4>
+          <p class="ann-body">${ann.content}</p>
+        </div>
+      `;
+    };
+
+    let modalHTML = '';
+    modalHTML += pinnedItems.map((ann, idx) => renderCardHTML(ann, idx)).join('');
+
+    if (pinnedItems.length > 0 && regularItems.length > 0) {
+      modalHTML += `
+        <div class="announcement-divider" style="margin: 8px 0;">
+          <span><i class="fa-regular fa-clock" style="font-size: 0.7rem; margin-right: 5px;"></i> Other Announcements</span>
+        </div>
+      `;
+    }
+
+    modalHTML += regularItems.map((ann, idx) => renderCardHTML(ann, pinnedItems.length + idx)).join('');
+    modalList.innerHTML = modalHTML;
+  }
+
+  modal.classList.remove('is-hidden');
+  document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+// Close Modal Handler
+function closeAllAnnouncementsModal() {
+  const modal = document.getElementById('allAnnouncementsModal');
+  if (modal) {
+    modal.classList.add('is-hidden');
+    document.body.style.overflow = ''; // Restore background scrolling
+  }
+}
+
+
 /* ============================================================
    EDIT & MODAL HELPERS
    ============================================================ */
@@ -3002,6 +3133,8 @@ function cancelEditAnnouncement() {
 
   document.getElementById('announcementForm').reset();
 }
+
+
 
 
 

@@ -412,15 +412,35 @@
   </div>
 </div>
 
-<!-- PUBLIC ANNOUNCEMENT SECTION BELOW CAROUSEL -->
+<!-- PUBLIC ANNOUNCEMENT SECTION -->
 <div class="container" style="margin-top: 30px; margin-bottom: 20px;">
   <section id="publicAnnouncementSection" class="announcement-public-container">
-    <div class="announcement-header-title">ANNOUNCEMENTS:
+    <div class="announcement-header-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+      <span>ANNOUNCEMENTS:</span>
+      <button type="button" class="btn-view-all-ann" onclick="openAllAnnouncementsModal()">
+        <i class="fa-solid fa-list-ul"></i> View All Announcements
+      </button>
     </div>
     <div id="announcementDisplay" class="announcement-display-wrapper">
       <!-- Dynamic Announcement Cards Render Here -->
     </div>
   </section>
+</div>
+
+<!-- ALL ANNOUNCEMENTS POPUP MODAL -->
+<div id="allAnnouncementsModal" class="ann-modal-overlay is-hidden" onclick="if(event.target === this) closeAllAnnouncementsModal()">
+  <div class="ann-modal-card">
+    <div class="ann-modal-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #0f172a;">All Announcements</h3>
+      </div>
+      <button type="button" class="ann-modal-close" onclick="closeAllAnnouncementsModal()" aria-label="Close Modal">&times;</button>
+    </div>
+    
+    <div class="ann-modal-body" id="allAnnouncementsList">
+      <!-- Dynamic list loaded via JS with pinned posts on top -->
+    </div>
+  </div>
 </div>
 
 <!--FEATURED TRAININGS-->
