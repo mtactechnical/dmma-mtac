@@ -4689,6 +4689,21 @@ input[type="text"], input[type="url"] {
     border-radius: 16px;
   }
 }
+/* Mobile Layout (< 520px) */
+@media (max-width: 520px) {
+  .announcement-board .announcement-header-title {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .btn-view-all-ann {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
+  }
+}
 
 
 
