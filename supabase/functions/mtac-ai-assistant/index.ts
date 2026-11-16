@@ -99,3 +99,59 @@ RULES:
     });
   }
 });
+
+
+
+serve(async (req) => {
+  const { seafarerName, srn, docType, fileName, mimeType, fileBase64 } = await req.json();
+
+  // 1. FAST AI DOCUMENT EVALUATION WITH GEMINI 2.5 FLASH (~3-5 seconds)
+  const geminiRes = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${Deno.env.get("GEMINI_API_KEY")}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { inline_data: { mime_type: mimeType, data: fileBase64 } },
+            {
+              text: `Evaluate this maritime requirement (${docType}) for seafarer ${seafarerName} (SRN: ${srn}). 
+                     Today's date is ${new Date().toISOString().split('T')[0]}.
+                     Return ONLY valid JSON:
+                     {"status": "Valid" | "Expired" | "Invalid", "expiryDate": "YYYY-MM-DD" or null, "summary": "1-sentence verification note"}`
+            }
+          ]
+        }],
+        generationConfig: { response_mime_type: "application/json" }
+      })
+    }
+  );
+
+  const aiJson = await geminiRes.json();
+  const evaluation = JSON.parse(aiJson.candidates[0].content.parts[0].text);
+
+  // 2. UPLOAD FILE TO YOUR DMMA GOOGLE DRIVE FOLDER (via Google Drive API or Apps Script Webhook)
+  const driveWebhookRes = await fetch(Deno.env.get("GDRIVE_UPLOAD_WEBHOOK_URL")!, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      folderName: `${srn}_${seafarerName}`,
+      fileName: `${docType}_${fileName}`,
+      mimeType,
+      fileBase64
+    })
+  });
+  const driveData = await driveWebhookRes.json();
+
+  return new Response(
+    JSON.stringify({
+      driveFileId: driveData.fileId,
+      driveViewLink: driveData.viewLink,
+      status: evaluation.status,
+      expiryDate: evaluation.expiryDate,
+      summary: evaluation.summary
+    }),
+    { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } }
+  );
+});

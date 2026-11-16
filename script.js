@@ -150,7 +150,9 @@ async function handleSaveCourse(e) {
 // --- ADMIN & GOOGLE OAUTH CONFIGURATION ---
 const ALLOWED_ADMIN_EMAILS = [
   "mtac.it@dmmacsp.edu.ph",
-  "mtac.technical-staff-ii@dmmacsp.edu.ph"
+  "mtac.technical-staff-ii@dmmacsp.edu.ph",
+  "ardomtac@dmmacsp.edu.ph"
+  
 ];
 
 // --- AUTH STATE LISTENER & SESSION INITIALIZATION ---
@@ -3277,5 +3279,7 @@ function dismissPWAToast() {
     sessionStorage.setItem('pwa_toast_dismissed', 'true');
   }
 }
+
+
 
 
