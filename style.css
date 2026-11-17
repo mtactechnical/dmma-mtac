@@ -4704,21 +4704,42 @@ input[type="text"], input[type="url"] {
 /* Glassmorphic Notice Board Container */
 .announcement-board {
   position: relative;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
   background: rgba(255, 255, 255, 0.45);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 20px;
   padding: 24px 28px;
-  box-shadow: 
+  box-shadow:
     0 10px 30px rgba(15, 23, 42, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  box-sizing: border-box;
+  box-sizing: border-box !important;
+}
+
+/* Force any immediate parent wrapper of .announcement-board to match .section-header width */
+*:has(> .announcement-board) {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
 }
 
 /* Internal Card Margin Reset */
 .announcement-board .announcement-card-public {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
   margin-bottom: 0 !important;
+  box-sizing: border-box !important;
 }
 
 /* Responsive Padding for Mobile (< 600px) */

@@ -151,7 +151,8 @@ async function handleSaveCourse(e) {
 const ALLOWED_ADMIN_EMAILS = [
   "mtac.it@dmmacsp.edu.ph",
   "mtac.technical-staff-ii@dmmacsp.edu.ph",
-  "ardomtac@dmmacsp.edu.ph"
+  "ardomtac@dmmacsp.edu.ph",
+  "sabrido.rt@dmmacsp.edu.ph"
   
 ];
 
